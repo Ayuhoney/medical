@@ -10,7 +10,7 @@ export default function Layout() {
   }, [pathname]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-background" style={{ fontFamily: "'Outfit',sans-serif" }}>
+    <div className="min-h-screen flex flex-col bg-background font-sans antialiased">
       <Header />
       <main className="flex-1">
         <Outlet />

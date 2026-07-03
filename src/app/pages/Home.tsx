@@ -1,529 +1,581 @@
+import { useState } from "react";
 import { Link } from "react-router";
 import {
-  Calendar, ArrowRight, Award, Shield, CheckCircle,
-  Star, Heart, Microscope, Sparkles, Zap, Phone, Clock,
-  MapPin, ChevronRight,
+  Calendar, ArrowRight, Award, Shield, CheckCircle, Microscope,
+  Star, Phone, Clock, MapPin, ChevronLeft, ChevronRight, ArrowUpRight,
 } from "lucide-react";
 import { IMAGES, CLINIC } from "../constants";
 import { BookingBanner } from "../components/ui";
+import { ServiceAccordion } from "../components/ServiceAccordion";
+import { MaskReveal, useRefEntrance } from "../components/RefEntrance";
+import { ScrollReveal, StaggerReveal } from "../components/ScrollReveal";
+import { ScrollZoomReveal } from "../components/ScrollZoomReveal";
+import { ServiceMarquee } from "../components/ServiceMarquee";
 
-const FF_SERIF = "'DM Serif Display',serif";
-const FF_SANS  = "'Inter',sans-serif";
-
-// ─── Hero ─────────────────────────────────────────────────────────────────────
+/* ─── STEP 1: Hero — reference: full-viewport, left content, bottom stats, scroll badge ─── */
 function Hero() {
+  const enterRef = useRefEntrance(true);
+  const stats = [
+    { v: "20+", l: "Years of Care" },
+    { v: "AGPAL", l: "Accredited" },
+    { v: "5.0 ★", l: "Patient Rated" },
+    { v: "4", l: "Specialist Services" },
+  ];
+
   return (
-    <section className="relative overflow-hidden bg-[#07161F]" style={{ minHeight: "92vh" }}>
-      {/* Portrait image — right side */}
-      <div className="absolute right-0 top-0 bottom-0 w-full lg:w-[58%] xl:w-[55%]">
-        <img
-          src={IMAGES.heroPortrait}
-          alt="Healthy glowing skin"
-          className="w-full h-full object-cover object-center"
-        />
-        {/* Left fade into dark bg */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#07161F] via-[#07161F]/65 to-transparent" />
-        {/* Bottom vignette */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#07161F]/60 via-transparent to-transparent" />
+    <section ref={enterRef} className="hero-section">
+      <div className="hero-bg-sticky" aria-hidden>
+        <div className="hero-bg-wrap hero-bg-layer">
+          <div
+            className="hero-bg-pan hero-bg-drift"
+            style={{ backgroundImage: `url(${IMAGES.heroPortrait})` }}
+          />
+          <div className="hero-bg-scrim" />
+        </div>
       </div>
 
-      {/* Subtle grid pattern overlay */}
-      <div className="absolute inset-0 opacity-[0.03]"
-        style={{ backgroundImage: "radial-gradient(circle, #ffffff 1px, transparent 1px)", backgroundSize: "40px 40px" }} />
-
-      {/* Content */}
-      <div className="relative z-10 max-w-screen-xl mx-auto px-5 lg:px-8 flex items-center" style={{ minHeight: "92vh" }}>
-        <div className="max-w-lg xl:max-w-xl py-24 lg:py-0">
-          {/* Location pill */}
-          <div className="inline-flex items-center gap-2.5 rounded-full border border-[#0A7E94]/40 bg-[#0A7E94]/10 px-4 py-1.5 mb-7">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#00B4CC] animate-pulse" />
-            <span className="text-[#7EC8D8] text-[11px] font-semibold tracking-widest"
-              style={{ fontFamily: FF_SANS, letterSpacing: "0.12em" }}>
-              BATEMANS BAY · NSW AUSTRALIA
-            </span>
-          </div>
-
-          {/* Headline */}
-          <h1 className="text-white font-normal leading-[1.08] mb-6"
-            style={{ fontFamily: FF_SERIF, fontSize: "clamp(2.8rem, 5.5vw, 4.4rem)" }}>
-            Where Health<br />
-            Meets <em className="text-[#7EC8D8]">Beauty</em>
-          </h1>
-
-          {/* Sub */}
-          <p className="text-white/60 leading-relaxed mb-8 max-w-md"
-            style={{ fontFamily: FF_SANS, fontWeight: 300, fontSize: "clamp(1rem,1.5vw,1.125rem)" }}>
-            General Practice, Skin Cancer detection, and medical-grade
-            Aesthetic treatments — delivered with personalised care in Batemans Bay.
+      <div className="hero-inner site-container">
+        <div className="hero-content lg:max-w-[50%] xl:max-w-[46%]">
+          <p className="ref-label-enter">
+            <MaskReveal delay={380}>BATEMANS BAY · NSW AUSTRALIA</MaskReveal>
           </p>
 
-          {/* CTAs */}
-          <div className="flex flex-wrap gap-3 mb-12">
-            <Link to="/book"
-              className="inline-flex items-center gap-2 px-7 py-3.5 bg-[#0A7E94] text-white font-semibold rounded-xl hover:bg-[#086B7E] transition-all duration-200 shadow-[0_8px_24px_rgba(10,126,148,0.5)] hover:shadow-[0_12px_32px_rgba(10,126,148,0.6)] hover:-translate-y-0.5"
-              style={{ fontFamily: FF_SANS }}>
-              <Calendar size={16} /> Book Consultation
-            </Link>
-            <Link to="/general-practice"
-              className="inline-flex items-center gap-2 px-7 py-3.5 bg-white/10 text-white font-medium rounded-xl border border-white/20 hover:bg-white/18 hover:border-white/35 transition-all duration-200 backdrop-blur-sm"
-              style={{ fontFamily: FF_SANS }}>
-              Our Services <ArrowRight size={15} />
-            </Link>
-          </div>
+          <h1 className="heading-display-light">
+            <MaskReveal delay={480} className="mb-1.5">
+              Where Health
+            </MaskReveal>
+            <MaskReveal delay={600}>
+              Meets <em className="heading-accent-light">Beauty</em>
+            </MaskReveal>
+          </h1>
 
-          {/* Stats row */}
-          <div className="flex items-center gap-8 pt-8 border-t border-white/10">
-            {[
-              { v: "20+", l: "Years of Care" },
-              { v: "AGPAL", l: "Accredited" },
-              { v: "5.0 ★", l: "Patient Rated" },
-            ].map(({ v, l }) => (
-              <div key={l}>
-                <div className="text-white font-bold" style={{ fontFamily: FF_SERIF, fontSize: "1.5rem" }}>{v}</div>
-                <div className="text-white/45 text-[11px] mt-0.5" style={{ fontFamily: FF_SANS }}>{l}</div>
+          <MaskReveal delay={820} className="mb-10 md:mb-12">
+            <p className="body-text-light !mb-0">
+              General Practice, Skin Cancer detection, and medical-grade
+              Aesthetic treatments — delivered with personalised care in Batemans Bay.
+            </p>
+          </MaskReveal>
+
+          <div className="flex flex-wrap items-center gap-3 md:gap-4">
+            <div className="ref-rise" style={{ transitionDelay: "1040ms" }}>
+              <Link to="/book" className="btn-primary btn-ref-arrow bg-[#0A7E94] hover:bg-[#086B7E] shadow-[0_4px_20px_rgba(10,126,148,0.35)] hover:shadow-[0_6px_24px_rgba(10,126,148,0.45)]">
+                Book Consultation <ArrowRight size={14} className="ref-arrow" />
+              </Link>
+            </div>
+            <div className="ref-rise" style={{ transitionDelay: "1160ms" }}>
+              <Link to="/general-practice" className="btn-outline-white">
+                Our Services
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="hero-stats-wrap site-container pb-6 md:pb-8">
+        <div className="hero-stats">
+          <div className="hero-stats-grid">
+            {stats.map(({ v, l }, i) => (
+              <div
+                key={l}
+                className="hero-stat-item ref-rise"
+                style={{ transitionDelay: `${1280 + i * 80}ms` }}
+              >
+                <div className="hero-stat-value">{v}</div>
+                <div className="hero-stat-label">{l}</div>
               </div>
             ))}
           </div>
+          <p className="hero-rating-block ref-rise w-full md:w-auto mt-5 md:mt-0 pt-5 md:pt-0 border-t border-white/10 md:border-0" style={{ transitionDelay: "1440ms" }}>
+            · Rated 5.0 · Patient Reviews
+          </p>
         </div>
       </div>
 
-      {/* Bottom wave edge */}
-      <div className="absolute bottom-0 left-0 right-0">
-        <svg viewBox="0 0 1440 48" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" className="w-full h-8 lg:h-12">
-          <path d="M0 48L1440 48L1440 0C1200 40 900 48 720 32C540 16 240 0 0 24L0 48Z" fill="white" />
-        </svg>
-      </div>
+      <ServiceMarquee />
     </section>
   );
 }
 
-// ─── Accreditation strip ──────────────────────────────────────────────────────
+/* ─── STEP 2: TrustStrip — reference minimal credential row ─── */
 function TrustStrip() {
   const items = [
-    { icon: <Shield size={17} />, title: "AGPAL Accredited", sub: "Quality Practice Standards" },
-    { icon: <Award size={17} />, title: "AHPRA Registered", sub: "All Practitioners" },
-    { icon: <Microscope size={17} />, title: "Skin Cancer Institute", sub: "Recognised Clinic" },
-    { icon: <CheckCircle size={17} />, title: "RACGP Members", sub: "College of GPs" },
-    { icon: <Star size={17} />, title: "Medical Grade", sub: "Cosmetic Excellence" },
+    { icon: <Shield size={15} strokeWidth={1.5} />, title: "AGPAL Accredited", sub: "Quality Practice Standards" },
+    { icon: <Award size={15} strokeWidth={1.5} />, title: "AHPRA Registered", sub: "All Practitioners" },
+    { icon: <Microscope size={15} strokeWidth={1.5} />, title: "Skin Cancer Institute", sub: "Recognised Clinic" },
+    { icon: <CheckCircle size={15} strokeWidth={1.5} />, title: "RACGP Members", sub: "College of GPs" },
+    { icon: <Star size={15} strokeWidth={1.5} />, title: "Medical Grade", sub: "Cosmetic Excellence" },
   ];
+
   return (
-    <section className="bg-white border-b border-[rgba(10,126,148,0.08)] py-7">
-      <div className="max-w-screen-xl mx-auto px-5 lg:px-8">
-        <div className="flex flex-wrap items-center justify-center gap-2.5">
+    <section className="section-white border-b border-[rgba(10,126,148,0.06)] py-8 md:py-10">
+      <div className="site-container">
+        <StaggerReveal className="trust-strip-grid">
           {items.map(({ icon, title, sub }) => (
-            <div key={title}
-              className="flex items-center gap-3 bg-[#F4F8FA] hover:bg-[#EDF8FB] rounded-xl px-4 py-2.5 transition-colors duration-200 group cursor-default">
-              <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center shadow-sm flex-shrink-0 text-[#0A7E94] group-hover:shadow transition-shadow">
-                {icon}
-              </div>
+            <div key={title} className="trust-strip-item">
+              <span className="text-[#0A7E94] mt-0.5">{icon}</span>
               <div>
-                <p className="text-[#0D1F2D] font-semibold text-[13px] leading-none mb-0.5" style={{ fontFamily: FF_SANS }}>{title}</p>
-                <p className="text-[#5C7A8A] text-[11px]" style={{ fontFamily: FF_SANS }}>{sub}</p>
+                <p className="font-sans text-[12px] font-semibold text-[#0D1F2D] leading-tight mb-1">{title}</p>
+                <p className="font-sans text-[10px] text-[#5C7A8A] uppercase tracking-[0.1em]">{sub}</p>
               </div>
             </div>
           ))}
-        </div>
+        </StaggerReveal>
       </div>
     </section>
   );
 }
 
-// ─── Services ─────────────────────────────────────────────────────────────────
+/* ─── STEP 3: Services — reference expanding panel accordion ─── */
 function Services() {
-  const cards = [
+  const panels = [
     {
-      icon: <Heart size={18} />, tag: "PRIMARY CARE",
+      num: "01",
+      tag: "PRIMARY CARE",
       title: "General Practice",
-      desc: "Comprehensive family medicine, preventive healthcare, and chronic disease management for every stage of life.",
-      features: ["Preventive Healthcare", "Family Medicine", "Chronic Disease", "Mental Health Plans", "Immunisations"],
-      image: IMAGES.cardGP, path: "/general-practice",
+      desc: "Comprehensive family healthcare for every stage of life — preventive care, chronic disease management, and everyday GP services tailored to you.",
+      image: IMAGES.cardGP,
+      path: "/general-practice",
     },
     {
-      icon: <Microscope size={18} />, tag: "SKIN CANCER",
+      num: "02",
+      tag: "SKIN CANCER",
       title: "Skin Cancer Clinic",
-      desc: "Expert detection using MoleMax HD full-body photography and dermoscopy — Australia's most thorough approach.",
-      features: ["Full Body Skin Checks", "MoleMax HD Mapping", "Mole Monitoring", "Skin Cancer Surgery", "Photodynamic Therapy"],
-      image: IMAGES.cardSkin, path: "/skin-cancer",
+      desc: "Expert full-body skin checks and MoleMax HD detection — early diagnosis and treatment when it matters most.",
+      image: IMAGES.cardSkin,
+      path: "/skin-cancer",
     },
     {
-      icon: <Sparkles size={18} />, tag: "AESTHETICS",
+      num: "03",
+      tag: "AESTHETICS",
       title: "Aesthetic Medicine",
-      desc: "Medical-grade cosmetic treatments performed by AHPRA-registered doctors for natural-looking, lasting results.",
-      features: ["Cosmetic Injectables", "Fractional RF / Microneedling", "HIFU Therapy", "LED Phototherapy", "Non-Surgical Lifts"],
-      image: IMAGES.cardAesthetic, path: "/aesthetic",
+      desc: "Medical-grade cosmetic treatments by AHPRA-registered practitioners — injectables, skin rejuvenation, and natural refined results.",
+      image: IMAGES.facialTreat,
+      path: "/aesthetic",
     },
     {
-      icon: <Zap size={18} />, tag: "LASER",
+      num: "04",
+      tag: "LASER",
       title: "Laser Treatments",
-      desc: "State-of-the-art laser technology for skin resurfacing, pigmentation correction, and total skin rejuvenation.",
-      features: ["Laser Resurfacing", "Pigmentation Treatment", "Vascular Lesions", "Scar Reduction", "Hair Removal"],
-      image: IMAGES.cardLaser, path: "/laser",
+      desc: "State-of-the-art laser technology for resurfacing, pigmentation, vascular lesions, and skin rejuvenation.",
+      image: IMAGES.cardLaser,
+      path: "/laser",
+    },
+    {
+      num: "05",
+      tag: "SKIN CARE",
+      title: "Clinical Skin Products",
+      desc: "Medical-grade skincare recommended and dispensed by our clinic — professional products for lasting skin health.",
+      image: IMAGES.cardSkinPortrait,
+      path: "/store",
     },
   ];
 
   return (
-    <section className="py-24 bg-white">
-      <div className="max-w-screen-xl mx-auto px-5 lg:px-8">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14">
-          <div>
-            <p className="text-[#0A7E94] text-[11px] font-bold uppercase tracking-widest mb-3"
-              style={{ fontFamily: FF_SANS, letterSpacing: "0.14em" }}>OUR SERVICES</p>
-            <h2 className="text-[#0D1F2D] leading-tight"
-              style={{ fontFamily: FF_SERIF, fontSize: "clamp(2rem,3.5vw,2.75rem)" }}>
-              Comprehensive Care &amp;<br /><em>Advanced Treatments</em>
-            </h2>
-          </div>
-          <Link to="/general-practice"
-            className="hidden md:inline-flex items-center gap-2 text-[13px] font-semibold text-[#0A7E94] hover:gap-3 transition-all duration-200 flex-shrink-0"
-            style={{ fontFamily: FF_SANS }}>
-            View all services <ArrowRight size={14} />
-          </Link>
-        </div>
-
-        {/* Cards — 2×2 grid on tablet, 4-col on desktop */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
-          {cards.map((card) => (
-            <Link to={card.path} key={card.title}
-              className="group bg-white rounded-2xl overflow-hidden border border-[rgba(10,126,148,0.09)] hover:border-[rgba(10,126,148,0.28)] shadow-[0_2px_12px_rgba(10,126,148,0.06)] hover:shadow-[0_16px_48px_rgba(10,126,148,0.14)] transition-all duration-350 hover:-translate-y-2 flex flex-col">
-              {/* Image */}
-              <div className="relative h-56 overflow-hidden bg-[#EDF8FB]">
-                <img src={card.image} alt={card.title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-108" />
-                {/* Dark gradient for readability */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
-                {/* Tag chip */}
-                <div className="absolute top-3.5 left-3.5">
-                  <span className="inline-flex items-center gap-1.5 bg-white/95 backdrop-blur-sm text-[#0A7E94] rounded-full px-3 py-1 text-[10px] font-bold shadow-sm"
-                    style={{ fontFamily: FF_SANS, letterSpacing: "0.05em" }}>
-                    {card.icon} {card.tag}
-                  </span>
-                </div>
-                {/* Bottom title on image */}
-                <div className="absolute bottom-3.5 left-4 right-4">
-                  <p className="text-white font-semibold text-lg leading-tight"
-                    style={{ fontFamily: FF_SERIF }}>{card.title}</p>
-                </div>
-              </div>
-
-              {/* Body */}
-              <div className="p-5 flex flex-col flex-1">
-                <p className="text-[#5C7A8A] text-[13px] leading-relaxed mb-4"
-                  style={{ fontFamily: FF_SANS }}>{card.desc}</p>
-                <ul className="space-y-1.5 mb-5 flex-1">
-                  {card.features.slice(0, 4).map((f) => (
-                    <li key={f} className="flex items-center gap-2 text-[12px] text-[#334E5E]"
-                      style={{ fontFamily: FF_SANS }}>
-                      <span className="w-1 h-1 rounded-full bg-[#0A7E94] flex-shrink-0" />{f}
-                    </li>
-                  ))}
-                </ul>
-                <span className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#0A7E94] group-hover:gap-2.5 transition-all duration-200 mt-auto">
-                  Learn More <ArrowRight size={13} />
-                </span>
-              </div>
+    <section className="section-py section-white overflow-hidden relative !pt-10 md:!pt-14 !pb-10 md:!pb-14">
+      <div className="site-container">
+        <ScrollReveal>
+          <div className="section-header-split !mb-8 md:!mb-10">
+            <div>
+              <p className="ref-label">OUR SERVICES</p>
+              <h2 className="heading-section">
+                Comprehensive Care &amp;<br />
+                <em className="heading-accent">Advanced Treatments</em>
+              </h2>
+            </div>
+            <p className="section-header-note hidden lg:block">
+              Hover each panel to explore — every treatment starts with a personalised consultation.
+            </p>
+            <Link to="/general-practice" className="btn-outline lg:hidden shrink-0">
+              View All Services
             </Link>
-          ))}
+          </div>
+        </ScrollReveal>
+      </div>
+
+      <ScrollReveal delay={1}>
+        <div className="svc-accordion-wrap">
+          <ServiceAccordion panels={panels} />
         </div>
+      </ScrollReveal>
+
+      <div className="site-container">
+        <ScrollReveal delay={2}>
+          <div className="mt-8 md:mt-10 flex justify-center">
+            <Link to="/general-practice" className="btn-outline">
+              View All Services
+            </Link>
+          </div>
+        </ScrollReveal>
       </div>
     </section>
   );
 }
 
-// ─── Stats / Why Choose Us ────────────────────────────────────────────────────
-function WhyUs() {
+/* ─── Stats band — reference dark credential strip ─── */
+function StatsBand() {
   const stats = [
-    { value: "20+", label: "Years Serving Batemans Bay" },
-    { value: "4",   label: "Expert Clinicians" },
-    { value: "98%", label: "Patient Satisfaction" },
-    { value: "4",   label: "Specialist Services" },
-  ];
-  const points = [
-    "AGPAL-accredited practice maintaining Australia's highest GP standards",
-    "MoleMax HD total body photography — the gold standard in skin cancer detection",
-    "All aesthetic treatments performed by AHPRA-registered medical practitioners",
-    "Same building: GP, skin cancer clinic, aesthetics and laser — no referrals needed",
+    { v: "20+", l: "Years of Excellence" },
+    { v: "5.0 ★", l: "Patient Rated" },
+    { v: "AGPAL", l: "Accredited Practice" },
+    { v: "4", l: "Specialist Services" },
   ];
 
   return (
-    <section className="py-24 bg-[#0D1F2D] relative overflow-hidden">
-      {/* Decorative teal glow */}
-      <div className="absolute top-0 right-1/4 w-96 h-96 rounded-full bg-[#0A7E94]/8 blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 left-1/4 w-64 h-64 rounded-full bg-[#0A7E94]/5 blur-3xl pointer-events-none" />
-
-      <div className="relative z-10 max-w-screen-xl mx-auto px-5 lg:px-8">
-        {/* Stats row */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-px bg-white/8 rounded-2xl overflow-hidden mb-16">
-          {stats.map(({ value, label }) => (
-            <div key={label} className="bg-[#0D1F2D] px-8 py-8 text-center">
-              <div className="text-[#7EC8D8] font-bold mb-2" style={{ fontFamily: FF_SERIF, fontSize: "clamp(2.2rem,4vw,3rem)" }}>
-                {value}
+    <section className="stats-band">
+      <div className="site-container">
+        <ScrollReveal>
+          <div className="stats-band-grid">
+            {stats.map(({ v, l }) => (
+              <div key={l} className="stats-band-item">
+                <div className="stats-band-value">{v}</div>
+                <div className="stats-band-label">{l}</div>
               </div>
-              <p className="text-white/45 text-[12px] leading-snug" style={{ fontFamily: FF_SANS }}>{label}</p>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+          <div className="stats-band-foot">
+            <p className="font-sans text-white/40 text-[13px] font-light max-w-md">
+              Excellence in every consultation — trusted family care with specialist skin and aesthetic expertise.
+            </p>
+            <Link to="/practice-info" className="link-arrow !text-white/55 hover:!text-[#7EC8D8] shrink-0">
+              About Our Practice <ArrowRight size={13} />
+            </Link>
+          </div>
+        </ScrollReveal>
+      </div>
+    </section>
+  );
+}
 
-        {/* Content grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
-          <div>
-            <p className="text-[#0A7E94] text-[11px] font-bold uppercase tracking-widest mb-4"
-              style={{ fontFamily: FF_SANS, letterSpacing: "0.14em" }}>WHY CHOOSE US</p>
-            <h2 className="text-white leading-tight mb-6"
-              style={{ fontFamily: FF_SERIF, fontSize: "clamp(1.9rem,3vw,2.6rem)" }}>
+/* ─── STEP 4: WhyUs — reference philosophy section with numbered list ─── */
+function WhyUs() {
+  const points = [
+    { n: "01", title: "AGPAL-Accredited Excellence", desc: "Maintaining Australia's highest GP standards with evidence-based care." },
+    { n: "02", title: "MoleMax HD Technology", desc: "The gold standard in skin cancer detection with total body photography." },
+    { n: "03", title: "Medical-Grade Aesthetics", desc: "All treatments performed by AHPRA-registered medical practitioners." },
+  ];
+
+  return (
+    <section className="section-py section-cream">
+      <div className="site-container">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-center">
+          <ScrollZoomReveal className="relative order-2 lg:order-1">
+            <div className="relative pl-6 pt-6">
+              <div className="absolute top-0 left-0 w-16 h-16 bg-[#0D1F2D] z-0" aria-hidden />
+              <div className="absolute top-0 left-[72px] w-px h-24 bg-[#0A7E94]/25 z-0" aria-hidden />
+              <div className="image-frame aspect-[4/5] max-w-md relative z-10 overflow-hidden">
+                <img
+                  src={IMAGES.clinicInterior}
+                  alt="Clinic"
+                  className="ref-zoom-img ref-zoom-img-drift w-full h-full object-cover"
+                />
+              </div>
+              <div className="absolute -bottom-6 -right-2 md:-right-6 w-[52%] aspect-square border-[5px] border-white shadow-[0_16px_48px_rgba(13,31,45,0.12)] overflow-hidden z-20">
+                <img
+                  src={IMAGES.cardAesthetic}
+                  alt="Treatment"
+                  className="ref-zoom-img ref-zoom-img-delay w-full h-full object-cover"
+                />
+              </div>
+              <div className="absolute top-10 left-0 z-30 bg-[#0D1F2D] text-white px-4 py-3 font-sans text-[10px] uppercase tracking-[0.14em] leading-relaxed border border-[#0A7E94]/20">
+                20+<br />Years of<br />Excellence
+              </div>
+            </div>
+          </ScrollZoomReveal>
+
+          <ScrollReveal delay={2} className="order-1 lg:order-2">
+            <p className="ref-label">WHY CHOOSE US</p>
+            <h2 className="heading-section mb-6">
               The Standard of Care<br />
-              <em className="text-[#7EC8D8]">You Deserve</em>
+              <em className="heading-accent">You Deserve</em>
             </h2>
-            <p className="text-white/55 text-base leading-relaxed mb-8"
-              style={{ fontFamily: FF_SANS, fontWeight: 300 }}>
+            <p className="body-text mb-8">
               We combine the warmth of a trusted family practice with the capabilities of a
               specialist skin and aesthetics clinic — all under one roof in Batemans Bay.
             </p>
-            <ul className="space-y-4">
-              {points.map((pt) => (
-                <li key={pt} className="flex items-start gap-3.5">
-                  <span className="flex-shrink-0 w-5 h-5 rounded-full bg-[#0A7E94]/20 border border-[#0A7E94]/50 flex items-center justify-center mt-0.5">
-                    <CheckCircle size={12} className="text-[#0A7E94]" />
-                  </span>
-                  <span className="text-white/65 text-[14px] leading-relaxed" style={{ fontFamily: FF_SANS }}>{pt}</span>
-                </li>
+            <div className="mb-8">
+              {points.map(({ n, title, desc }) => (
+                <div key={n} className="philosophy-item">
+                  <span className="philosophy-num">{n}</span>
+                  <div>
+                    <p className="philosophy-title">{title}</p>
+                    <p className="body-text-sm">{desc}</p>
+                  </div>
+                </div>
               ))}
-            </ul>
-            <Link to="/practice-info"
-              className="inline-flex items-center gap-2 mt-8 px-7 py-3.5 bg-[#0A7E94] text-white font-semibold rounded-xl hover:bg-[#086B7E] transition-all duration-200 shadow-[0_8px_24px_rgba(10,126,148,0.4)]"
-              style={{ fontFamily: FF_SANS }}>
-              About Our Practice <ArrowRight size={15} />
+            </div>
+            <Link to="/practice-info" className="btn-primary bg-[#0A7E94] hover:bg-[#086B7E]">
+              About Our Practice <ArrowRight size={14} />
             </Link>
-          </div>
-
-          {/* Image collage */}
-          <div className="relative hidden lg:block">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="rounded-2xl overflow-hidden aspect-[3/4]">
-                <img src={IMAGES.clinicInterior} alt="Clinic" className="w-full h-full object-cover" />
-              </div>
-              <div className="flex flex-col gap-4 pt-8">
-                <div className="rounded-2xl overflow-hidden aspect-square">
-                  <img src={IMAGES.cardAesthetic} alt="Aesthetic treatment" className="w-full h-full object-cover" />
-                </div>
-                <div className="rounded-2xl overflow-hidden aspect-square">
-                  <img src={IMAGES.cardSkin} alt="Skin check" className="w-full h-full object-cover" />
-                </div>
-              </div>
-            </div>
-            {/* AGPAL badge float */}
-            <div className="absolute -bottom-4 -left-4 bg-white rounded-2xl p-4 shadow-2xl flex items-center gap-3 border border-[rgba(10,126,148,0.1)]">
-              <div className="w-10 h-10 rounded-xl bg-[#EDF8FB] flex items-center justify-center flex-shrink-0">
-                <Shield size={18} className="text-[#0A7E94]" />
-              </div>
-              <div>
-                <p className="text-[#0D1F2D] font-semibold text-[13px]" style={{ fontFamily: FF_SANS }}>AGPAL Accredited</p>
-                <p className="text-[#5C7A8A] text-[11px]" style={{ fontFamily: FF_SANS }}>Quality care guaranteed</p>
-              </div>
-            </div>
-          </div>
+          </ScrollReveal>
         </div>
       </div>
     </section>
   );
 }
 
-// ─── About section ────────────────────────────────────────────────────────────
+/* ─── STEP 5: About — reference editorial + featured grid ─── */
 function About() {
-  return (
-    <section className="py-24 bg-white">
-      <div className="max-w-screen-xl mx-auto px-5 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 xl:gap-20 items-center">
-          {/* Image */}
-          <div className="relative">
-            <div className="rounded-2xl overflow-hidden aspect-[4/3] shadow-[0_24px_64px_rgba(10,126,148,0.15)]">
-              <img src={IMAGES.heroWomanWarm} alt="Personalised care" className="w-full h-full object-cover" />
-            </div>
-            {/* Decorative teal border accent */}
-            <div className="absolute -bottom-3 -right-3 w-2/3 h-2/3 rounded-2xl border-2 border-[#0A7E94]/20 -z-10" />
-          </div>
+  const featured = [
+    { tag: "PRIMARY CARE", title: "General Practice", image: IMAGES.cardGP, path: "/general-practice" },
+    { tag: "SKIN CANCER", title: "Skin Cancer Clinic", image: IMAGES.cardSkin, path: "/skin-cancer" },
+    { tag: "AESTHETICS", title: "Aesthetic Medicine", image: IMAGES.cardAesthetic, path: "/aesthetic" },
+    { tag: "LASER", title: "Laser Treatments", image: IMAGES.cardLaser, path: "/laser" },
+  ];
 
-          {/* Text */}
-          <div>
-            <p className="text-[#0A7E94] text-[11px] font-bold uppercase tracking-widest mb-4"
-              style={{ fontFamily: FF_SANS, letterSpacing: "0.14em" }}>ABOUT OUR CLINIC</p>
-            <h2 className="text-[#0D1F2D] leading-tight mb-5"
-              style={{ fontFamily: FF_SERIF, fontSize: "clamp(1.9rem,3vw,2.6rem)" }}>
-              Trusted Healthcare
-              <br /><em>in Batemans Bay</em>
-            </h2>
-            <p className="text-[#5C7A8A] text-base leading-relaxed mb-5"
-              style={{ fontFamily: FF_SANS, fontWeight: 300 }}>
+  return (
+    <section className="section-py section-white">
+      <div className="site-container">
+        <ScrollReveal>
+          <div className="section-header-split">
+            <div>
+              <p className="ref-label">ABOUT OUR CLINIC</p>
+              <h2 className="heading-section">
+                Trusted Healthcare<br />
+                <em className="heading-accent">in Batemans Bay</em>
+              </h2>
+            </div>
+            <p className="section-header-note hidden lg:block">
+              Over 20 years of personalised care — from everyday GP visits to advanced skin and aesthetic treatments.
+            </p>
+          </div>
+        </ScrollReveal>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-center">
+          <ScrollReveal delay={1}>
+            <p className="body-text mb-5 lg:hidden">
+              For over 20 years, Beach Road Surgery &amp; Skin Clinic has delivered personalised healthcare to the Batemans Bay community.
+            </p>
+            <p className="body-text mb-5 hidden lg:block">
               For over 20 years, Beach Road Surgery &amp; Skin Clinic has delivered personalised healthcare to the Batemans Bay community. Our experienced doctors bring specialist-level expertise to every patient encounter.
             </p>
-            <p className="text-[#5C7A8A] text-base leading-relaxed mb-7"
-              style={{ fontFamily: FF_SANS, fontWeight: 300 }}>
+            <p className="body-text mb-8">
               Whether you need everyday GP care, a comprehensive skin cancer check, or a medical aesthetic treatment, you'll find the same warmth, clinical excellence, and personal attention at every visit.
             </p>
-            <ul className="space-y-3 mb-8">
+            <StaggerReveal className="space-y-0 mb-8 border-t border-[rgba(10,126,148,0.08)]">
               {[
                 "Experienced, FRACGP-qualified general practitioners",
                 "Advanced skin cancer detection with MoleMax HD technology",
                 "Medical-grade cosmetic treatments in a comfortable setting",
                 "Bulk billing available for eligible patients",
               ].map((item) => (
-                <li key={item} className="flex items-start gap-3">
-                  <span className="flex-shrink-0 mt-0.5 w-4.5 h-4.5 rounded-full bg-[#EDF8FB] flex items-center justify-center">
-                    <CheckCircle size={11} className="text-[#0A7E94]" />
-                  </span>
-                  <span className="text-[#334E5E] text-[14px] leading-relaxed" style={{ fontFamily: FF_SANS }}>{item}</span>
-                </li>
+                <div key={item} className="philosophy-item !gap-4">
+                  <span className="text-[#0A7E94] font-sans text-sm pt-0.5">—</span>
+                  <p className="font-sans text-[14px] text-[#334E5E] leading-relaxed">{item}</p>
+                </div>
               ))}
-            </ul>
-            <Link to="/practice-info"
-              className="inline-flex items-center gap-2 px-7 py-3.5 bg-[#0A7E94] text-white font-semibold rounded-xl hover:bg-[#086B7E] transition-all duration-200 shadow-[0_4px_16px_rgba(10,126,148,0.3)]"
-              style={{ fontFamily: FF_SANS }}>
-              Meet Our Doctors <ArrowRight size={15} />
+            </StaggerReveal>
+            <Link to="/practice-info" className="btn-primary bg-[#0A7E94] hover:bg-[#086B7E]">
+              Meet Our Doctors <ArrowRight size={14} />
             </Link>
-          </div>
+          </ScrollReveal>
+
+          <ScrollReveal delay={2}>
+            <div className="featured-grid">
+              <Link to="/practice-info" className="featured-card featured-card-lg group">
+                <img src={IMAGES.heroWomanWarm} alt="Personalised care at Beach Road Surgery" />
+                <div className="featured-card-overlay" />
+                <span className="featured-card-meta">Our Clinic</span>
+                <h3 className="featured-card-title">Personalised Care in Batemans Bay</h3>
+              </Link>
+              <div className="featured-card-wrap">
+                {featured.map(({ tag, title, image, path }) => (
+                  <Link key={title} to={path} className="featured-card featured-card-sm group">
+                    <img src={image} alt={title} />
+                    <div className="featured-card-overlay" />
+                    <span className="featured-card-meta">{tag}</span>
+                    <h3 className="featured-card-title text-base">{title}</h3>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </ScrollReveal>
         </div>
       </div>
     </section>
   );
 }
 
-// ─── Testimonials ─────────────────────────────────────────────────────────────
+/* ─── STEP 6: Testimonials — reference carousel + stats bar ─── */
 function Testimonials() {
   const reviews = [
     { name: "Sarah M.", type: "General Practice", rating: 5, quote: "Dr Dharmarama is exceptional — he truly listens and takes time to explain everything clearly. The clinic is modern and the team are incredibly welcoming. I wouldn't go anywhere else." },
     { name: "James T.", type: "Skin Cancer Check", rating: 5, quote: "I had a comprehensive skin check with full body mapping using MoleMax HD. The technology is impressive and the doctor was thorough and reassuring. Peace of mind is priceless." },
     { name: "Michelle K.", type: "Aesthetic Medicine", rating: 5, quote: "The results from my treatments exceeded my expectations. The team made me feel at ease throughout the process and the outcomes looked completely natural. Highly recommend." },
   ];
+  const [idx, setIdx] = useState(0);
+  const r = reviews[idx];
+  const pad = (n: number) => String(n).padStart(2, "0");
 
   return (
-    <section className="py-24 bg-[#F4F8FA]">
-      <div className="max-w-screen-xl mx-auto px-5 lg:px-8">
-        <div className="text-center mb-14">
-          <p className="text-[#0A7E94] text-[11px] font-bold uppercase tracking-widest mb-3"
-            style={{ fontFamily: FF_SANS, letterSpacing: "0.14em" }}>PATIENT STORIES</p>
-          <h2 className="text-[#0D1F2D]"
-            style={{ fontFamily: FF_SERIF, fontSize: "clamp(1.9rem,3vw,2.6rem)" }}>
-            What Our Patients Say
-          </h2>
-        </div>
+    <section className="section-py section-dark">
+      <div className="site-container">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14">
+          <ScrollReveal className="lg:col-span-4">
+            <p className="ref-label-light !text-[#7EC8D8] before:!bg-[#7EC8D8]/40">PATIENT STORIES</p>
+            <h2 className="heading-section-light mb-10">
+              What Our<br />
+              <em className="heading-accent-light">Patients Say</em>
+            </h2>
+            <div className="flex items-center gap-3 mb-4">
+              <button
+                onClick={() => setIdx((i) => (i - 1 + reviews.length) % reviews.length)}
+                className="testimonial-nav-btn"
+                aria-label="Previous review"
+              >
+                <ChevronLeft size={16} />
+              </button>
+              <button
+                onClick={() => setIdx((i) => (i + 1) % reviews.length)}
+                className="testimonial-nav-btn"
+                aria-label="Next review"
+              >
+                <ChevronRight size={16} />
+              </button>
+              <span className="font-sans text-white/35 text-[11px] tracking-[0.12em] ml-2">
+                {pad(idx + 1)} / {pad(reviews.length)}
+              </span>
+            </div>
+            <div className="flex gap-2">
+              {reviews.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setIdx(i)}
+                  className={`testimonial-dash ${i === idx ? "active" : "inactive"}`}
+                  aria-label={`Go to review ${i + 1}`}
+                />
+              ))}
+            </div>
+          </ScrollReveal>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {reviews.map((r, i) => (
-            <div key={r.name}
-              className="bg-white rounded-2xl p-7 border border-[rgba(10,126,148,0.09)] shadow-[0_2px_16px_rgba(10,126,148,0.06)] hover:shadow-[0_8px_32px_rgba(10,126,148,0.12)] transition-all duration-300 relative">
-              {/* Quote mark */}
-              <div className="absolute top-5 right-6 text-[#EDF8FB]"
-                style={{ fontFamily: FF_SERIF, fontSize: "5rem", lineHeight: 1 }}>
-                "
-              </div>
-              {/* Stars */}
-              <div className="flex gap-0.5 mb-4">
-                {Array.from({ length: r.rating }).map((_, j) => (
-                  <Star key={j} size={13} className="text-[#F59E0B] fill-[#F59E0B]" />
-                ))}
-              </div>
-              <p className="text-[#334E5E] text-[14px] leading-relaxed mb-6 relative z-10 italic"
-                style={{ fontFamily: FF_SERIF, fontSize: "0.95rem" }}>
-                "{r.quote}"
-              </p>
-              <div className="flex items-center gap-3 pt-4 border-t border-[rgba(10,126,148,0.08)]">
-                <div className="w-9 h-9 rounded-full bg-[#EDF8FB] flex items-center justify-center text-[#0A7E94] font-bold text-sm flex-shrink-0"
-                  style={{ fontFamily: FF_SERIF }}>
+          <ScrollReveal delay={2} className="lg:col-span-8">
+            <blockquote key={idx} className="testimonial-quote-enter font-serif text-white/90 text-[clamp(1.2rem,2.2vw,1.75rem)] leading-[1.55] mb-10">
+              &ldquo;{r.quote}&rdquo;
+            </blockquote>
+            <div className="flex items-center justify-between border-t border-white/10 pt-8">
+              <div className="flex items-center gap-4">
+                <div className="w-11 h-11 rounded-full bg-[#0A7E94]/30 flex items-center justify-center text-[#7EC8D8] font-serif text-lg">
                   {r.name[0]}
                 </div>
                 <div>
-                  <p className="text-[#0D1F2D] font-semibold text-[13px]" style={{ fontFamily: FF_SANS }}>{r.name}</p>
-                  <p className="text-[#5C7A8A] text-[11px]" style={{ fontFamily: FF_SANS }}>{r.type}</p>
+                  <p className="font-sans text-white text-sm font-medium">{r.name}</p>
+                  <p className="font-sans text-white/40 text-[11px] uppercase tracking-[0.1em]">{r.type}</p>
                 </div>
+              </div>
+              <div className="text-right">
+                <div className="flex gap-0.5 justify-end mb-1">
+                  {Array.from({ length: r.rating }).map((_, j) => (
+                    <Star key={j} size={12} className="text-[#7EC8D8] fill-[#7EC8D8]" />
+                  ))}
+                </div>
+                <p className="font-sans text-white/30 text-[9px] uppercase tracking-[0.14em]">Verified</p>
               </div>
             </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-// ─── Location ─────────────────────────────────────────────────────────────────
-function Location() {
-  return (
-    <section className="py-24 bg-white">
-      <div className="max-w-screen-xl mx-auto px-5 lg:px-8">
-        <div className="text-center mb-14">
-          <p className="text-[#0A7E94] text-[11px] font-bold uppercase tracking-widest mb-3"
-            style={{ fontFamily: FF_SANS, letterSpacing: "0.14em" }}>FIND US</p>
-          <h2 className="text-[#0D1F2D]"
-            style={{ fontFamily: FF_SERIF, fontSize: "clamp(1.9rem,3vw,2.6rem)" }}>Visit Our Clinic</h2>
+          </ScrollReveal>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-stretch">
-          {/* Map */}
-          <div className="lg:col-span-3 rounded-2xl overflow-hidden shadow-[0_8px_32px_rgba(10,126,148,0.1)] min-h-[360px] relative border border-[rgba(10,126,148,0.1)]">
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3296.0!2d150.1731!3d-35.7075!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6b16c22b0e0d0c0f%3A0x0!2s116+Beach+Rd%2C+Batemans+Bay+NSW+2536!5e0!3m2!1sen!2sau!4v1688000000000!5m2!1sen!2sau"
-              className="absolute inset-0 w-full h-full"
-              style={{ border: 0, minHeight: "360px" }}
-              allowFullScreen loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              title="Clinic map"
-            />
-          </div>
-
-          {/* Info cards */}
-          <div className="lg:col-span-2 flex flex-col gap-4">
+        <ScrollReveal delay={3}>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-14 pt-10 border-t border-white/10">
             {[
-              { emoji: <MapPin size={18} className="text-[#0A7E94]" />, label: "Address",
-                content: "116 Beach Road\nBatemans Bay NSW 2536",
-                link: { text: "Get Directions →", href: "https://maps.google.com/?q=116+Beach+Road+Batemans+Bay+NSW" } },
-              { emoji: <Phone size={18} className="text-[#0A7E94]" />, label: "Phone",
-                content: CLINIC.phone,
-                link: { text: "Call Now →", href: `tel:${CLINIC.phone.replace(/\s/g,"")}` } },
-              { emoji: <Clock size={18} className="text-[#0A7E94]" />, label: "Opening Hours",
-                content: "Monday – Friday\n9:00 AM – 4:30 PM" },
-            ].map(({ emoji, label, content, link }) => (
-              <div key={label}
-                className="flex items-start gap-4 bg-[#F4F8FA] rounded-2xl p-5 border border-[rgba(10,126,148,0.09)] hover:bg-[#EDF8FB] transition-colors duration-200">
-                <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center flex-shrink-0 shadow-sm">
-                  {emoji}
-                </div>
-                <div>
-                  <p className="text-[#0D1F2D] font-semibold text-[13px] mb-1" style={{ fontFamily: FF_SANS }}>{label}</p>
-                  <p className="text-[#5C7A8A] text-[13px] whitespace-pre-line" style={{ fontFamily: FF_SANS }}>{content}</p>
-                  {link && (
-                    <a href={link.href} target="_blank" rel="noreferrer"
-                      className="inline-flex items-center gap-1 text-[#0A7E94] text-[12px] font-semibold mt-2 hover:underline"
-                      style={{ fontFamily: FF_SANS }}>
-                      {link.text}
-                    </a>
-                  )}
-                </div>
+              { v: "5.0 ★", l: "Average Rating" },
+              { v: "20+", l: "Years of Care" },
+              { v: "98%", l: "Patient Satisfaction" },
+              { v: "4", l: "Specialist Services" },
+            ].map(({ v, l }) => (
+              <div key={l} className="md:px-6 first:md:pl-0 md:border-r md:border-white/10 last:md:border-r-0">
+                <div className="font-serif text-[#7EC8D8] text-2xl md:text-[2rem] mb-2 leading-none">{v}</div>
+                <div className="font-sans text-white/35 text-[10px] uppercase tracking-[0.16em]">{l}</div>
               </div>
             ))}
-
-            <Link to="/book"
-              className="flex items-center justify-center gap-2 py-3.5 bg-[#0A7E94] text-white text-[13px] font-semibold rounded-2xl hover:bg-[#086B7E] transition-colors shadow-[0_4px_16px_rgba(10,126,148,0.3)]"
-              style={{ fontFamily: FF_SANS }}>
-              <Calendar size={15} /> Book Appointment Online
-            </Link>
           </div>
+          <div className="partner-strip">
+            {["AGPAL Accredited", "AHPRA Registered", "RACGP Members", "Skin Cancer Institute", "Medical Grade"].map((name) => (
+              <span key={name} className="partner-strip-item">{name}</span>
+            ))}
+          </div>
+        </ScrollReveal>
+      </div>
+    </section>
+  );
+}
+
+/* ─── STEP 7: Location — reference clean split layout ─── */
+function Location() {
+  return (
+    <section className="section-py section-white">
+      <div className="site-container">
+        <ScrollReveal>
+          <div className="section-header-split">
+            <div>
+              <p className="ref-label">FIND US</p>
+              <h2 className="heading-section">
+                Visit Our <em className="heading-accent">Clinic</em>
+              </h2>
+            </div>
+            <p className="section-header-note hidden lg:block">
+              Conveniently located on Beach Road — free parking available for patients.
+            </p>
+          </div>
+        </ScrollReveal>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
+          <ScrollReveal className="lg:col-span-7 min-h-[380px] relative map-frame">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3296.0!2d150.1731!3d-35.7075!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6b16c22b0e0d0c0f%3A0x0!2s116+Beach+Rd%2C+Batemans+Bay+NSW+2536!5e0!3m2!1sen!2sau!4v1688000000000!5m2!1sen!2sau"
+              className="absolute inset-0 w-full h-full min-h-[380px]"
+              style={{ border: 0 }}
+              allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade" title="Clinic map"
+            />
+          </ScrollReveal>
+
+          <ScrollReveal delay={2} className="lg:col-span-5">
+            <div className="flex flex-col h-full divide-y divide-[rgba(10,126,148,0.08)] border border-[rgba(10,126,148,0.08)]">
+              {[
+                { icon: <MapPin size={16} className="text-[#0A7E94]" />, label: "Address", content: "116 Beach Road\nBatemans Bay NSW 2536",
+                  link: { text: "Get Directions →", href: "https://maps.google.com/?q=116+Beach+Road+Batemans+Bay+NSW" } },
+                { icon: <Phone size={16} className="text-[#0A7E94]" />, label: "Phone", content: CLINIC.phone,
+                  link: { text: "Call Now →", href: `tel:${CLINIC.phone.replace(/\s/g, "")}` } },
+                { icon: <Clock size={16} className="text-[#0A7E94]" />, label: "Opening Hours", content: "Monday – Friday\n9:00 AM – 4:30 PM" },
+              ].map(({ icon, label, content, link }) => (
+                <div key={label} className="flex items-start gap-4 p-6 md:p-8 bg-surface hover:bg-[var(--cream-warm)] transition-colors duration-500 flex-1">
+                  <span className="mt-0.5">{icon}</span>
+                  <div>
+                    <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.1em] text-[#0D1F2D] mb-1.5">{label}</p>
+                    <p className="body-text-sm whitespace-pre-line">{content}</p>
+                    {link && (
+                      <a href={link.href} target="_blank" rel="noreferrer" className="link-arrow text-[10px] mt-3 inline-flex">
+                        {link.text}
+                      </a>
+                    )}
+                  </div>
+                </div>
+              ))}
+              <div className="p-6 md:p-8">
+                <Link to="/book" className="btn-primary w-full bg-[#0A7E94] hover:bg-[#086B7E]">
+                  <Calendar size={14} /> Book Appointment Online
+                </Link>
+              </div>
+            </div>
+          </ScrollReveal>
         </div>
       </div>
     </section>
   );
 }
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
 export default function Home() {
   return (
     <>
       <Hero />
-      <TrustStrip />
-      <Services />
-      <WhyUs />
-      <About />
-      <Testimonials />
-      <BookingBanner />
-      <Location />
+      <div className="home-sections">
+        <Services />
+        <TrustStrip />
+        <WhyUs />
+        <StatsBand />
+        <About />
+        <Testimonials />
+        <BookingBanner />
+        <Location />
+      </div>
     </>
   );
 }

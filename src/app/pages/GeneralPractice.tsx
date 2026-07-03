@@ -17,42 +17,42 @@ export default function GeneralPractice() {
     <>
       <PageHero image={IMAGES.heroGP} tag="GENERAL PRACTICE" title={<>Comprehensive Family<br />Healthcare</>} subtitle="Your trusted family doctors providing personalised care for every stage of life." />
 
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
+      <section className="section-py section-white">
+        <div className="site-container grid grid-cols-1 lg:grid-cols-2 gap-14 md:gap-16 items-center">
           <div>
-            <p className="text-[#0A7E94] text-[11px] font-bold uppercase tracking-widest mb-4" style={{ fontFamily: "'Outfit',sans-serif", letterSpacing: "0.14em" }}>OUR APPROACH</p>
-            <h2 className="text-[#0D1F2D] leading-tight mb-5" style={{ fontFamily: "'DM Serif Display',serif", fontSize: "clamp(1.8rem,3vw,2.5rem)" }}>
+            <p className="eyebrow">OUR APPROACH</p>
+            <h2 className="heading-section mb-5 md:mb-6">
               Patient-Centred Care
               <br /><em>for Every Life Stage</em>
             </h2>
-            <p className="text-[#5A7A8A] text-base leading-relaxed mb-5" style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 300 }}>
+            <p className="body-text mb-5">
               Our experienced GPs take time to listen, understand, and provide personalised healthcare. We believe in building lasting relationships with our patients to support their long-term health and wellbeing.
             </p>
-            <p className="text-[#5A7A8A] text-base leading-relaxed mb-8" style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 300 }}>
+            <p className="body-text mb-8 md:mb-10">
               As an AGPAL-accredited practice, we maintain the highest standards in general practice medicine, using evidence-based approaches to deliver outstanding care for individuals and families in Batemans Bay.
             </p>
-            <div className="flex flex-wrap gap-3 mb-8">
+            <div className="flex flex-wrap gap-3 mb-8 md:mb-10">
               {["Bulk billing available", "New patients welcome", "Same-day appointments", "HotDoc online booking"].map((t) => (
-                <span key={t} className="bg-[#EDF8FB] text-[#0A7E94] text-xs font-semibold px-3 py-1.5 rounded-full border border-[rgba(10,126,148,0.2)]" style={{ fontFamily: "'Outfit',sans-serif" }}>{t}</span>
+                <span key={t} className="bg-[#EDF8FB] text-[#0A7E94] text-xs font-semibold px-4 py-2 rounded-full border border-[rgba(10,126,148,0.2)] font-sans">{t}</span>
               ))}
             </div>
-            <Link to="/book" className="inline-flex items-center gap-2 px-7 py-3.5 bg-[#0A7E94] text-white font-semibold rounded-xl hover:bg-[#096B7E] transition-all duration-200 shadow-md shadow-[rgba(10,126,148,0.3)]" style={{ fontFamily: "'Outfit',sans-serif" }}>
+            <Link to="/book" className="btn-primary">
               Book a GP Visit <ArrowRight size={16} />
             </Link>
           </div>
-          <div className="rounded-2xl overflow-hidden aspect-[4/3] shadow-xl shadow-[rgba(10,126,148,0.12)]">
+          <div className="image-frame aspect-[4/3]">
             <img src={IMAGES.heroGP} alt="Doctor consultation" className="w-full h-full object-cover object-top" />
           </div>
         </div>
       </section>
 
-      <section className="py-20 bg-[#F8FCFD]">
-        <div className="max-w-7xl mx-auto px-4 lg:px-8">
-          <div className="text-center mb-12">
-            <p className="text-[#0A7E94] text-[11px] font-bold uppercase tracking-widest mb-3" style={{ fontFamily: "'Outfit',sans-serif", letterSpacing: "0.14em" }}>WHAT WE OFFER</p>
-            <h2 className="text-[#0D1F2D]" style={{ fontFamily: "'DM Serif Display',serif", fontSize: "clamp(1.8rem,3vw,2.5rem)" }}>General Practice Services</h2>
+      <section className="section-py section-muted">
+        <div className="site-container">
+          <div className="text-center mb-12 md:mb-16">
+            <p className="eyebrow">WHAT WE OFFER</p>
+            <h2 className="heading-section">General Practice Services</h2>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
             {services.map((s) => <TreatmentCard key={s.title} {...s} />)}
           </div>
         </div>

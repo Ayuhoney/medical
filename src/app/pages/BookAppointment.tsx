@@ -1,13 +1,13 @@
 import { useState } from "react";
-import { Calendar, Clock, User, CheckCircle, Phone, ArrowRight, ChevronRight } from "lucide-react";
-import { PageHero } from "../components/ui";
-import { IMAGES } from "../constants";
+import { Calendar, User, CheckCircle, ArrowRight, ChevronRight, Phone } from "lucide-react";
+import { PageHero, BookingBanner } from "../components/ui";
+import { IMAGES, CLINIC } from "../constants";
 
 const serviceTypes = [
-  { id: "gp", label: "General Practice", icon: "🏥", desc: "GP consultation, health checks, prescriptions" },
-  { id: "skin", label: "Skin Cancer Check", icon: "🔍", desc: "Full body skin check and mole monitoring" },
-  { id: "aesthetic", label: "Aesthetic Medicine", icon: "✨", desc: "Cosmetic injectables and skin treatments" },
-  { id: "laser", label: "Laser Treatment", icon: "⚡", desc: "Laser resurfacing, pigmentation, hair removal" },
+  { id: "gp", label: "General Practice", desc: "GP consultation, health checks, prescriptions" },
+  { id: "skin", label: "Skin Cancer Check", desc: "Full body skin check and mole monitoring" },
+  { id: "aesthetic", label: "Aesthetic Medicine", desc: "Cosmetic injectables and skin treatments" },
+  { id: "laser", label: "Laser Treatment", desc: "Laser resurfacing, pigmentation, hair removal" },
 ];
 
 const doctors = [
@@ -21,7 +21,12 @@ const timeSlots = [
   "1:00 PM", "1:30 PM", "2:00 PM", "2:30 PM", "3:00 PM", "3:30 PM", "4:00 PM",
 ];
 
-function StepIndicator({ step, current }: { step: number; current: number }) {
+const selectBtn = (active: boolean) =>
+  active
+    ? "border-[#0A7E94] bg-[#EDF8FB] text-[#0A7E94]"
+    : "border-[rgba(10,126,148,0.12)] text-[#2A4A5A] hover:border-[rgba(10,126,148,0.3)] hover:bg-[#F4F8FA]";
+
+function StepIndicator({ current }: { current: number }) {
   const steps = ["Service", "Doctor", "Date & Time", "Your Details", "Confirm"];
   return (
     <div className="flex items-center gap-0 overflow-x-auto pb-1">
@@ -31,13 +36,25 @@ function StepIndicator({ step, current }: { step: number; current: number }) {
         const active = n === current;
         return (
           <div key={label} className="flex items-center gap-0 flex-shrink-0">
-            <div className="flex flex-col items-center gap-1">
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all ${done ? "bg-[#0A7E94] text-white" : active ? "bg-[#0A7E94] text-white ring-4 ring-[rgba(10,126,148,0.2)]" : "bg-[#F0F6F8] text-[#5A7A8A]"}`} style={{ fontFamily: "'Outfit',sans-serif" }}>
+            <div className="flex flex-col items-center gap-1.5">
+              <div
+                className={`w-9 h-9 flex items-center justify-center text-[11px] font-semibold transition-all duration-300 font-sans ${
+                  done
+                    ? "bg-[#0A7E94] text-white"
+                    : active
+                      ? "bg-[#0A7E94] text-white ring-2 ring-[rgba(10,126,148,0.25)]"
+                      : "bg-[#F4F8FA] text-[#5C7A8A] border border-[rgba(10,126,148,0.1)]"
+                }`}
+              >
                 {done ? <CheckCircle size={14} /> : n}
               </div>
-              <span className={`text-[10px] font-medium hidden sm:block ${active ? "text-[#0A7E94]" : "text-[#5A7A8A]"}`} style={{ fontFamily: "'Outfit',sans-serif" }}>{label}</span>
+              <span className={`text-[10px] font-medium hidden sm:block font-sans uppercase tracking-[0.08em] ${active ? "text-[#0A7E94]" : "text-[#5C7A8A]"}`}>
+                {label}
+              </span>
             </div>
-            {i < steps.length - 1 && <div className={`h-0.5 w-8 sm:w-12 mx-1 mt-[-14px] sm:mt-[-18px] ${done ? "bg-[#0A7E94]" : "bg-[#E0EFF2]"}`} />}
+            {i < steps.length - 1 && (
+              <div className={`h-px w-8 sm:w-10 mx-1.5 mt-[-16px] sm:mt-[-18px] transition-colors ${done ? "bg-[#0A7E94]" : "bg-[rgba(10,126,148,0.12)]"}`} />
+            )}
           </div>
         );
       })}
@@ -65,40 +82,56 @@ export default function BookAppointment() {
 
   if (submitted) {
     return (
-      <div className="min-h-[80vh] flex items-center justify-center bg-[#F8FCFD]">
-        <div className="max-w-md mx-auto px-4 text-center py-20">
-          <div className="w-20 h-20 rounded-full bg-[#EDF8FB] flex items-center justify-center mx-auto mb-6">
-            <CheckCircle size={40} className="text-[#0A7E94]" />
+      <>
+        <section className="section-py section-cream min-h-[70vh] flex items-center">
+          <div className="site-container-narrow text-center py-12">
+            <div className="w-16 h-16 bg-[#0A7E94] flex items-center justify-center mx-auto mb-6">
+              <CheckCircle size={32} className="text-white" />
+            </div>
+            <p className="ref-label justify-center before:!hidden">CONFIRMATION</p>
+            <h2 className="heading-section mb-4">Booking Request Sent</h2>
+            <p className="body-text mx-auto mb-8">
+              Thank you, <strong className="font-medium text-[#0D1F2D]">{selected.name}</strong>. Your appointment request has been submitted. Our team will confirm via phone or email within 1 business day.
+            </p>
+            <div className="border border-[rgba(10,126,148,0.1)] bg-surface p-6 md:p-8 text-left mb-8 space-y-3">
+              {[
+                { l: "Service", v: serviceTypes.find((s) => s.id === selected.service)?.label },
+                { l: "Doctor", v: doctors.find((d) => d.id === selected.doctor)?.name },
+                { l: "Date", v: selected.date },
+                { l: "Time", v: selected.time },
+              ].map(({ l, v }) =>
+                v ? (
+                  <div key={l} className="flex justify-between text-sm font-sans border-b border-[rgba(10,126,148,0.06)] pb-3 last:border-0 last:pb-0">
+                    <span className="text-[#5C7A8A] uppercase text-[11px] tracking-[0.08em]">{l}</span>
+                    <span className="text-[#0D1F2D] font-medium">{v}</span>
+                  </div>
+                ) : null
+              )}
+            </div>
+            <p className="body-text-sm mb-8">
+              Questions? Call us at{" "}
+              <a href={`tel:${CLINIC.phone.replace(/\s/g, "")}`} className="text-[#0A7E94] font-semibold">
+                {CLINIC.phone}
+              </a>
+            </p>
+            <button
+              type="button"
+              onClick={() => {
+                setSubmitted(false);
+                setStep(1);
+                setSelected({ service: "", doctor: "", date: "", time: "", name: "", email: "", phone: "", dob: "", notes: "" });
+              }}
+              className="link-arrow"
+            >
+              Book another appointment <ArrowRight size={13} />
+            </button>
           </div>
-          <h2 className="text-[#0D1F2D] mb-3" style={{ fontFamily: "'DM Serif Display',serif", fontSize: "2rem" }}>Booking Request Sent!</h2>
-          <p className="text-[#5A7A8A] text-base leading-relaxed mb-6" style={{ fontFamily: "'Outfit',sans-serif" }}>
-            Thank you, <strong>{selected.name}</strong>. Your appointment request has been submitted. Our team will confirm via phone or email within 1 business day.
-          </p>
-          <div className="bg-white rounded-2xl p-5 border border-[rgba(10,126,148,0.1)] text-left mb-6 space-y-2">
-            {[
-              { l: "Service", v: serviceTypes.find(s => s.id === selected.service)?.label },
-              { l: "Doctor", v: doctors.find(d => d.id === selected.doctor)?.name },
-              { l: "Date", v: selected.date },
-              { l: "Time", v: selected.time },
-            ].map(({ l, v }) => v ? (
-              <div key={l} className="flex justify-between text-sm">
-                <span className="text-[#5A7A8A]" style={{ fontFamily: "'Outfit',sans-serif" }}>{l}</span>
-                <span className="text-[#0D1F2D] font-medium" style={{ fontFamily: "'Outfit',sans-serif" }}>{v}</span>
-              </div>
-            ) : null)}
-          </div>
-          <p className="text-[#5A7A8A] text-sm mb-6" style={{ fontFamily: "'Outfit',sans-serif" }}>
-            Questions? Call us at <a href="tel:0244080777" className="text-[#0A7E94] font-semibold">02 4408 0777</a>
-          </p>
-          <button onClick={() => { setSubmitted(false); setStep(1); setSelected({ service: "", doctor: "", date: "", time: "", name: "", email: "", phone: "", dob: "", notes: "" }); }} className="text-[#0A7E94] text-sm font-semibold hover:underline" style={{ fontFamily: "'Outfit',sans-serif" }}>
-            Book another appointment →
-          </button>
-        </div>
-      </div>
+        </section>
+        <BookingBanner />
+      </>
     );
   }
 
-  // Generate date options (next 14 working days)
   const dateOptions: { display: string; value: string }[] = [];
   const d = new Date();
   while (dateOptions.length < 14) {
@@ -113,66 +146,80 @@ export default function BookAppointment() {
 
   return (
     <>
-      <PageHero image={IMAGES.clinicInterior} tag="APPOINTMENTS" title="Book an Appointment" subtitle="Schedule a visit with our doctors online — quick and easy." />
+      <PageHero
+        image={IMAGES.clinicInterior}
+        imagePosition="center 40%"
+        tag="APPOINTMENTS"
+        title={
+          <>
+            Book an <em className="heading-accent-light">Appointment</em>
+          </>
+        }
+        subtitle="Schedule a visit with our doctors online — quick and easy."
+      />
 
-      <section className="py-16 bg-[#F8FCFD] min-h-[70vh]">
-        <div className="max-w-3xl mx-auto px-4 lg:px-8">
-          {/* HotDoc note */}
-          <div className="bg-white rounded-2xl p-5 border border-[rgba(10,126,148,0.15)] flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-8">
+      <section className="section-py section-cream">
+        <div className="site-container-narrow">
+          <div className="border border-[rgba(10,126,148,0.1)] bg-surface p-5 md:p-6 flex flex-col sm:flex-row items-start sm:items-center gap-5 mb-8 md:mb-10">
             <div className="flex-1">
-              <p className="text-[#0D1F2D] font-semibold text-sm mb-1" style={{ fontFamily: "'Outfit',sans-serif" }}>Prefer to book via HotDoc?</p>
-              <p className="text-[#5A7A8A] text-xs" style={{ fontFamily: "'Outfit',sans-serif" }}>Our clinic uses HotDoc for real-time appointment bookings. Use the form below for a callback request.</p>
+              <p className="ref-label !mb-3">HOTDOC</p>
+              <p className="font-sans text-[#0D1F2D] font-semibold text-sm mb-1">Prefer to book via HotDoc?</p>
+              <p className="body-text-sm !max-w-none">Our clinic uses HotDoc for real-time bookings. Use the form below for a callback request.</p>
             </div>
-            <a href="https://www.hotdoc.com.au" target="_blank" rel="noreferrer" className="flex items-center gap-2 bg-[#0A7E94] text-white text-sm font-semibold px-5 py-2.5 rounded-xl hover:bg-[#096B7E] transition-colors flex-shrink-0" style={{ fontFamily: "'Outfit',sans-serif" }}>
+            <a href="https://www.hotdoc.com.au" target="_blank" rel="noreferrer" className="btn-primary-sm flex-shrink-0 bg-[#0A7E94] hover:bg-[#086B7E]">
               Open HotDoc <ArrowRight size={14} />
             </a>
           </div>
 
-          <div className="bg-white rounded-2xl border border-[rgba(10,126,148,0.12)] shadow-sm overflow-hidden">
-            {/* Header */}
-            <div className="bg-[#EDF8FB] px-6 py-5 border-b border-[rgba(10,126,148,0.1)]">
-              <p className="text-[#0A7E94] text-[11px] font-bold uppercase tracking-widest mb-3" style={{ fontFamily: "'Outfit',sans-serif", letterSpacing: "0.14em" }}>BOOK APPOINTMENT</p>
-              <StepIndicator step={step} current={step} />
+          <div className="border border-[rgba(10,126,148,0.1)] bg-surface overflow-hidden">
+            <div className="bg-[var(--cream-muted)] px-6 md:px-8 py-5 md:py-6 border-b border-[rgba(10,126,148,0.08)]">
+              <p className="ref-label !mb-4">BOOK APPOINTMENT</p>
+              <StepIndicator current={step} />
             </div>
 
-            <div className="p-6">
-              {/* Step 1: Service */}
+            <div className="p-6 md:p-8 lg:p-10">
               {step === 1 && (
                 <div>
-                  <h3 className="text-[#0D1F2D] text-xl mb-5" style={{ fontFamily: "'DM Serif Display',serif" }}>What brings you in?</h3>
+                  <h3 className="font-serif text-[#0D1F2D] text-xl md:text-2xl mb-2">What brings you in?</h3>
+                  <p className="body-text-sm mb-6">Select the type of appointment you need.</p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {serviceTypes.map((s) => (
-                      <button key={s.id} onClick={() => setSelected(v => ({ ...v, service: s.id }))}
-                        className={`flex items-start gap-4 p-4 rounded-xl border-2 text-left transition-all duration-200 ${selected.service === s.id ? "border-[#0A7E94] bg-[#EDF8FB]" : "border-[rgba(10,126,148,0.12)] hover:border-[rgba(10,126,148,0.3)]"}`}
+                      <button
+                        key={s.id}
+                        type="button"
+                        onClick={() => setSelected((v) => ({ ...v, service: s.id }))}
+                        className={`flex items-start gap-4 p-5 border text-left transition-all duration-300 font-sans ${selectBtn(selected.service === s.id)}`}
                       >
-                        <span className="text-2xl">{s.icon}</span>
-                        <div>
-                          <p className="text-[#0D1F2D] font-semibold text-sm" style={{ fontFamily: "'Outfit',sans-serif" }}>{s.label}</p>
-                          <p className="text-[#5A7A8A] text-xs mt-0.5" style={{ fontFamily: "'Outfit',sans-serif" }}>{s.desc}</p>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-[#0D1F2D] font-semibold text-sm uppercase tracking-[0.04em]">{s.label}</p>
+                          <p className="body-text-sm mt-1 !text-[13px]">{s.desc}</p>
                         </div>
-                        {selected.service === s.id && <CheckCircle size={16} className="text-[#0A7E94] ml-auto flex-shrink-0 mt-0.5" />}
+                        {selected.service === s.id && <CheckCircle size={16} className="text-[#0A7E94] flex-shrink-0 mt-0.5" />}
                       </button>
                     ))}
                   </div>
                 </div>
               )}
 
-              {/* Step 2: Doctor */}
               {step === 2 && (
                 <div>
-                  <h3 className="text-[#0D1F2D] text-xl mb-5" style={{ fontFamily: "'DM Serif Display',serif" }}>Choose a Doctor</h3>
+                  <h3 className="font-serif text-[#0D1F2D] text-xl md:text-2xl mb-2">Choose a Doctor</h3>
+                  <p className="body-text-sm mb-6">Select your preferred practitioner.</p>
                   <div className="flex flex-col gap-3">
                     {doctors.map((doc) => (
-                      <button key={doc.id} onClick={() => setSelected(v => ({ ...v, doctor: doc.id }))}
-                        className={`flex items-center gap-4 p-4 rounded-xl border-2 text-left transition-all duration-200 ${selected.doctor === doc.id ? "border-[#0A7E94] bg-[#EDF8FB]" : "border-[rgba(10,126,148,0.12)] hover:border-[rgba(10,126,148,0.3)]"}`}
+                      <button
+                        key={doc.id}
+                        type="button"
+                        onClick={() => setSelected((v) => ({ ...v, doctor: doc.id }))}
+                        className={`flex items-center gap-4 p-5 border text-left transition-all duration-300 font-sans ${selectBtn(selected.doctor === doc.id)}`}
                       >
-                        <div className="w-10 h-10 rounded-full bg-[#EDF8FB] flex items-center justify-center text-[#0A7E94] flex-shrink-0">
+                        <div className="w-11 h-11 bg-[#EDF8FB] flex items-center justify-center text-[#0A7E94] flex-shrink-0">
                           <User size={18} />
                         </div>
-                        <div className="flex-1">
-                          <p className="text-[#0D1F2D] font-semibold text-sm" style={{ fontFamily: "'Outfit',sans-serif" }}>{doc.name}</p>
-                          <p className="text-[#5A7A8A] text-xs" style={{ fontFamily: "'Outfit',sans-serif" }}>{doc.role}</p>
-                          <p className="text-[#0A7E94] text-xs font-medium mt-0.5" style={{ fontFamily: "'Outfit',sans-serif" }}>{doc.available}</p>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-[#0D1F2D] font-semibold text-sm">{doc.name}</p>
+                          <p className="body-text-sm">{doc.role}</p>
+                          <p className="text-[#0A7E94] text-[11px] font-medium mt-1 uppercase tracking-[0.06em]">{doc.available}</p>
                         </div>
                         {selected.doctor === doc.id && <CheckCircle size={16} className="text-[#0A7E94] flex-shrink-0" />}
                       </button>
@@ -181,29 +228,32 @@ export default function BookAppointment() {
                 </div>
               )}
 
-              {/* Step 3: Date & Time */}
               {step === 3 && (
                 <div>
-                  <h3 className="text-[#0D1F2D] text-xl mb-5" style={{ fontFamily: "'DM Serif Display',serif" }}>Choose Date & Time</h3>
-                  <p className="text-[#5A7A8A] text-sm mb-4" style={{ fontFamily: "'Outfit',sans-serif" }}>Select a preferred date:</p>
+                  <h3 className="font-serif text-[#0D1F2D] text-xl md:text-2xl mb-2">Choose Date &amp; Time</h3>
+                  <p className="body-text-sm mb-4">Select a preferred date:</p>
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-6">
-                    {dateOptions.slice(0, 8).map((d) => (
-                      <button key={d.value} onClick={() => setSelected(v => ({ ...v, date: d.display, time: "" }))}
-                        className={`py-2.5 px-3 rounded-xl text-xs font-medium border-2 transition-all duration-200 text-center ${selected.date === d.display ? "border-[#0A7E94] bg-[#EDF8FB] text-[#0A7E94]" : "border-[rgba(10,126,148,0.12)] text-[#2A4A5A] hover:border-[rgba(10,126,148,0.3)]"}`}
-                        style={{ fontFamily: "'Outfit',sans-serif" }}
+                    {dateOptions.slice(0, 8).map((dt) => (
+                      <button
+                        key={dt.value}
+                        type="button"
+                        onClick={() => setSelected((v) => ({ ...v, date: dt.display, time: "" }))}
+                        className={`py-3 px-2 text-[11px] font-medium border transition-all duration-300 text-center font-sans uppercase tracking-[0.04em] ${selectBtn(selected.date === dt.display)}`}
                       >
-                        {d.display}
+                        {dt.display}
                       </button>
                     ))}
                   </div>
                   {selected.date && (
                     <>
-                      <p className="text-[#5A7A8A] text-sm mb-3" style={{ fontFamily: "'Outfit',sans-serif" }}>Select a time:</p>
+                      <p className="body-text-sm mb-3">Select a time:</p>
                       <div className="flex flex-wrap gap-2">
                         {timeSlots.map((t) => (
-                          <button key={t} onClick={() => setSelected(v => ({ ...v, time: t }))}
-                            className={`px-3.5 py-2 rounded-xl text-xs font-medium border-2 transition-all duration-200 ${selected.time === t ? "border-[#0A7E94] bg-[#EDF8FB] text-[#0A7E94]" : "border-[rgba(10,126,148,0.12)] text-[#2A4A5A] hover:border-[rgba(10,126,148,0.3)]"}`}
-                            style={{ fontFamily: "'Outfit',sans-serif" }}
+                          <button
+                            key={t}
+                            type="button"
+                            onClick={() => setSelected((v) => ({ ...v, time: t }))}
+                            className={`px-4 py-2.5 text-[11px] font-medium border transition-all duration-300 font-sans ${selectBtn(selected.time === t)}`}
                           >
                             {t}
                           </button>
@@ -214,11 +264,11 @@ export default function BookAppointment() {
                 </div>
               )}
 
-              {/* Step 4: Details */}
               {step === 4 && (
                 <div>
-                  <h3 className="text-[#0D1F2D] text-xl mb-5" style={{ fontFamily: "'DM Serif Display',serif" }}>Your Details</h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <h3 className="font-serif text-[#0D1F2D] text-xl md:text-2xl mb-2">Your Details</h3>
+                  <p className="body-text-sm mb-6">We&apos;ll use these details to confirm your appointment.</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5">
                     {[
                       { key: "name", label: "Full Name *", placeholder: "Jane Smith", type: "text" },
                       { key: "dob", label: "Date of Birth", placeholder: "DD/MM/YYYY", type: "text" },
@@ -226,85 +276,101 @@ export default function BookAppointment() {
                       { key: "email", label: "Email Address", placeholder: "jane@example.com", type: "email" },
                     ].map(({ key, label, placeholder, type }) => (
                       <div key={key}>
-                        <label className="block text-[#0D1F2D] text-xs font-semibold mb-1.5" style={{ fontFamily: "'Outfit',sans-serif" }}>{label}</label>
+                        <label className="form-label">{label}</label>
                         <input
                           type={type}
                           placeholder={placeholder}
                           value={selected[key as keyof typeof selected]}
-                          onChange={(e) => setSelected(v => ({ ...v, [key]: e.target.value }))}
-                          className="w-full px-4 py-2.5 rounded-xl border border-[rgba(10,126,148,0.2)] bg-[#F8FCFD] text-[#0D1F2D] text-sm outline-none focus:border-[#0A7E94] focus:ring-2 focus:ring-[rgba(10,126,148,0.15)] transition-all"
-                          style={{ fontFamily: "'Outfit',sans-serif" }}
+                          onChange={(e) => setSelected((v) => ({ ...v, [key]: e.target.value }))}
+                          className="form-input"
                         />
                       </div>
                     ))}
                     <div className="sm:col-span-2">
-                      <label className="block text-[#0D1F2D] text-xs font-semibold mb-1.5" style={{ fontFamily: "'Outfit',sans-serif" }}>Reason for Visit / Notes</label>
+                      <label className="form-label">Reason for Visit / Notes</label>
                       <textarea
                         rows={3}
                         placeholder="Please describe the reason for your appointment..."
                         value={selected.notes}
-                        onChange={(e) => setSelected(v => ({ ...v, notes: e.target.value }))}
-                        className="w-full px-4 py-2.5 rounded-xl border border-[rgba(10,126,148,0.2)] bg-[#F8FCFD] text-[#0D1F2D] text-sm outline-none focus:border-[#0A7E94] focus:ring-2 focus:ring-[rgba(10,126,148,0.15)] transition-all resize-none"
-                        style={{ fontFamily: "'Outfit',sans-serif" }}
+                        onChange={(e) => setSelected((v) => ({ ...v, notes: e.target.value }))}
+                        className="form-input resize-none"
                       />
                     </div>
                   </div>
                 </div>
               )}
 
-              {/* Step 5: Confirm */}
               {step === 5 && (
                 <div>
-                  <h3 className="text-[#0D1F2D] text-xl mb-5" style={{ fontFamily: "'DM Serif Display',serif" }}>Confirm Your Booking</h3>
-                  <div className="bg-[#F8FCFD] rounded-xl p-5 border border-[rgba(10,126,148,0.1)] space-y-3 mb-5">
+                  <h3 className="font-serif text-[#0D1F2D] text-xl md:text-2xl mb-2">Confirm Your Booking</h3>
+                  <p className="body-text-sm mb-6">Please review your details before submitting.</p>
+                  <div className="border border-[rgba(10,126,148,0.1)] bg-[var(--cream-muted)] p-5 md:p-6 space-y-3 mb-5">
                     {[
-                      { label: "Service", value: serviceTypes.find(s => s.id === selected.service)?.label },
-                      { label: "Doctor", value: doctors.find(d => d.id === selected.doctor)?.name },
+                      { label: "Service", value: serviceTypes.find((s) => s.id === selected.service)?.label },
+                      { label: "Doctor", value: doctors.find((d) => d.id === selected.doctor)?.name },
                       { label: "Date", value: selected.date },
                       { label: "Time", value: selected.time },
                       { label: "Name", value: selected.name },
                       { label: "Phone", value: selected.phone },
-                    ].map(({ label, value }) => value ? (
-                      <div key={label} className="flex justify-between text-sm">
-                        <span className="text-[#5A7A8A]" style={{ fontFamily: "'Outfit',sans-serif" }}>{label}</span>
-                        <span className="text-[#0D1F2D] font-medium" style={{ fontFamily: "'Outfit',sans-serif" }}>{value}</span>
-                      </div>
-                    ) : null)}
+                    ].map(({ label, value }) =>
+                      value ? (
+                        <div key={label} className="flex justify-between text-sm font-sans border-b border-[rgba(10,126,148,0.06)] pb-3 last:border-0 last:pb-0">
+                          <span className="text-[#5C7A8A] uppercase text-[11px] tracking-[0.08em]">{label}</span>
+                          <span className="text-[#0D1F2D] font-medium text-right max-w-[60%]">{value}</span>
+                        </div>
+                      ) : null
+                    )}
                   </div>
-                  <p className="text-[#5A7A8A] text-xs leading-relaxed" style={{ fontFamily: "'Outfit',sans-serif" }}>
-                    By submitting this request, you agree to be contacted by our clinic to confirm your appointment. This is a booking request, not a confirmed appointment.
+                  <p className="body-text-sm">
+                    By submitting, you agree to be contacted by our clinic to confirm your appointment. This is a booking request, not a confirmed appointment.
                   </p>
                 </div>
               )}
 
-              {/* Navigation */}
-              <div className="flex items-center justify-between mt-8 pt-6 border-t border-[rgba(10,126,148,0.1)]">
+              <div className="flex items-center justify-between mt-10 pt-6 border-t border-[rgba(10,126,148,0.08)]">
                 {step > 1 ? (
-                  <button onClick={back} className="px-5 py-2.5 text-sm font-medium text-[#5A7A8A] hover:text-[#0A7E94] transition-colors" style={{ fontFamily: "'Outfit',sans-serif" }}>
+                  <button type="button" onClick={back} className="font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-[#5C7A8A] hover:text-[#0A7E94] transition-colors">
                     ← Back
                   </button>
-                ) : <div />}
+                ) : (
+                  <div />
+                )}
                 {step < 5 ? (
-                  <button onClick={next} disabled={!canNext()} className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 ${canNext() ? "bg-[#0A7E94] text-white hover:bg-[#096B7E] shadow-md shadow-[rgba(10,126,148,0.25)]" : "bg-[#E0EFF2] text-[#5A7A8A] cursor-not-allowed"}`} style={{ fontFamily: "'Outfit',sans-serif" }}>
+                  <button
+                    type="button"
+                    onClick={next}
+                    disabled={!canNext()}
+                    className={`inline-flex items-center gap-2 font-sans text-[11px] font-semibold uppercase tracking-[0.14em] transition-all duration-300 ${
+                      canNext()
+                        ? "btn-primary-sm bg-[#0A7E94] hover:bg-[#086B7E]"
+                        : "h-[46px] px-6 bg-[#E0EFF2] text-[#5C7A8A] cursor-not-allowed"
+                    }`}
+                  >
                     Continue <ChevronRight size={14} />
                   </button>
                 ) : (
-                  <button onClick={handleSubmit} className="flex items-center gap-2 px-6 py-2.5 bg-[#0A7E94] text-white text-sm font-semibold rounded-xl hover:bg-[#096B7E] transition-all shadow-md shadow-[rgba(10,126,148,0.25)]" style={{ fontFamily: "'Outfit',sans-serif" }}>
-                    <Calendar size={15} /> Submit Booking Request
+                  <button type="button" onClick={handleSubmit} className="btn-primary-sm bg-[#0A7E94] hover:bg-[#086B7E]">
+                    <Calendar size={15} /> Submit Request
                   </button>
                 )}
               </div>
             </div>
           </div>
 
-          {/* Phone alt */}
-          <div className="mt-6 text-center">
-            <p className="text-[#5A7A8A] text-sm" style={{ fontFamily: "'Outfit',sans-serif" }}>
-              Prefer to call? <a href="tel:0244080777" className="text-[#0A7E94] font-semibold hover:underline">02 4408 0777</a> — Mon–Fri 9am–4:30pm
+          <div className="mt-8 pt-6 border-t border-[rgba(10,126,148,0.08)] flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-center">
+            <Phone size={14} className="text-[#0A7E94] hidden sm:block" />
+            <p className="body-text-sm !max-w-none">
+              Prefer to call?{" "}
+              <a href={`tel:${CLINIC.phone.replace(/\s/g, "")}`} className="text-[#0A7E94] font-semibold hover:underline">
+                {CLINIC.phone}
+              </a>
+              <span className="text-[#5C7A8A]"> — Mon–Fri 9am–4:30pm</span>
             </p>
           </div>
         </div>
       </section>
+
+      <BookingBanner />
     </>
   );
 }

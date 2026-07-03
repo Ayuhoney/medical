@@ -2,17 +2,22 @@
 
 :root {
   --font-size: 16px;
-  --background: #ffffff;
+  /* Smooth warm off-white — reference cream, not pure #fff */
+  --cream: #FAF9F6;
+  --cream-warm: #F5F3EE;
+  --cream-muted: #F0EEEA;
+  --surface: #FCFBF8;
+  --background: #FAF9F6;
   --foreground: #0D1F2D;
-  --card: #ffffff;
+  --card: #FCFBF8;
   --card-foreground: #0D1F2D;
-  --popover: #ffffff;
+  --popover: #FCFBF8;
   --popover-foreground: #0D1F2D;
   --primary: #0A7E94;
   --primary-foreground: #ffffff;
-  --secondary: #EDF8FB;
+  --secondary: #EDE9E3;
   --secondary-foreground: #0A7E94;
-  --muted: #F4F8FA;
+  --muted: #F0EEEA;
   --muted-foreground: #5C7A8A;
   --accent: #00B4CC;
   --accent-foreground: #ffffff;
@@ -20,7 +25,7 @@
   --destructive-foreground: #ffffff;
   --border: rgba(10, 126, 148, 0.1);
   --input: transparent;
-  --input-background: #F0F6F8;
+  --input-background: #F3F1EC;
   --switch-background: #a0c4cc;
   --font-weight-medium: 500;
   --font-weight-normal: 400;
@@ -30,7 +35,15 @@
   --chart-3: #7EC8D8;
   --chart-4: #B8E4EC;
   --chart-5: #0D1F2D;
-  --radius: 1rem;
+  --radius: 1.25rem;
+  --shadow-sm: 0 2px 12px rgba(10, 126, 148, 0.06);
+  --shadow-md: 0 8px 32px rgba(10, 126, 148, 0.1);
+  --shadow-lg: 0 20px 56px rgba(10, 126, 148, 0.14);
+  --shadow-xl: 0 28px 72px rgba(10, 126, 148, 0.18);
+  --section-py: 3.5rem;
+  --section-py-lg: 6rem;
+  --font-serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Jost', system-ui, sans-serif;
   --sidebar: #EDF8FB;
   --sidebar-foreground: #0D1F2D;
   --sidebar-primary: #0A7E94;
@@ -125,7 +138,7 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-sans);
   }
   html { font-size: var(--font-size); }
   h1 { font-size: var(--text-2xl); font-weight: 500; line-height: 1.2; }

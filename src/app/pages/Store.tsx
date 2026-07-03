@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ShoppingCart, Star, ArrowRight, Search, Filter } from "lucide-react";
+import { ShoppingCart, Star, ArrowRight, Search } from "lucide-react";
 import { IMAGES } from "../constants";
 import { PageHero } from "../components/ui";
 import { Link } from "react-router";
@@ -20,35 +20,32 @@ const products = [
 function ProductCard({ product }: { product: (typeof products)[number] }) {
   const [added, setAdded] = useState(false);
   return (
-    <div className="group bg-white rounded-2xl overflow-hidden border border-[rgba(10,126,148,0.1)] hover:border-[rgba(10,126,148,0.25)] hover:shadow-xl hover:shadow-[rgba(10,126,148,0.1)] transition-all duration-300 flex flex-col">
+    <div className="group card-premium hover:-translate-y-1 flex flex-col">
       <div className="relative h-56 bg-[#F0F6F8] overflow-hidden">
-        <img src={product.image} alt={product.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+        <img src={product.image} alt={product.name} className="w-full h-full object-cover image-hover" />
         {product.tag && (
-          <div className="absolute top-3 left-3">
-            <span className="bg-[#0A7E94] text-white text-[10px] font-bold px-2.5 py-1 rounded-full" style={{ fontFamily: "'Outfit',sans-serif" }}>
-              {product.tag}
-            </span>
+          <div className="absolute top-4 left-4">
+            <span className="bg-[#0A7E94] text-white text-[10px] font-bold px-3 py-1 rounded-full font-sans">{product.tag}</span>
           </div>
         )}
       </div>
-      <div className="p-5 flex flex-col flex-1">
-        <p className="text-[#0A7E94] text-[10px] font-bold uppercase tracking-widest mb-1" style={{ fontFamily: "'Outfit',sans-serif" }}>{product.brand}</p>
-        <h3 className="text-[#0D1F2D] font-semibold text-base mb-1.5 leading-snug" style={{ fontFamily: "'Outfit',sans-serif" }}>{product.name}</h3>
-        <p className="text-[#5A7A8A] text-xs leading-relaxed mb-3 flex-1" style={{ fontFamily: "'Outfit',sans-serif" }}>{product.desc}</p>
+      <div className="p-5 md:p-6 flex flex-col flex-1">
+        <p className="eyebrow mb-1 !text-[10px]">{product.brand}</p>
+        <h3 className="text-[#0D1F2D] font-semibold text-base mb-1.5 leading-snug font-sans">{product.name}</h3>
+        <p className="body-text-sm mb-3 flex-1">{product.desc}</p>
         <div className="flex items-center gap-1.5 mb-4">
           <div className="flex gap-0.5">
-            {[1,2,3,4,5].map((s) => (
+            {[1, 2, 3, 4, 5].map((s) => (
               <Star key={s} size={11} className={s <= Math.round(product.rating) ? "text-[#F59E0B] fill-[#F59E0B]" : "text-gray-200 fill-gray-200"} />
             ))}
           </div>
-          <span className="text-[#5A7A8A] text-xs" style={{ fontFamily: "'Outfit',sans-serif" }}>({product.reviews})</span>
+          <span className="body-text-sm">({product.reviews})</span>
         </div>
         <div className="flex items-center justify-between">
-          <span className="text-[#0D1F2D] font-bold text-xl" style={{ fontFamily: "'DM Serif Display',serif" }}>${product.price}</span>
+          <span className="text-[#0D1F2D] font-bold text-xl font-serif">${product.price}</span>
           <button
             onClick={() => { setAdded(true); setTimeout(() => setAdded(false), 1800); }}
-            className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${added ? "bg-green-500 text-white" : "bg-[#0A7E94] text-white hover:bg-[#096B7E]"}`}
-            style={{ fontFamily: "'Outfit',sans-serif" }}
+            className={`flex items-center gap-1.5 px-4 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 font-sans ${added ? "bg-green-500 text-white" : "btn-primary-sm !px-4 !py-2.5"}`}
           >
             <ShoppingCart size={13} />
             {added ? "Added!" : "Add to Cart"}
@@ -73,19 +70,18 @@ export default function Store() {
     <>
       <PageHero image={IMAGES.aestheticMask} tag="ONLINE STORE" title={<>Clinical Skin Care <br /><em>Products</em></>} subtitle="Medical-grade skincare recommended and dispensed by our clinic." />
 
-      {/* Intro */}
-      <section className="py-12 bg-[#EDF8FB] border-b border-[rgba(10,126,148,0.1)]">
-        <div className="max-w-7xl mx-auto px-4 lg:px-8">
+      <section className="section-py-sm bg-[#EDF8FB] border-b border-[rgba(10,126,148,0.08)]">
+        <div className="site-container">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div>
-              <h2 className="text-[#0D1F2D] text-xl mb-1" style={{ fontFamily: "'DM Serif Display',serif" }}>Cosmetic Skin Solutions Australia</h2>
-              <p className="text-[#5A7A8A] text-sm" style={{ fontFamily: "'Outfit',sans-serif" }}>Select from our curated Clinical Skin Care Range — doctor-approved, medical grade products.</p>
+              <h2 className="font-serif text-[#0D1F2D] text-xl mb-1">Cosmetic Skin Solutions Australia</h2>
+              <p className="body-text-sm">Select from our curated Clinical Skin Care Range — doctor-approved, medical grade products.</p>
             </div>
-            <div className="flex items-center gap-3 text-sm text-[#5A7A8A]" style={{ fontFamily: "'Outfit',sans-serif" }}>
-              <span className="flex items-center gap-1.5 bg-white px-4 py-2 rounded-xl border border-[rgba(10,126,148,0.15)]">
+            <div className="flex items-center gap-3 text-sm text-[#5A7A8A] font-sans">
+              <span className="flex items-center gap-1.5 bg-white px-4 py-2.5 rounded-full border border-[rgba(10,126,148,0.12)] shadow-sm">
                 <span className="w-2 h-2 rounded-full bg-green-500" /> Free shipping over $150
               </span>
-              <span className="flex items-center gap-1.5 bg-white px-4 py-2 rounded-xl border border-[rgba(10,126,148,0.15)]">
+              <span className="flex items-center gap-1.5 bg-white px-4 py-2.5 rounded-full border border-[rgba(10,126,148,0.12)] shadow-sm">
                 🔒 Secure checkout
               </span>
             </div>
@@ -93,9 +89,8 @@ export default function Store() {
         </div>
       </section>
 
-      <section className="py-14 bg-white min-h-[60vh]">
-        <div className="max-w-7xl mx-auto px-4 lg:px-8">
-          {/* Search + filter */}
+      <section className="section-py-sm section-white min-h-[60vh]">
+        <div className="site-container">
           <div className="flex flex-col sm:flex-row gap-4 mb-8">
             <div className="relative flex-1">
               <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#5A7A8A]" />
@@ -104,55 +99,49 @@ export default function Store() {
                 placeholder="Search products or brands..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 rounded-xl border border-[rgba(10,126,148,0.2)] bg-[#F8FCFD] text-[#0D1F2D] text-sm outline-none focus:border-[#0A7E94] focus:ring-2 focus:ring-[rgba(10,126,148,0.15)] transition-all"
-                style={{ fontFamily: "'Outfit',sans-serif" }}
+                className="form-input pl-10"
               />
             </div>
           </div>
 
-          {/* Category tabs */}
           <div className="flex flex-wrap gap-2 mb-8">
             {categories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${activeCategory === cat ? "bg-[#0A7E94] text-white shadow-md shadow-[rgba(10,126,148,0.25)]" : "bg-[#F0F6F8] text-[#2A4A5A] hover:bg-[#EDF8FB] hover:text-[#0A7E94]"}`}
-                style={{ fontFamily: "'Outfit',sans-serif" }}
+                className={`px-4 py-2.5 rounded-full text-sm font-medium transition-all duration-300 font-sans ${activeCategory === cat ? "bg-[#0A7E94] text-white shadow-[0_4px_18px_rgba(10,126,148,0.25)]" : "bg-[#F0F6F8] text-[#2A4A5A] hover:bg-[#EDF8FB] hover:text-[#0A7E94]"}`}
               >
                 {cat}
               </button>
             ))}
           </div>
 
-          {/* Results count */}
-          <p className="text-[#5A7A8A] text-sm mb-6" style={{ fontFamily: "'Outfit',sans-serif" }}>
+          <p className="body-text-sm mb-6">
             Showing {filtered.length} product{filtered.length !== 1 ? "s" : ""}
             {activeCategory !== "All Products" ? ` in ${activeCategory}` : ""}
           </p>
 
-          {/* Product grid */}
           {filtered.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 md:gap-6">
               {filtered.map((p) => <ProductCard key={p.id} product={p} />)}
             </div>
           ) : (
             <div className="py-20 text-center">
-              <p className="text-[#5A7A8A] text-lg" style={{ fontFamily: "'DM Serif Display',serif" }}>No products found</p>
-              <p className="text-[#5A7A8A] text-sm mt-2" style={{ fontFamily: "'Outfit',sans-serif" }}>Try a different search or category</p>
-              <button onClick={() => { setSearchQuery(""); setActiveCategory("All Products"); }} className="mt-4 text-[#0A7E94] text-sm font-semibold hover:underline" style={{ fontFamily: "'Outfit',sans-serif" }}>Clear filters</button>
+              <p className="font-serif text-[#5A7A8A] text-lg">No products found</p>
+              <p className="body-text-sm mt-2">Try a different search or category</p>
+              <button onClick={() => { setSearchQuery(""); setActiveCategory("All Products"); }} className="link-arrow mt-4">Clear filters</button>
             </div>
           )}
         </div>
       </section>
 
-      {/* Professional advice CTA */}
-      <section className="py-12 bg-[#F8FCFD] border-t border-[rgba(10,126,148,0.1)]">
-        <div className="max-w-3xl mx-auto px-4 text-center">
-          <h3 className="text-[#0D1F2D] text-xl mb-2" style={{ fontFamily: "'DM Serif Display',serif" }}>Not Sure What Your Skin Needs?</h3>
-          <p className="text-[#5A7A8A] text-sm mb-5" style={{ fontFamily: "'Outfit',sans-serif" }}>
+      <section className="section-py-sm section-muted border-t border-[rgba(10,126,148,0.08)]">
+        <div className="site-container-narrow text-center">
+          <h3 className="font-serif text-[#0D1F2D] text-xl mb-2">Not Sure What Your Skin Needs?</h3>
+          <p className="body-text-sm mb-5 max-w-lg mx-auto">
             Book a Skin Analysis with Scan-X and let our medical team recommend a personalised skincare routine tailored to your specific concerns.
           </p>
-          <Link to="/book" className="inline-flex items-center gap-2 px-6 py-3 bg-[#0A7E94] text-white text-sm font-semibold rounded-xl hover:bg-[#096B7E] transition-colors" style={{ fontFamily: "'Outfit',sans-serif" }}>
+          <Link to="/book" className="btn-primary-sm">
             Book Skin Analysis <ArrowRight size={14} />
           </Link>
         </div>

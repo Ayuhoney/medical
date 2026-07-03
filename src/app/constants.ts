@@ -19,7 +19,9 @@ export const IMAGES = {
   cardGP: `${U}1638202993928-7267aad84c31${q}&w=700&h=520`,
   cardSkin: `${U}1676312754401-d97fe43c2c4b${q}&w=700&h=520`,
   cardAesthetic: `${U}1746708810803-722593e53772${q}&w=700&h=520`,
-  cardLaser: `${U}1700760933941-3a06a28fbf47${q}&w=700&h=520`,
+  cardLaser: `${U}1700760933941-3a06a28fbf47${q}&w=800&h=1100`,
+  cardSkinCare: `${U}1767256046031-743d33937c4e${q}&w=800&h=1100`,
+  cardSkinPortrait: `${U}1674932668403-33398b81c92f${q}&w=800&h=1100`,
   // About / clinic
   clinicInterior: `${U}1758448721162-0c77cf477d6f${q}&w=900&h=680`,
   clinicLobby: `${U}1758448721205-8465cebc26af${q}&w=900&h=680`,

@@ -25,60 +25,57 @@ export default function SkinCancer() {
     <>
       <PageHero image={IMAGES.heroSkinCancer} tag="SKIN CANCER CLINIC" title={<>Expert Skin Cancer <br />Detection &amp; Treatment</>} subtitle="Early detection saves lives. Book your comprehensive skin check with our trained skin cancer doctors." />
 
-      {/* Why skin check */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
+      <section className="section-py section-white">
+        <div className="site-container grid grid-cols-1 lg:grid-cols-2 gap-14 md:gap-16 items-center">
           <div>
-            <p className="text-[#0A7E94] text-[11px] font-bold uppercase tracking-widest mb-4" style={{ fontFamily: "'Outfit',sans-serif", letterSpacing: "0.14em" }}>WHY IT MATTERS</p>
-            <h2 className="text-[#0D1F2D] leading-tight mb-5" style={{ fontFamily: "'DM Serif Display',serif", fontSize: "clamp(1.8rem,3vw,2.5rem)" }}>
+            <p className="eyebrow">WHY IT MATTERS</p>
+            <h2 className="heading-section mb-5 md:mb-6">
               Australia Has One of the
               <br /><em>Highest Rates of Skin Cancer</em>
             </h2>
-            <p className="text-[#5A7A8A] text-base leading-relaxed mb-4" style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 300 }}>
+            <p className="body-text mb-4">
               2 in 3 Australians will be diagnosed with skin cancer by the time they are 70. Regular skin checks are the most effective way to detect and treat skin cancer at its earliest, most curable stage.
             </p>
-            <p className="text-[#5A7A8A] text-base leading-relaxed mb-8" style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 300 }}>
+            <p className="body-text mb-8 md:mb-10">
               Our doctors are trained in dermoscopy and use the MoleMax HD system for total body photography, giving you the most comprehensive skin cancer assessment available in Batemans Bay.
             </p>
-            <Link to="/book" className="inline-flex items-center gap-2 px-7 py-3.5 bg-[#0A7E94] text-white font-semibold rounded-xl hover:bg-[#096B7E] transition-all duration-200 shadow-md shadow-[rgba(10,126,148,0.3)]" style={{ fontFamily: "'Outfit',sans-serif" }}>
+            <Link to="/book" className="btn-primary">
               Book Skin Check <ArrowRight size={16} />
             </Link>
           </div>
-          <div className="rounded-2xl overflow-hidden aspect-[4/3] shadow-xl shadow-[rgba(10,126,148,0.12)]">
+          <div className="image-frame aspect-[4/3]">
             <img src={IMAGES.skinCheck} alt="Skin cancer check" className="w-full h-full object-cover" />
           </div>
         </div>
       </section>
 
-      {/* ABCDE */}
-      <section className="py-20 bg-[#F8FCFD]">
-        <div className="max-w-7xl mx-auto px-4 lg:px-8">
-          <div className="text-center mb-12">
-            <p className="text-[#0A7E94] text-[11px] font-bold uppercase tracking-widest mb-3" style={{ fontFamily: "'Outfit',sans-serif", letterSpacing: "0.14em" }}>KNOW THE SIGNS</p>
-            <h2 className="text-[#0D1F2D]" style={{ fontFamily: "'DM Serif Display',serif", fontSize: "clamp(1.8rem,3vw,2.5rem)" }}>The ABCDE of Melanoma</h2>
+      <section className="section-py section-muted">
+        <div className="site-container">
+          <div className="text-center mb-12 md:mb-16">
+            <p className="eyebrow">KNOW THE SIGNS</p>
+            <h2 className="heading-section">The ABCDE of Melanoma</h2>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-5">
             {signs.map(({ letter, name, desc }) => (
-              <div key={letter} className="bg-white rounded-2xl p-5 text-center border border-[rgba(10,126,148,0.1)] hover:border-[rgba(10,126,148,0.3)] transition-colors duration-200">
+              <div key={letter} className="card-premium p-5 md:p-6 text-center hover:-translate-y-1">
                 <div className="w-14 h-14 rounded-2xl bg-[#0A7E94] flex items-center justify-center mx-auto mb-3">
-                  <span className="text-white text-2xl font-bold" style={{ fontFamily: "'DM Serif Display',serif" }}>{letter}</span>
+                  <span className="text-white text-2xl font-bold font-serif">{letter}</span>
                 </div>
-                <p className="text-[#0D1F2D] font-semibold text-sm mb-1.5" style={{ fontFamily: "'Outfit',sans-serif" }}>{name}</p>
-                <p className="text-[#5A7A8A] text-xs leading-relaxed" style={{ fontFamily: "'Outfit',sans-serif" }}>{desc}</p>
+                <p className="text-[#0D1F2D] font-semibold text-sm mb-1.5 font-sans">{name}</p>
+                <p className="body-text-sm">{desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Treatments */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 lg:px-8">
-          <div className="text-center mb-12">
-            <p className="text-[#0A7E94] text-[11px] font-bold uppercase tracking-widest mb-3" style={{ fontFamily: "'Outfit',sans-serif", letterSpacing: "0.14em" }}>OUR SERVICES</p>
-            <h2 className="text-[#0D1F2D]" style={{ fontFamily: "'DM Serif Display',serif", fontSize: "clamp(1.8rem,3vw,2.5rem)" }}>Skin Cancer Services</h2>
+      <section className="section-py section-white">
+        <div className="site-container">
+          <div className="text-center mb-12 md:mb-16">
+            <p className="eyebrow">OUR SERVICES</p>
+            <h2 className="heading-section">Skin Cancer Services</h2>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
             {treatments.map((t) => <TreatmentCard key={t.title} {...t} />)}
           </div>
         </div>
