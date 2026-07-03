@@ -1,71 +1,8 @@
 import { Link } from "react-router";
 import { ArrowRight, Clock } from "lucide-react";
 import { IMAGES } from "../constants";
+import { blogPosts } from "../data/blogPosts";
 import { PageHero } from "../components/ui";
-
-const posts = [
-  {
-    id: 1,
-    category: "Skin Cancer",
-    title: "Why Every Australian Should Get an Annual Skin Check",
-    excerpt: "Australia has one of the highest rates of skin cancer in the world. Here's everything you need to know about why regular skin checks are essential, what to expect, and how MoleMax HD technology makes a difference.",
-    image: IMAGES.heroSkinCancer,
-    author: "Dr Heshan Dharmarama",
-    date: "15 June 2024",
-    readTime: "5 min read",
-    featured: true,
-  },
-  {
-    id: 2,
-    category: "Aesthetic Medicine",
-    title: "The Difference Between Anti-Wrinkle Injections and Dermal Fillers",
-    excerpt: "Many patients are unsure about the difference between these two popular treatments. Our aesthetic physician explains how each works, what to expect, and how to choose the right treatment for your goals.",
-    image: IMAGES.heroAesthetic,
-    author: "Dr Kishani Weerasena",
-    date: "8 June 2024",
-    readTime: "4 min read",
-  },
-  {
-    id: 3,
-    category: "General Practice",
-    title: "Understanding Your Chronic Disease Management Plan",
-    excerpt: "If you live with a chronic condition such as diabetes, asthma, or heart disease, a GP Management Plan can help you get more from your healthcare. Here's how it works and what benefits are available.",
-    image: IMAGES.heroGP,
-    author: "Dr Heshan Dharmarama",
-    date: "1 June 2024",
-    readTime: "6 min read",
-  },
-  {
-    id: 4,
-    category: "Laser",
-    title: "Laser vs IPL: Which Treatment is Right for Your Skin?",
-    excerpt: "Both laser and IPL (intense pulsed light) are used for skin rejuvenation and pigmentation, but they work differently and suit different skin types. Our team breaks down the key differences.",
-    image: IMAGES.heroLaser,
-    author: "Dr Kishani Weerasena",
-    date: "22 May 2024",
-    readTime: "5 min read",
-  },
-  {
-    id: 5,
-    category: "Skincare",
-    title: "Building a Medical-Grade Skincare Routine for Australian Skin",
-    excerpt: "The Australian sun is harsh on skin. Here's how to build a daily skincare routine using medical-grade products that will protect, repair, and maintain healthy skin all year round.",
-    image: IMAGES.productSerums,
-    author: "Dr Kishani Weerasena",
-    date: "14 May 2024",
-    readTime: "7 min read",
-  },
-  {
-    id: 6,
-    category: "Skin Cancer",
-    title: "What is Photodynamic Therapy (PDT) and Is It Right for You?",
-    excerpt: "Photodynamic therapy is a highly effective, non-surgical treatment for certain types of skin cancer and sun-damaged skin. Learn how it works, what to expect, and who is a good candidate.",
-    image: IMAGES.aestheticFace,
-    author: "Dr Heshan Dharmarama",
-    date: "5 May 2024",
-    readTime: "5 min read",
-  },
-];
 
 const categoryColors: Record<string, string> = {
   "Skin Cancer": "bg-red-50 text-red-600",
@@ -76,8 +13,8 @@ const categoryColors: Record<string, string> = {
 };
 
 export default function Blog() {
-  const featured = posts[0];
-  const rest = posts.slice(1);
+  const featured = blogPosts.find((p) => p.featured) ?? blogPosts[0];
+  const rest = blogPosts.filter((p) => p.slug !== featured.slug);
 
   return (
     <>
@@ -87,12 +24,12 @@ export default function Blog() {
         <div className="site-container">
           <div className="mb-12 md:mb-14">
             <p className="eyebrow">FEATURED ARTICLE</p>
-            <div className="group card-premium hover:-translate-y-1 grid grid-cols-1 lg:grid-cols-2">
-              <div className="relative h-60 lg:h-auto overflow-hidden bg-[#EDF8FB]">
-                <img src={featured.image} alt={featured.title} className="w-full h-full object-cover image-hover min-h-[240px]" />
+            <div className="group card-premium hover:-translate-y-1 blog-featured-card">
+              <div className="blog-featured-media">
+                <img src={featured.image} alt={featured.title} className="w-full h-full object-cover image-hover min-h-[220px]" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
               </div>
-              <div className="p-8 lg:p-10 flex flex-col justify-center">
+              <div className="p-6 lg:p-8 lg:pl-4 flex flex-col justify-center">
                 <span className={`inline-block px-3 py-1 rounded-full text-[10px] font-bold mb-3 w-fit font-sans ${categoryColors[featured.category] || "bg-[#EDF8FB] text-[#0A7E94]"}`}>
                   {featured.category}
                 </span>
@@ -107,25 +44,25 @@ export default function Blog() {
                   <span className="text-[#D0E8EE]">·</span>
                   <span className="flex items-center gap-1"><Clock size={11} /> {featured.readTime}</span>
                 </div>
-                <Link to="#" className="link-arrow">
+                <Link to={`/blog/${featured.slug}`} className="link-arrow">
                   Read Article <ArrowRight size={14} />
                 </Link>
               </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-7">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-7 max-w-[1100px] mx-auto">
             {rest.map((post) => (
-              <article key={post.id} className="group card-premium hover:-translate-y-1 flex flex-col">
-                <div className="relative h-44 overflow-hidden bg-[#EDF8FB]">
+              <article key={post.slug} className="group card-premium hover:-translate-y-1 flex flex-col">
+                <div className="blog-post-media">
                   <img src={post.image} alt={post.title} className="w-full h-full object-cover image-hover" />
-                  <div className="absolute top-3 left-3">
+                  <div className="absolute top-2.5 left-2.5">
                     <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold font-sans ${categoryColors[post.category] || "bg-[#EDF8FB] text-[#0A7E94]"}`}>
                       {post.category}
                     </span>
                   </div>
                 </div>
-                <div className="p-5 md:p-6 flex flex-col flex-1">
+                <div className="blog-post-body">
                   <h3 className="font-serif text-[#0D1F2D] leading-snug mb-2.5 text-base">{post.title}</h3>
                   <p className="body-text-sm mb-4 flex-1">{post.excerpt.substring(0, 120)}...</p>
                   <div className="flex items-center gap-3 text-[10px] text-[#5A7A8A] mb-3 font-sans">
@@ -133,7 +70,7 @@ export default function Blog() {
                     <span className="text-[#D0E8EE]">·</span>
                     <span className="flex items-center gap-1"><Clock size={10} /> {post.readTime}</span>
                   </div>
-                  <Link to="#" className="link-arrow text-xs">
+                  <Link to={`/blog/${post.slug}`} className="link-arrow text-xs">
                     Read More <ArrowRight size={12} />
                   </Link>
                 </div>

@@ -1,19 +1,81 @@
 import { useState } from "react";
-import { Calendar, User, CheckCircle, ArrowRight, ChevronRight, Phone } from "lucide-react";
+import {
+  Calendar,
+  CheckCircle,
+  ArrowRight,
+  ChevronRight,
+  Phone,
+  ExternalLink,
+  Stethoscope,
+  Microscope,
+  Sparkles,
+  Zap,
+} from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { PageHero, BookingBanner } from "../components/ui";
 import { IMAGES, CLINIC } from "../constants";
 
-const serviceTypes = [
-  { id: "gp", label: "General Practice", desc: "GP consultation, health checks, prescriptions" },
-  { id: "skin", label: "Skin Cancer Check", desc: "Full body skin check and mole monitoring" },
-  { id: "aesthetic", label: "Aesthetic Medicine", desc: "Cosmetic injectables and skin treatments" },
-  { id: "laser", label: "Laser Treatment", desc: "Laser resurfacing, pigmentation, hair removal" },
+type ServiceType = {
+  id: string;
+  label: string;
+  desc: string;
+  image: string;
+  icon: LucideIcon;
+};
+
+const serviceTypes: ServiceType[] = [
+  {
+    id: "gp",
+    label: "General Practice",
+    desc: "GP consultation, health checks, prescriptions",
+    image: IMAGES.heroGP,
+    icon: Stethoscope,
+  },
+  {
+    id: "skin",
+    label: "Skin Cancer Check",
+    desc: "Full body skin check and mole monitoring",
+    image: IMAGES.heroSkinCancer,
+    icon: Microscope,
+  },
+  {
+    id: "aesthetic",
+    label: "Aesthetic Medicine",
+    desc: "Cosmetic injectables and skin treatments",
+    image: IMAGES.heroAesthetic,
+    icon: Sparkles,
+  },
+  {
+    id: "laser",
+    label: "Laser Treatment",
+    desc: "Laser resurfacing, pigmentation, hair removal",
+    image: IMAGES.heroLaser,
+    icon: Zap,
+  },
 ];
 
 const doctors = [
-  { id: "heshan", name: "Dr Heshan Dharmarama", role: "General Practitioner", available: "Next available: Today" },
-  { id: "kishani", name: "Dr Kishani Weerasena", role: "GP & Aesthetic Physician", available: "Next available: Tomorrow" },
-  { id: "any", name: "First Available Doctor", role: "Any available GP", available: "Soonest appointment" },
+  {
+    id: "heshan",
+    name: "Dr Heshan Dharmarama",
+    role: "General Practitioner",
+    available: "Next available: Today",
+    image: IMAGES.doctorFemale,
+  },
+  {
+    id: "kishani",
+    name: "Dr Kishani Weerasena",
+    role: "GP & Aesthetic Physician",
+    available: "Next available: Tomorrow",
+    image: IMAGES.heroAesthetic,
+  },
+  {
+    id: "any",
+    name: "First Available Doctor",
+    role: "Any available GP",
+    available: "Soonest appointment",
+    image: IMAGES.clinicInterior,
+  },
 ];
 
 const timeSlots = [
@@ -21,39 +83,37 @@ const timeSlots = [
   "1:00 PM", "1:30 PM", "2:00 PM", "2:30 PM", "3:00 PM", "3:30 PM", "4:00 PM",
 ];
 
-const selectBtn = (active: boolean) =>
-  active
-    ? "border-[#0A7E94] bg-[#EDF8FB] text-[#0A7E94]"
-    : "border-[rgba(10,126,148,0.12)] text-[#2A4A5A] hover:border-[rgba(10,126,148,0.3)] hover:bg-[#F4F8FA]";
+const STEPS = ["Service", "Doctor", "Date & Time", "Your Details", "Confirm"];
 
 function StepIndicator({ current }: { current: number }) {
-  const steps = ["Service", "Doctor", "Date & Time", "Your Details", "Confirm"];
   return (
-    <div className="flex items-center gap-0 overflow-x-auto pb-1">
-      {steps.map((label, i) => {
+    <div className="flex items-center w-full gap-0">
+      {STEPS.map((label, i) => {
         const n = i + 1;
         const done = n < current;
         const active = n === current;
         return (
-          <div key={label} className="flex items-center gap-0 flex-shrink-0">
-            <div className="flex flex-col items-center gap-1.5">
+          <div key={label} className="flex items-center flex-1 last:flex-none min-w-0">
+            <div className="flex flex-col items-center gap-2 flex-shrink-0">
               <div
-                className={`w-9 h-9 flex items-center justify-center text-[11px] font-semibold transition-all duration-300 font-sans ${
-                  done
-                    ? "bg-[#0A7E94] text-white"
-                    : active
-                      ? "bg-[#0A7E94] text-white ring-2 ring-[rgba(10,126,148,0.25)]"
-                      : "bg-[#F4F8FA] text-[#5C7A8A] border border-[rgba(10,126,148,0.1)]"
+                className={`book-step-dot ${
+                  done ? "book-step-dot--done" : active ? "book-step-dot--active" : "book-step-dot--pending"
                 }`}
               >
-                {done ? <CheckCircle size={14} /> : n}
+                {done ? <CheckCircle size={15} strokeWidth={2.5} /> : n}
               </div>
-              <span className={`text-[10px] font-medium hidden sm:block font-sans uppercase tracking-[0.08em] ${active ? "text-[#0A7E94]" : "text-[#5C7A8A]"}`}>
+              <span
+                className={`text-[9px] sm:text-[10px] font-semibold hidden sm:block font-sans uppercase tracking-[0.1em] text-center max-w-[4.5rem] leading-tight ${
+                  active ? "text-[#0A7E94]" : done ? "text-[#0A7E94]/70" : "text-[#8AA8B5]"
+                }`}
+              >
                 {label}
               </span>
             </div>
-            {i < steps.length - 1 && (
-              <div className={`h-px w-8 sm:w-10 mx-1.5 mt-[-16px] sm:mt-[-18px] transition-colors ${done ? "bg-[#0A7E94]" : "bg-[rgba(10,126,148,0.12)]"}`} />
+            {i < STEPS.length - 1 && (
+              <div
+                className={`book-step-line mt-[-1.25rem] sm:mt-[-1.5rem] ${done ? "bg-[#0A7E94]" : "bg-[rgba(10,126,148,0.12)]"}`}
+              />
             )}
           </div>
         );
@@ -64,7 +124,17 @@ function StepIndicator({ current }: { current: number }) {
 
 export default function BookAppointment() {
   const [step, setStep] = useState(1);
-  const [selected, setSelected] = useState({ service: "", doctor: "", date: "", time: "", name: "", email: "", phone: "", dob: "", notes: "" });
+  const [selected, setSelected] = useState({
+    service: "",
+    doctor: "",
+    date: "",
+    time: "",
+    name: "",
+    email: "",
+    phone: "",
+    dob: "",
+    notes: "",
+  });
   const [submitted, setSubmitted] = useState(false);
 
   const next = () => setStep((s) => Math.min(s + 1, 5));
@@ -85,7 +155,7 @@ export default function BookAppointment() {
       <>
         <section className="section-py section-cream min-h-[70vh] flex items-center">
           <div className="site-container-narrow text-center py-12">
-            <div className="w-16 h-16 bg-[#0A7E94] flex items-center justify-center mx-auto mb-6">
+            <div className="w-16 h-16 rounded-2xl bg-[#0A7E94] flex items-center justify-center mx-auto mb-6 shadow-lg shadow-[#0A7E94]/25">
               <CheckCircle size={32} className="text-white" />
             </div>
             <p className="ref-label justify-center before:!hidden">CONFIRMATION</p>
@@ -93,7 +163,7 @@ export default function BookAppointment() {
             <p className="body-text mx-auto mb-8">
               Thank you, <strong className="font-medium text-[#0D1F2D]">{selected.name}</strong>. Your appointment request has been submitted. Our team will confirm via phone or email within 1 business day.
             </p>
-            <div className="border border-[rgba(10,126,148,0.1)] bg-surface p-6 md:p-8 text-left mb-8 space-y-3">
+            <div className="book-panel p-6 md:p-8 text-left mb-8 space-y-3">
               {[
                 { l: "Service", v: serviceTypes.find((s) => s.id === selected.service)?.label },
                 { l: "Doctor", v: doctors.find((d) => d.id === selected.doctor)?.name },
@@ -160,85 +230,122 @@ export default function BookAppointment() {
 
       <section className="section-py section-cream">
         <div className="site-container-narrow">
-          <div className="border border-[rgba(10,126,148,0.1)] bg-surface p-5 md:p-6 flex flex-col sm:flex-row items-start sm:items-center gap-5 mb-8 md:mb-10">
-            <div className="flex-1">
-              <p className="ref-label !mb-3">HOTDOC</p>
-              <p className="font-sans text-[#0D1F2D] font-semibold text-sm mb-1">Prefer to book via HotDoc?</p>
-              <p className="body-text-sm !max-w-none">Our clinic uses HotDoc for real-time bookings. Use the form below for a callback request.</p>
+          {/* HotDoc banner */}
+          <div className="book-hotdoc relative z-10">
+            <div className="flex-1 min-w-0">
+              <p className="ref-label !mb-2">HOTDOC</p>
+              <p className="font-sans text-[#0D1F2D] font-semibold text-base mb-1">Prefer to book via HotDoc?</p>
+              <p className="body-text-sm !max-w-none text-[#5A7A8A]">
+                Our clinic uses HotDoc for real-time bookings. Use the form below for a callback request.
+              </p>
             </div>
-            <a href="https://www.hotdoc.com.au" target="_blank" rel="noreferrer" className="btn-primary-sm flex-shrink-0 bg-[#0A7E94] hover:bg-[#086B7E]">
-              Open HotDoc <ArrowRight size={14} />
+            <a
+              href="https://www.hotdoc.com.au"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 flex-shrink-0 h-11 px-6 rounded-full bg-[#0A7E94] hover:bg-[#086B7E] text-white font-sans text-[11px] font-semibold uppercase tracking-[0.12em] transition-all duration-300 hover:scale-[1.02]"
+            >
+              Open HotDoc <ExternalLink size={14} />
             </a>
           </div>
 
-          <div className="border border-[rgba(10,126,148,0.1)] bg-surface overflow-hidden">
-            <div className="bg-[var(--cream-muted)] px-6 md:px-8 py-5 md:py-6 border-b border-[rgba(10,126,148,0.08)]">
-              <p className="ref-label !mb-4">BOOK APPOINTMENT</p>
+          {/* Main booking panel */}
+          <div className="book-panel">
+            <div className="book-panel-header">
+              <p className="ref-label !mb-5">BOOK APPOINTMENT</p>
               <StepIndicator current={step} />
             </div>
 
             <div className="p-6 md:p-8 lg:p-10">
+              {/* Step 1 — Service */}
               {step === 1 && (
                 <div>
                   <h3 className="font-serif text-[#0D1F2D] text-xl md:text-2xl mb-2">What brings you in?</h3>
-                  <p className="body-text-sm mb-6">Select the type of appointment you need.</p>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {serviceTypes.map((s) => (
-                      <button
-                        key={s.id}
-                        type="button"
-                        onClick={() => setSelected((v) => ({ ...v, service: s.id }))}
-                        className={`flex items-start gap-4 p-5 border text-left transition-all duration-300 font-sans ${selectBtn(selected.service === s.id)}`}
-                      >
-                        <div className="flex-1 min-w-0">
-                          <p className="text-[#0D1F2D] font-semibold text-sm uppercase tracking-[0.04em]">{s.label}</p>
-                          <p className="body-text-sm mt-1 !text-[13px]">{s.desc}</p>
-                        </div>
-                        {selected.service === s.id && <CheckCircle size={16} className="text-[#0A7E94] flex-shrink-0 mt-0.5" />}
-                      </button>
-                    ))}
+                  <p className="body-text-sm mb-7 text-[#5A7A8A]">Select the type of appointment you need.</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5">
+                    {serviceTypes.map((s) => {
+                      const isSelected = selected.service === s.id;
+                      const Icon = s.icon;
+                      return (
+                        <button
+                          key={s.id}
+                          type="button"
+                          onClick={() => setSelected((v) => ({ ...v, service: s.id }))}
+                          className={`book-service-card w-full ${isSelected ? "book-service-card--selected" : ""}`}
+                        >
+                          <div className="book-service-card-media">
+                            <img src={s.image} alt={s.label} loading="lazy" />
+                          </div>
+                          <div className="book-service-card-scrim" />
+                          {isSelected && (
+                            <div className="book-service-check">
+                              <CheckCircle size={14} className="text-white" strokeWidth={2.5} />
+                            </div>
+                          )}
+                          <div className="book-service-card-body">
+                            <span className="inline-flex items-center gap-1.5 w-fit mb-2 px-2.5 py-1 rounded-full bg-white/15 backdrop-blur-sm text-white/90 text-[10px] font-semibold uppercase tracking-wider font-sans">
+                              <Icon size={11} />
+                              {s.label.split(" ")[0]}
+                            </span>
+                            <p className="text-white font-serif text-lg leading-snug mb-1">{s.label}</p>
+                            <p className="text-white/70 text-[12px] font-sans leading-relaxed">{s.desc}</p>
+                          </div>
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
               )}
 
+              {/* Step 2 — Doctor */}
               {step === 2 && (
                 <div>
                   <h3 className="font-serif text-[#0D1F2D] text-xl md:text-2xl mb-2">Choose a Doctor</h3>
-                  <p className="body-text-sm mb-6">Select your preferred practitioner.</p>
-                  <div className="flex flex-col gap-3">
-                    {doctors.map((doc) => (
-                      <button
-                        key={doc.id}
-                        type="button"
-                        onClick={() => setSelected((v) => ({ ...v, doctor: doc.id }))}
-                        className={`flex items-center gap-4 p-5 border text-left transition-all duration-300 font-sans ${selectBtn(selected.doctor === doc.id)}`}
-                      >
-                        <div className="w-11 h-11 bg-[#EDF8FB] flex items-center justify-center text-[#0A7E94] flex-shrink-0">
-                          <User size={18} />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-[#0D1F2D] font-semibold text-sm">{doc.name}</p>
-                          <p className="body-text-sm">{doc.role}</p>
-                          <p className="text-[#0A7E94] text-[11px] font-medium mt-1 uppercase tracking-[0.06em]">{doc.available}</p>
-                        </div>
-                        {selected.doctor === doc.id && <CheckCircle size={16} className="text-[#0A7E94] flex-shrink-0" />}
-                      </button>
-                    ))}
+                  <p className="body-text-sm mb-7 text-[#5A7A8A]">Select your preferred practitioner.</p>
+                  <div className="flex flex-col gap-3 md:gap-4">
+                    {doctors.map((doc) => {
+                      const isSelected = selected.doctor === doc.id;
+                      return (
+                        <button
+                          key={doc.id}
+                          type="button"
+                          onClick={() => setSelected((v) => ({ ...v, doctor: doc.id }))}
+                          className={`book-doctor-card w-full ${isSelected ? "book-doctor-card--selected" : ""}`}
+                        >
+                          <div className="book-doctor-avatar">
+                            <img src={doc.image} alt={doc.name} className="w-full h-full object-cover object-top" />
+                          </div>
+                          <div className="flex-1 min-w-0 text-left">
+                            <p className="text-[#0D1F2D] font-semibold text-sm font-sans">{doc.name}</p>
+                            <p className="body-text-sm !text-[13px]">{doc.role}</p>
+                            <p className="text-[#0A7E94] text-[10px] font-semibold mt-1.5 uppercase tracking-[0.08em] font-sans">
+                              {doc.available}
+                            </p>
+                          </div>
+                          {isSelected && (
+                            <div className="w-7 h-7 rounded-full bg-[#0A7E94] flex items-center justify-center flex-shrink-0">
+                              <CheckCircle size={14} className="text-white" strokeWidth={2.5} />
+                            </div>
+                          )}
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
               )}
 
+              {/* Step 3 — Date & Time */}
               {step === 3 && (
                 <div>
                   <h3 className="font-serif text-[#0D1F2D] text-xl md:text-2xl mb-2">Choose Date &amp; Time</h3>
-                  <p className="body-text-sm mb-4">Select a preferred date:</p>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-6">
+                  <p className="body-text-sm mb-5 text-[#5A7A8A]">Select a preferred date:</p>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mb-8">
                     {dateOptions.slice(0, 8).map((dt) => (
                       <button
                         key={dt.value}
                         type="button"
                         onClick={() => setSelected((v) => ({ ...v, date: dt.display, time: "" }))}
-                        className={`py-3 px-2 text-[11px] font-medium border transition-all duration-300 text-center font-sans uppercase tracking-[0.04em] ${selectBtn(selected.date === dt.display)}`}
+                        className={`book-slot ${selected.date === dt.display ? "book-slot--selected" : ""}`}
                       >
                         {dt.display}
                       </button>
@@ -246,14 +353,14 @@ export default function BookAppointment() {
                   </div>
                   {selected.date && (
                     <>
-                      <p className="body-text-sm mb-3">Select a time:</p>
+                      <p className="body-text-sm mb-4 text-[#5A7A8A]">Select a time:</p>
                       <div className="flex flex-wrap gap-2">
                         {timeSlots.map((t) => (
                           <button
                             key={t}
                             type="button"
                             onClick={() => setSelected((v) => ({ ...v, time: t }))}
-                            className={`px-4 py-2.5 text-[11px] font-medium border transition-all duration-300 font-sans ${selectBtn(selected.time === t)}`}
+                            className={`book-slot !px-4 ${selected.time === t ? "book-slot--selected" : ""}`}
                           >
                             {t}
                           </button>
@@ -264,10 +371,11 @@ export default function BookAppointment() {
                 </div>
               )}
 
+              {/* Step 4 — Details */}
               {step === 4 && (
                 <div>
                   <h3 className="font-serif text-[#0D1F2D] text-xl md:text-2xl mb-2">Your Details</h3>
-                  <p className="body-text-sm mb-6">We&apos;ll use these details to confirm your appointment.</p>
+                  <p className="body-text-sm mb-7 text-[#5A7A8A]">We&apos;ll use these details to confirm your appointment.</p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5">
                     {[
                       { key: "name", label: "Full Name *", placeholder: "Jane Smith", type: "text" },
@@ -282,7 +390,7 @@ export default function BookAppointment() {
                           placeholder={placeholder}
                           value={selected[key as keyof typeof selected]}
                           onChange={(e) => setSelected((v) => ({ ...v, [key]: e.target.value }))}
-                          className="form-input"
+                          className="form-input rounded-xl !border-[rgba(10,126,148,0.12)]"
                         />
                       </div>
                     ))}
@@ -293,18 +401,19 @@ export default function BookAppointment() {
                         placeholder="Please describe the reason for your appointment..."
                         value={selected.notes}
                         onChange={(e) => setSelected((v) => ({ ...v, notes: e.target.value }))}
-                        className="form-input resize-none"
+                        className="form-input resize-none rounded-xl !border-[rgba(10,126,148,0.12)]"
                       />
                     </div>
                   </div>
                 </div>
               )}
 
+              {/* Step 5 — Confirm */}
               {step === 5 && (
                 <div>
                   <h3 className="font-serif text-[#0D1F2D] text-xl md:text-2xl mb-2">Confirm Your Booking</h3>
-                  <p className="body-text-sm mb-6">Please review your details before submitting.</p>
-                  <div className="border border-[rgba(10,126,148,0.1)] bg-[var(--cream-muted)] p-5 md:p-6 space-y-3 mb-5">
+                  <p className="body-text-sm mb-6 text-[#5A7A8A]">Please review your details before submitting.</p>
+                  <div className="rounded-2xl bg-[#F4F8FA] border border-[rgba(10,126,148,0.08)] p-5 md:p-6 space-y-3 mb-5">
                     {[
                       { label: "Service", value: serviceTypes.find((s) => s.id === selected.service)?.label },
                       { label: "Doctor", value: doctors.find((d) => d.id === selected.doctor)?.name },
@@ -321,15 +430,20 @@ export default function BookAppointment() {
                       ) : null
                     )}
                   </div>
-                  <p className="body-text-sm">
+                  <p className="body-text-sm text-[#5A7A8A]">
                     By submitting, you agree to be contacted by our clinic to confirm your appointment. This is a booking request, not a confirmed appointment.
                   </p>
                 </div>
               )}
 
+              {/* Navigation */}
               <div className="flex items-center justify-between mt-10 pt-6 border-t border-[rgba(10,126,148,0.08)]">
                 {step > 1 ? (
-                  <button type="button" onClick={back} className="font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-[#5C7A8A] hover:text-[#0A7E94] transition-colors">
+                  <button
+                    type="button"
+                    onClick={back}
+                    className="font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-[#5C7A8A] hover:text-[#0A7E94] transition-colors px-2"
+                  >
                     ← Back
                   </button>
                 ) : (
@@ -340,16 +454,16 @@ export default function BookAppointment() {
                     type="button"
                     onClick={next}
                     disabled={!canNext()}
-                    className={`inline-flex items-center gap-2 font-sans text-[11px] font-semibold uppercase tracking-[0.14em] transition-all duration-300 ${
-                      canNext()
-                        ? "btn-primary-sm bg-[#0A7E94] hover:bg-[#086B7E]"
-                        : "h-[46px] px-6 bg-[#E0EFF2] text-[#5C7A8A] cursor-not-allowed"
-                    }`}
+                    className={`book-continue-btn ${canNext() ? "book-continue-btn--active" : "book-continue-btn--disabled"}`}
                   >
-                    Continue <ChevronRight size={14} />
+                    Continue <ChevronRight size={15} />
                   </button>
                 ) : (
-                  <button type="button" onClick={handleSubmit} className="btn-primary-sm bg-[#0A7E94] hover:bg-[#086B7E]">
+                  <button
+                    type="button"
+                    onClick={handleSubmit}
+                    className="book-continue-btn book-continue-btn--active"
+                  >
                     <Calendar size={15} /> Submit Request
                   </button>
                 )}
@@ -357,8 +471,10 @@ export default function BookAppointment() {
             </div>
           </div>
 
-          <div className="mt-8 pt-6 border-t border-[rgba(10,126,148,0.08)] flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-center">
-            <Phone size={14} className="text-[#0A7E94] hidden sm:block" />
+          <div className="mt-8 pt-6 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 text-center">
+            <div className="w-9 h-9 rounded-full bg-[#EDF8FB] flex items-center justify-center">
+              <Phone size={14} className="text-[#0A7E94]" />
+            </div>
             <p className="body-text-sm !max-w-none">
               Prefer to call?{" "}
               <a href={`tel:${CLINIC.phone.replace(/\s/g, "")}`} className="text-[#0A7E94] font-semibold hover:underline">

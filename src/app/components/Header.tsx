@@ -143,25 +143,28 @@ export default function Header() {
           }`}
           style={{ height: UTILITY_H }}
         >
-          <div className="site-container h-full flex items-center justify-between text-[9px] md:text-[10px] font-sans tracking-wide">
-            <div className="flex items-center gap-5 md:gap-8 min-w-0">
-              <a
-                href={`tel:${CLINIC.phone.replace(/\s/g, "")}`}
-                className="flex items-center gap-1.5 hover:text-white transition-colors shrink-0"
-              >
-                <Phone size={10} strokeWidth={1.75} /> {CLINIC.phone}
-              </a>
+          <div className="header-utility-inner text-[9px] md:text-[10px] font-sans tracking-wide">
+            <div className="header-utility-side header-utility-side-left">
               <span className="hidden lg:flex items-center gap-1.5 opacity-75 truncate max-w-[340px]">
                 <MapPin size={10} strokeWidth={1.75} className="shrink-0" />
                 <span className="truncate">{CLINIC.address}</span>
               </span>
             </div>
-            <Link
-              to="/blog"
-              className="hidden sm:block uppercase tracking-[0.18em] opacity-75 hover:opacity-100 transition-opacity shrink-0"
+            <a
+              href={`tel:${CLINIC.phone.replace(/\s/g, "")}`}
+              className="header-utility-phone flex items-center gap-1.5 hover:text-white transition-colors"
             >
-              Blog &amp; News
-            </Link>
+              <Phone size={10} strokeWidth={1.75} aria-hidden />
+              <span>{CLINIC.phone}</span>
+            </a>
+            <div className="header-utility-side header-utility-side-right">
+              <Link
+                to="/blog"
+                className="hidden sm:block uppercase tracking-[0.18em] opacity-75 hover:opacity-100 transition-opacity"
+              >
+                Blog &amp; News
+              </Link>
+            </div>
           </div>
         </div>
 
@@ -177,7 +180,7 @@ export default function Header() {
           style={{ height: NAV_H }}
         >
           <div className="header-bar">
-            <Logo light={overlay && !openMenu} />
+            <Logo light={overlay && !openMenu} className="header-logo" />
 
             <nav className="header-nav" aria-label="Main navigation">
               <div className="header-nav-inner">
@@ -208,7 +211,7 @@ export default function Header() {
               </div>
             </nav>
 
-            <div className="flex items-center justify-end gap-2 shrink-0">
+            <div className="header-actions">
               <div className="hidden lg:flex items-center gap-2">
                 <Link
                   to="/store"
@@ -231,8 +234,9 @@ export default function Header() {
               </div>
 
               <button
+                type="button"
                 onClick={() => setMobileOpen(!mobileOpen)}
-                className={`lg:hidden p-2 -mr-1 transition-colors ${overlay && !openMenu ? "text-white" : "text-[#0D1F2D]"}`}
+                className={`header-menu-btn ${overlay && !openMenu ? "text-white" : "text-[#0D1F2D]"}`}
                 aria-label="Toggle menu"
               >
                 {mobileOpen ? <X size={22} /> : <Menu size={22} />}
@@ -251,7 +255,7 @@ export default function Header() {
 
       {/* Mobile drawer */}
       {mobileOpen && (
-        <div className="xl:hidden fixed inset-0 z-[60]">
+        <div className="lg:hidden fixed inset-0 z-[60]">
           <div className="absolute inset-0 bg-[#0D1F2D]/50 backdrop-blur-sm" onClick={() => setMobileOpen(false)} />
           <div
             className="absolute top-0 right-0 h-full w-full max-w-[360px] bg-background shadow-2xl overflow-y-auto"

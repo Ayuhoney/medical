@@ -1,21 +1,19 @@
 import { Link } from "react-router";
-import { Heart, Shield, Activity, Brain, Baby, Syringe, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { IMAGES } from "../constants";
-import { PageHero, BookingBanner, TreatmentCard } from "../components/ui";
-
-const services = [
-  { icon: <Shield size={20} />, title: "Preventive Healthcare", desc: "Health assessments, cancer screenings, immunisations, and lifestyle advice to keep you well before problems arise." },
-  { icon: <Heart size={20} />, title: "Family Medicine", desc: "Comprehensive care for every member of your family, from newborns to elderly patients, with a focus on continuity of care." },
-  { icon: <Activity size={20} />, title: "Chronic Disease Management", desc: "Ongoing management of conditions including diabetes, hypertension, asthma, and heart disease with personalised care plans." },
-  { icon: <Brain size={20} />, title: "Mental Health Care", desc: "Compassionate support for anxiety, depression, and other mental health conditions with GP Mental Health Care Plans." },
-  { icon: <Baby size={20} />, title: "Women's & Child Health", desc: "Dedicated care including antenatal care, Pap smears, contraception, well-baby checks, and childhood immunisations." },
-  { icon: <Syringe size={20} />, title: "Immunisations", desc: "Complete vaccination services for all ages including flu vaccines, travel vaccines, and childhood immunisation schedules." },
-];
+import { PageHero, BookingBanner } from "../components/ui";
+import { ServiceDetailList } from "../components/ServiceDetailSection";
+import { generalPracticeServices } from "../data/services/generalPractice";
 
 export default function GeneralPractice() {
   return (
     <>
-      <PageHero image={IMAGES.heroGP} tag="GENERAL PRACTICE" title={<>Comprehensive Family<br />Healthcare</>} subtitle="Your trusted family doctors providing personalised care for every stage of life." />
+      <PageHero
+        image={IMAGES.heroGP}
+        tag="GENERAL PRACTICE"
+        title={<>Comprehensive Family<br />Healthcare</>}
+        subtitle="Your trusted family doctors providing personalised care for every stage of life."
+      />
 
       <section className="section-py section-white">
         <div className="site-container grid grid-cols-1 lg:grid-cols-2 gap-14 md:gap-16 items-center">
@@ -46,17 +44,7 @@ export default function GeneralPractice() {
         </div>
       </section>
 
-      <section className="section-py section-muted">
-        <div className="site-container">
-          <div className="text-center mb-12 md:mb-16">
-            <p className="eyebrow">WHAT WE OFFER</p>
-            <h2 className="heading-section">General Practice Services</h2>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
-            {services.map((s) => <TreatmentCard key={s.title} {...s} />)}
-          </div>
-        </div>
-      </section>
+      <ServiceDetailList items={generalPracticeServices} bookLabel="Book a GP Visit" />
 
       <BookingBanner />
     </>

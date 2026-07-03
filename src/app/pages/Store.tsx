@@ -1,60 +1,10 @@
 import { useState } from "react";
-import { ShoppingCart, Star, ArrowRight, Search } from "lucide-react";
+import { ArrowRight, Search, Sparkles } from "lucide-react";
 import { IMAGES } from "../constants";
 import { PageHero } from "../components/ui";
 import { Link } from "react-router";
-
-const categories = ["All Products", "Redness Prone", "Wrinkles & Lines", "Discolouration", "Hydrate", "Cleansers", "Sunscreen", "Eye Care"];
-
-const products = [
-  { id: 1, name: "Brightening Vitamin C Serum", brand: "Cosmetic Skin Solutions", category: "Discolouration", price: 89, rating: 4.9, reviews: 124, image: IMAGES.productSerums, tag: "Best Seller", desc: "High-potency Vitamin C serum to brighten, even skin tone, and protect against oxidative damage." },
-  { id: 2, name: "Intense Hydration Moisturiser", brand: "Cosmedix", category: "Hydrate", price: 72, rating: 4.8, reviews: 98, image: IMAGES.productBottle, tag: "New", desc: "Rich, nourishing moisturiser with hyaluronic acid and ceramides to restore the skin barrier." },
-  { id: 3, name: "Retinol Renewal Night Cream", brand: "Cosmetic Skin Solutions", category: "Wrinkles & Lines", price: 115, rating: 4.9, reviews: 87, image: IMAGES.productPerfume, tag: "Premium", desc: "Medical-grade retinol night treatment for cellular renewal, wrinkle reduction, and skin resurfacing." },
-  { id: 4, name: "Calming Redness Relief Serum", brand: "Aspect Dr", category: "Redness Prone", price: 95, rating: 4.7, reviews: 61, image: IMAGES.productSerums, desc: "Soothing serum with niacinamide and centella to reduce redness, sensitivity, and inflammation." },
-  { id: 5, name: "SPF 50+ Daily Sunscreen", brand: "Ultraceuticals", category: "Sunscreen", price: 58, rating: 5.0, reviews: 203, image: IMAGES.productBasket, tag: "Essential", desc: "Lightweight, non-greasy SPF 50+ for daily use. Broad-spectrum protection with a matte finish." },
-  { id: 6, name: "Peptide Eye Cream", brand: "Cosmedix", category: "Eye Care", price: 88, rating: 4.8, reviews: 72, image: IMAGES.productBottle, desc: "Advanced peptide formula to firm, brighten, and hydrate the delicate eye area." },
-  { id: 7, name: "Clarifying Glycolic Cleanser", brand: "Aspect Dr", category: "Cleansers", price: 45, rating: 4.6, reviews: 55, image: IMAGES.productSerums, desc: "Gentle exfoliating cleanser with glycolic acid to remove impurities and refine skin texture." },
-  { id: 8, name: "Advanced Pigment Corrector", brand: "Ultraceuticals", category: "Discolouration", price: 128, rating: 4.9, reviews: 44, image: IMAGES.productPerfume, tag: "Clinical Grade", desc: "Professional-strength pigmentation treatment targeting dark spots, melasma, and uneven tone." },
-];
-
-function ProductCard({ product }: { product: (typeof products)[number] }) {
-  const [added, setAdded] = useState(false);
-  return (
-    <div className="group card-premium hover:-translate-y-1 flex flex-col">
-      <div className="relative h-56 bg-[#F0F6F8] overflow-hidden">
-        <img src={product.image} alt={product.name} className="w-full h-full object-cover image-hover" />
-        {product.tag && (
-          <div className="absolute top-4 left-4">
-            <span className="bg-[#0A7E94] text-white text-[10px] font-bold px-3 py-1 rounded-full font-sans">{product.tag}</span>
-          </div>
-        )}
-      </div>
-      <div className="p-5 md:p-6 flex flex-col flex-1">
-        <p className="eyebrow mb-1 !text-[10px]">{product.brand}</p>
-        <h3 className="text-[#0D1F2D] font-semibold text-base mb-1.5 leading-snug font-sans">{product.name}</h3>
-        <p className="body-text-sm mb-3 flex-1">{product.desc}</p>
-        <div className="flex items-center gap-1.5 mb-4">
-          <div className="flex gap-0.5">
-            {[1, 2, 3, 4, 5].map((s) => (
-              <Star key={s} size={11} className={s <= Math.round(product.rating) ? "text-[#F59E0B] fill-[#F59E0B]" : "text-gray-200 fill-gray-200"} />
-            ))}
-          </div>
-          <span className="body-text-sm">({product.reviews})</span>
-        </div>
-        <div className="flex items-center justify-between">
-          <span className="text-[#0D1F2D] font-bold text-xl font-serif">${product.price}</span>
-          <button
-            onClick={() => { setAdded(true); setTimeout(() => setAdded(false), 1800); }}
-            className={`flex items-center gap-1.5 px-4 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 font-sans ${added ? "bg-green-500 text-white" : "btn-primary-sm !px-4 !py-2.5"}`}
-          >
-            <ShoppingCart size={13} />
-            {added ? "Added!" : "Add to Cart"}
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
+import { products, STORE_CATEGORIES } from "../data/products";
+import { ProductCard } from "../components/store/ProductCard";
 
 export default function Store() {
   const [activeCategory, setActiveCategory] = useState("All Products");
@@ -62,28 +12,41 @@ export default function Store() {
 
   const filtered = products.filter((p) => {
     const matchCat = activeCategory === "All Products" || p.category === activeCategory;
-    const matchSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) || p.brand.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchSearch =
+      p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      p.brand.toLowerCase().includes(searchQuery.toLowerCase());
     return matchCat && matchSearch;
   });
 
   return (
     <>
-      <PageHero image={IMAGES.aestheticMask} tag="ONLINE STORE" title={<>Clinical Skin Care <br /><em>Products</em></>} subtitle="Medical-grade skincare recommended and dispensed by our clinic." />
+      <PageHero
+        image={IMAGES.aestheticMask}
+        tag="ONLINE STORE"
+        title={<>Clinical Skin Care <br /><em>Products</em></>}
+        subtitle="Medical-grade skincare recommended and dispensed by our clinic."
+      />
 
-      <section className="section-py-sm bg-[#EDF8FB] border-b border-[rgba(10,126,148,0.08)]">
+      <section className="store-banner">
         <div className="site-container">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="store-banner-inner">
             <div>
-              <h2 className="font-serif text-[#0D1F2D] text-xl mb-1">Cosmetic Skin Solutions Australia</h2>
-              <p className="body-text-sm">Select from our curated Clinical Skin Care Range — doctor-approved, medical grade products.</p>
+              <div className="flex items-center gap-2 mb-2">
+                <Sparkles size={14} className="text-[#0A7E94]" />
+                <span className="ref-label !mb-0">Clinic Exclusive</span>
+              </div>
+              <h2 className="font-serif text-[#0D1F2D] text-xl md:text-2xl mb-1">
+                Cosmetic Skin Solutions Australia
+              </h2>
+              <p className="body-text-sm max-w-xl">
+                Doctor-approved, medical-grade products — curated for results you can trust.
+              </p>
             </div>
-            <div className="flex items-center gap-3 text-sm text-[#5A7A8A] font-sans">
-              <span className="flex items-center gap-1.5 bg-white px-4 py-2.5 rounded-full border border-[rgba(10,126,148,0.12)] shadow-sm">
+            <div className="store-banner-badges">
+              <span className="store-banner-badge">
                 <span className="w-2 h-2 rounded-full bg-green-500" /> Free shipping over $150
               </span>
-              <span className="flex items-center gap-1.5 bg-white px-4 py-2.5 rounded-full border border-[rgba(10,126,148,0.12)] shadow-sm">
-                🔒 Secure checkout
-              </span>
+              <span className="store-banner-badge">🔒 Secure checkout</span>
             </div>
           </div>
         </div>
@@ -91,45 +54,50 @@ export default function Store() {
 
       <section className="section-py-sm section-white min-h-[60vh]">
         <div className="site-container">
-          <div className="flex flex-col sm:flex-row gap-4 mb-8">
-            <div className="relative flex-1">
-              <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#5A7A8A]" />
+          <div className="store-toolbar">
+            <div className="store-search">
+              <Search size={16} className="store-search-icon" />
               <input
                 type="text"
                 placeholder="Search products or brands..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="form-input pl-10"
+                className="store-search-input"
               />
             </div>
+            <p className="store-count">
+              {filtered.length} product{filtered.length !== 1 ? "s" : ""}
+            </p>
           </div>
 
-          <div className="flex flex-wrap gap-2 mb-8">
-            {categories.map((cat) => (
+          <div className="store-filters">
+            {STORE_CATEGORIES.map((cat) => (
               <button
                 key={cat}
+                type="button"
                 onClick={() => setActiveCategory(cat)}
-                className={`px-4 py-2.5 rounded-full text-sm font-medium transition-all duration-300 font-sans ${activeCategory === cat ? "bg-[#0A7E94] text-white shadow-[0_4px_18px_rgba(10,126,148,0.25)]" : "bg-[#F0F6F8] text-[#2A4A5A] hover:bg-[#EDF8FB] hover:text-[#0A7E94]"}`}
+                className={`store-filter-chip ${activeCategory === cat ? "is-active" : ""}`}
               >
                 {cat}
               </button>
             ))}
           </div>
 
-          <p className="body-text-sm mb-6">
-            Showing {filtered.length} product{filtered.length !== 1 ? "s" : ""}
-            {activeCategory !== "All Products" ? ` in ${activeCategory}` : ""}
-          </p>
-
           {filtered.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 md:gap-6">
+            <div className="store-grid">
               {filtered.map((p) => <ProductCard key={p.id} product={p} />)}
             </div>
           ) : (
             <div className="py-20 text-center">
               <p className="font-serif text-[#5A7A8A] text-lg">No products found</p>
               <p className="body-text-sm mt-2">Try a different search or category</p>
-              <button onClick={() => { setSearchQuery(""); setActiveCategory("All Products"); }} className="link-arrow mt-4">Clear filters</button>
+              <button
+                type="button"
+                onClick={() => { setSearchQuery(""); setActiveCategory("All Products"); }}
+                className="link-arrow mt-4"
+              >
+                Clear filters
+              </button>
             </div>
           )}
         </div>

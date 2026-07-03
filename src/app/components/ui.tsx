@@ -48,7 +48,7 @@ export function SectionHeader({
 
 export function TreatmentCard({ icon, title, desc }: { icon: ReactNode; title: string; desc: string }) {
   return (
-    <div className="group border border-[rgba(10,126,148,0.08)] p-7 md:p-8 hover:border-[rgba(10,126,148,0.2)] transition-colors duration-500 bg-surface">
+    <div className="treatment-card group">
       <div className="card-icon-wrap mb-5 group-hover:bg-[#0A7E94] group-hover:text-white transition-colors duration-500 [&>span]:transition-colors">
         <span className="text-[#0A7E94] group-hover:text-white">{icon}</span>
       </div>
@@ -62,23 +62,23 @@ export function ServiceCard({
   image, icon, category, title, desc, features, path,
 }: { image: string; icon: ReactNode; category: string; title: string; desc: string; features: string[]; path: string }) {
   return (
-    <div className="group card-premium flex flex-col border border-[rgba(10,126,148,0.08)]">
-      <div className="relative h-52 overflow-hidden">
+    <div className="service-card group">
+      <div className="service-card-media">
         <img src={image} alt={title} className="image-hover absolute inset-0 object-center" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-        <span className="proc-card-meta">{category}</span>
-        <h3 className="proc-card-title text-lg">{title}</h3>
+        <span className="proc-card-meta !top-3 !left-3">{category}</span>
+        <h3 className="proc-card-title !bottom-3 !left-3 !right-3 text-base">{title}</h3>
       </div>
-      <div className="p-6 flex flex-col flex-1 border-t border-[rgba(10,126,148,0.06)]">
-        <p className="body-text-sm mb-4">{desc}</p>
-        <ul className="space-y-2 mb-6 flex-1">
+      <div className="service-card-body">
+        <p className="body-text-sm mb-3 line-clamp-2">{desc}</p>
+        <ul className="space-y-1.5 mb-4 flex-1">
           {features.slice(0, 4).map((f) => (
-            <li key={f} className="flex items-center gap-2 text-[12px] text-[#334E5E] font-sans">
+            <li key={f} className="flex items-center gap-2 text-[11px] text-[#334E5E] font-sans">
               <span className="text-[#0A7E94]">—</span>{f}
             </li>
           ))}
         </ul>
-        <Link to={path} className="link-arrow mt-auto">Learn More <ArrowRight size={13} /></Link>
+        <Link to={path} className="link-arrow mt-auto text-[10px]">Learn More <ArrowRight size={12} /></Link>
       </div>
     </div>
   );
@@ -101,7 +101,7 @@ export function BookingBanner() {
               Take the Next Step
             </p>
             <div className="hidden md:block w-px h-8 bg-white/20 shrink-0" aria-hidden />
-            <h2 className="font-serif text-white text-[clamp(1.15rem,2.2vw,1.65rem)] leading-tight whitespace-nowrap truncate">
+            <h2 className="font-serif text-white text-[clamp(1.15rem,2.2vw,1.65rem)] leading-tight sm:whitespace-nowrap sm:truncate">
               Ready to Take Care of Your Health?
             </h2>
             <span className="hidden xl:inline font-sans text-white/55 text-[13px] font-light whitespace-nowrap">

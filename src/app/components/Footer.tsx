@@ -15,19 +15,19 @@ const quickLinks = [
 ];
 
 const services = [
-  "Full Body Skin Check",
-  "Mole Monitoring",
-  "Cosmetic Injectables",
-  "Fractional RF / Microneedling",
-  "HIFU Therapy",
-  "LED Phototherapy",
-  "Laser Skin Resurfacing",
-  "Skin Care Products",
+  { label: "Full Body Skin Check", path: "/skin-cancer#full-body-skin-check" },
+  { label: "Mole Monitoring", path: "/skin-cancer#mole-monitoring" },
+  { label: "Cosmetic Injectables", path: "/aesthetic#cosmetic-injectables" },
+  { label: "Fractional RF / Microneedling", path: "/aesthetic#fractional-rf" },
+  { label: "HIFU Therapy", path: "/aesthetic#hifu" },
+  { label: "LED Phototherapy", path: "/aesthetic#led-phototherapy" },
+  { label: "Laser Skin Resurfacing", path: "/laser#laser-resurfacing" },
+  { label: "Skin Care Products", path: "/store" },
 ];
 
 export default function Footer() {
   return (
-    <footer className="bg-[#080F14]">
+    <footer className="bg-[#080F14] text-white">
       {/* Pre-footer CTA */}
       <div className="bg-[#0A7E94] relative overflow-hidden">
         <div className="absolute inset-0 opacity-[0.05]"
@@ -37,20 +37,48 @@ export default function Footer() {
             <p className="text-white font-serif font-semibold text-lg md:text-xl">Ready to book an appointment?</p>
             <p className="text-white/65 text-[13px] font-sans mt-1">Accepting new patients — call us or book online.</p>
           </div>
-          <div className="flex gap-3 flex-shrink-0">
+          <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto shrink-0">
             <a
               href={`tel:${CLINIC.phone.replace(/\s/g, "")}`}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-white text-[#0A7E94] text-[13px] font-semibold rounded-full hover:bg-[#EDF8FB] transition-all duration-300 font-sans hover:scale-[1.02]"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-[#0A7E94] text-[13px] font-semibold rounded-full hover:bg-[#EDF8FB] transition-all duration-300 font-sans hover:scale-[1.02] w-full sm:w-auto"
             >
               <Phone size={13} /> {CLINIC.phone}
             </a>
             <Link
               to="/book"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-[#0D1F2D] text-white text-[13px] font-semibold rounded-full hover:bg-[#162D3F] transition-all duration-300 font-sans hover:scale-[1.02]"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#0D1F2D] text-white text-[13px] font-semibold rounded-full hover:bg-[#162D3F] transition-all duration-300 font-sans hover:scale-[1.02] w-full sm:w-auto"
             >
               Book Online <ArrowRight size={13} />
             </Link>
           </div>
+        </div>
+      </div>
+
+      {/* Newsletter bar — mockwebsites Footer pattern */}
+      <div className="border-b border-white/[0.08]">
+        <div className="site-container py-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          <div>
+            <p className="font-serif text-xl font-light text-white mb-1">Stay in the know.</p>
+            <p className="text-white/45 text-sm font-sans">
+              Clinic news, health tips, and skin care updates — from our Batemans Bay team.
+            </p>
+          </div>
+          <form
+            className="flex gap-0 w-full md:w-auto md:min-w-[18rem]"
+            onSubmit={(e) => e.preventDefault()}
+          >
+            <input
+              type="email"
+              placeholder="your@email.com"
+              className="flex-1 bg-white/[0.06] border border-white/15 focus:border-[#7EC8D8] focus:outline-none text-white placeholder-white/30 px-5 py-3 text-sm transition-colors font-sans"
+            />
+            <button
+              type="submit"
+              className="px-6 py-3 bg-[#0A7E94] hover:bg-[#086B7E] text-white text-xs tracking-[0.2em] uppercase font-medium transition-colors flex-shrink-0 font-sans"
+            >
+              Subscribe
+            </button>
+          </form>
         </div>
       </div>
 
@@ -92,9 +120,9 @@ export default function Footer() {
             <h4 className="text-white/30 text-[10px] font-bold uppercase tracking-[0.14em] mb-6 font-sans">Services</h4>
             <ul className="space-y-3">
               {services.map((s) => (
-                <li key={s}>
-                  <Link to="/book" className="text-white/45 text-[13px] hover:text-[#7EC8D8] transition-colors duration-200 font-sans">
-                    {s}
+                <li key={s.label}>
+                  <Link to={s.path} className="text-white/45 text-[13px] hover:text-[#7EC8D8] transition-colors duration-200 font-sans">
+                    {s.label}
                   </Link>
                 </li>
               ))}
@@ -125,17 +153,32 @@ export default function Footer() {
             </div>
           </div>
         </div>
+
+        {/* Certifications bar — mockwebsites pattern */}
+        <div className="border-t border-white/[0.08] pt-8 mt-14 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+            {["AGPAL Accredited", "AHPRA Registered", "RACGP Members", "Skin Cancer Institute"].map((cert) => (
+              <span key={cert} className="text-[10px] tracking-[0.2em] uppercase text-white/30 flex items-center gap-2 font-sans">
+                <span className="w-1 h-1 rounded-full bg-[#7EC8D8]" />
+                {cert}
+              </span>
+            ))}
+          </div>
+          <p className="text-[11px] text-white/25 font-sans">
+            &copy; {new Date().getFullYear()} Beach Road Surgery &amp; Skin Clinic. All rights reserved.
+          </p>
+        </div>
       </div>
 
       <div className="border-t border-white/6">
         <div className="site-container py-5 md:py-6 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-white/22 text-[12px] font-sans">
-            © 2024 Beach Road Surgery &amp; Skin Clinic. All rights reserved.
+          <p className="text-white/22 text-[12px] font-sans sm:hidden">
+            &copy; {new Date().getFullYear()} Beach Road Surgery &amp; Skin Clinic.
           </p>
           <div className="flex gap-5">
-            {["Privacy Policy", "Terms of Use", "Sitemap"].map((l) => (
-              <Link key={l} to="#" className="text-white/22 text-[12px] hover:text-white/45 transition-colors font-sans">
-                {l}
+            {[{ label: "Privacy Policy", path: "/practice-info#privacy" }, { label: "Terms of Use", path: "/contact" }, { label: "Sitemap", path: "/" }].map((l) => (
+              <Link key={l.label} to={l.path} className="text-white/22 text-[12px] hover:text-white/45 transition-colors font-sans">
+                {l.label}
               </Link>
             ))}
           </div>

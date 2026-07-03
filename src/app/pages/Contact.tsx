@@ -34,7 +34,7 @@ export default function Contact() {
                 { icon: <MapPin size={18} className="text-[#0A7E94]" />, label: "Address", value: CLINIC.address },
               ].map(({ icon, label, value, href }) => (
                 <div key={label} className="flex items-start gap-4 p-5 card-surface">
-                  <div className="card-icon-wrap !w-10 !h-10 !rounded-xl bg-white shadow-sm">{icon}</div>
+                  <div className="card-icon-wrap !w-10 !h-10 bg-white shadow-sm">{icon}</div>
                   <div>
                     <p className="text-[#0D1F2D] font-semibold text-sm font-sans">{label}</p>
                     {href ? (

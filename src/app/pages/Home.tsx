@@ -1,20 +1,29 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router";
 import {
   Calendar, ArrowRight, Award, Shield, CheckCircle, Microscope,
   Star, Phone, Clock, MapPin, ChevronLeft, ChevronRight, ArrowUpRight,
 } from "lucide-react";
 import { IMAGES, CLINIC } from "../constants";
-import { BookingBanner } from "../components/ui";
 import { ServiceAccordion } from "../components/ServiceAccordion";
 import { MaskReveal, useRefEntrance } from "../components/RefEntrance";
 import { ScrollReveal, StaggerReveal } from "../components/ScrollReveal";
-import { ScrollZoomReveal } from "../components/ScrollZoomReveal";
 import { ServiceMarquee } from "../components/ServiceMarquee";
+import { HomePhilosophy, HomeNumbers, HomeTreatments, HomeBooking } from "../components/home";
 
-/* ─── STEP 1: Hero — reference: full-viewport, left content, bottom stats, scroll badge ─── */
+/* ─── STEP 1: Hero — Beauty Redefined UI language, Beach Road header image + content ─── */
+const TEAL_ORB  = "rgba(10,126,148,0.22)";
+const TEAL_SOFT = "rgba(126,200,216,0.16)";
+const TEAL_GLOW = "rgba(39,153,165,0.18)";
+
 function Hero() {
   const enterRef = useRefEntrance(true);
+  const bgRef      = useRef<HTMLDivElement>(null);
+  const textRef    = useRef<HTMLDivElement>(null);
+  const orb1Ref    = useRef<HTMLDivElement>(null);
+  const orb2Ref    = useRef<HTMLDivElement>(null);
+  const orb3Ref    = useRef<HTMLDivElement>(null);
+
   const stats = [
     { v: "20+", l: "Years of Care" },
     { v: "AGPAL", l: "Accredited" },
@@ -22,48 +31,87 @@ function Hero() {
     { v: "4", l: "Specialist Services" },
   ];
 
+  useEffect(() => {
+    const section = enterRef.current;
+    if (!section) return;
+    const handler = (e: MouseEvent) => {
+      const { width, height, left, top } = section.getBoundingClientRect();
+      const x = (e.clientX - left) / width  - 0.5;
+      const y = (e.clientY - top)  / height - 0.5;
+      if (bgRef.current)   bgRef.current.style.transform   = `translate(${x * -14}px, ${y * -8}px) scale(1.06)`;
+      if (textRef.current) textRef.current.style.transform = `translate(${x *  10}px, ${y *  6}px)`;
+      if (orb1Ref.current) orb1Ref.current.style.transform = `translate(${x *  20}px, ${y * 12}px)`;
+      if (orb2Ref.current) orb2Ref.current.style.transform = `translate(${x * -12}px, ${y * -20}px)`;
+      if (orb3Ref.current) orb3Ref.current.style.transform = `translate(${x *  30}px, ${y * 16}px)`;
+    };
+    section.addEventListener("mousemove", handler, { passive: true });
+    return () => section.removeEventListener("mousemove", handler);
+  }, []);
+
+  const parallaxSlow = { transition: "transform 0.8s cubic-bezier(0.2, 0, 0, 1)", willChange: "transform" as const };
+  const parallaxFast = { transition: "transform 0.6s cubic-bezier(0.2, 0, 0, 1)", willChange: "transform" as const };
+
   return (
     <section ref={enterRef} className="hero-section">
-      <div className="hero-bg-sticky" aria-hidden>
-        <div className="hero-bg-wrap hero-bg-layer">
+      <div className="hero-bg-layer" aria-hidden>
+        <div className="hero-bg-wrap">
           <div
-            className="hero-bg-pan hero-bg-drift"
-            style={{ backgroundImage: `url(${IMAGES.heroPortrait})` }}
+            ref={bgRef}
+            className="hero-bg-pan"
+            style={{ backgroundImage: `url(${IMAGES.heroPortrait})`, ...parallaxSlow }}
           />
           <div className="hero-bg-scrim" />
+          <div className="hero-bg-top-fade" />
+          <div ref={orb1Ref} className="hero-orb pointer-events-none" style={{
+            width: 340, height: 340, top: "12%", right: "18%",
+            background: `radial-gradient(circle, ${TEAL_ORB} 0%, transparent 70%)`,
+            filter: "blur(52px)", animation: "orbFloat1 9s ease-in-out infinite", ...parallaxSlow,
+          }} />
+          <div ref={orb2Ref} className="hero-orb pointer-events-none" style={{
+            width: 460, height: 460, top: "42%", right: "6%",
+            background: `radial-gradient(circle, ${TEAL_SOFT} 0%, transparent 70%)`,
+            filter: "blur(70px)", animation: "orbFloat2 13s ease-in-out infinite",
+            transition: "transform 1.6s cubic-bezier(0.2, 0, 0, 1)", willChange: "transform",
+          }} />
+          <div ref={orb3Ref} className="hero-orb pointer-events-none" style={{
+            width: 200, height: 200, bottom: "22%", right: "36%",
+            background: `radial-gradient(circle, ${TEAL_GLOW} 0%, transparent 70%)`,
+            filter: "blur(32px)", animation: "orbFloat3 7s ease-in-out infinite",
+            transition: "transform 0.9s cubic-bezier(0.2, 0, 0, 1)", willChange: "transform",
+          }} />
         </div>
       </div>
 
-      <div className="hero-inner site-container">
-        <div className="hero-content lg:max-w-[50%] xl:max-w-[46%]">
-          <p className="ref-label-enter">
+      <div ref={textRef} className="hero-inner site-container" style={parallaxFast}>
+        <div className="hero-content hero-content-premium">
+          <p className="ref-label-enter ref-label-enter-hero !mb-8">
             <MaskReveal delay={380}>BATEMANS BAY · NSW AUSTRALIA</MaskReveal>
           </p>
 
-          <h1 className="heading-display-light">
-            <MaskReveal delay={480} className="mb-1.5">
+          <h1 className="hero-heading-premium">
+            <MaskReveal delay={480} className="block">
               Where Health
             </MaskReveal>
-            <MaskReveal delay={600}>
+            <MaskReveal delay={600} className="block">
               Meets <em className="heading-accent-light">Beauty</em>
             </MaskReveal>
           </h1>
 
-          <MaskReveal delay={820} className="mb-10 md:mb-12">
-            <p className="body-text-light !mb-0">
+          <MaskReveal delay={820} className="mb-8 md:mb-10 block">
+            <p className="body-text-light hero-body-premium !mb-0">
               General Practice, Skin Cancer detection, and medical-grade
               Aesthetic treatments — delivered with personalised care in Batemans Bay.
             </p>
           </MaskReveal>
 
-          <div className="flex flex-wrap items-center gap-3 md:gap-4">
-            <div className="ref-rise" style={{ transitionDelay: "1040ms" }}>
-              <Link to="/book" className="btn-primary btn-ref-arrow bg-[#0A7E94] hover:bg-[#086B7E] shadow-[0_4px_20px_rgba(10,126,148,0.35)] hover:shadow-[0_6px_24px_rgba(10,126,148,0.45)]">
-                Book Consultation <ArrowRight size={14} className="ref-arrow" />
+          <div className="hero-cta">
+            <div className="ref-rise shrink-0" style={{ transitionDelay: "1040ms" }}>
+              <Link to="/book" className="btn-primary btn-ref-arrow hero-cta-btn bg-[#0A7E94] hover:bg-[#086B7E] shadow-[0_4px_20px_rgba(10,126,148,0.35)] hover:shadow-[0_6px_24px_rgba(10,126,148,0.45)]">
+                Book Consultation <ArrowRight size={14} className="ref-arrow transition-transform duration-300" />
               </Link>
             </div>
-            <div className="ref-rise" style={{ transitionDelay: "1160ms" }}>
-              <Link to="/general-practice" className="btn-outline-white">
+            <div className="ref-rise shrink-0" style={{ transitionDelay: "1160ms" }}>
+              <Link to="/general-practice" className="btn-outline-white hero-cta-btn">
                 Our Services
               </Link>
             </div>
@@ -71,23 +119,55 @@ function Hero() {
         </div>
       </div>
 
-      <div className="hero-stats-wrap site-container pb-6 md:pb-8">
-        <div className="hero-stats">
-          <div className="hero-stats-grid">
-            {stats.map(({ v, l }, i) => (
-              <div
-                key={l}
-                className="hero-stat-item ref-rise"
-                style={{ transitionDelay: `${1280 + i * 80}ms` }}
-              >
-                <div className="hero-stat-value">{v}</div>
-                <div className="hero-stat-label">{l}</div>
-              </div>
-            ))}
+      {/* Rotating circular badge */}
+      <Link to="/book" className="hero-scroll-badge cursor-pointer" aria-label="Book appointment">
+        <div className="absolute inset-0 rounded-full hero-scroll-badge-pulse" />
+        <div className="hero-scroll-badge-ring">
+          <svg viewBox="0 0 140 140" width="140" height="140" aria-hidden>
+            <defs>
+              <path id="heroCirclePath" d="M 70,70 m -50,0 a 50,50 0 1,1 100,0 a 50,50 0 1,1 -100,0" />
+            </defs>
+            <text fontSize="10.5" letterSpacing="3.5" fill="rgba(255,255,255,0.55)">
+              <textPath href="#heroCirclePath">BOOK NOW · AGPAL ACCREDITED · EST. 2004 ·</textPath>
+            </text>
+          </svg>
+        </div>
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="hero-scroll-badge-center rounded-full">
+            <ArrowRight size={16} className="text-[#7EC8D8]" style={{ transform: "rotate(-45deg)" }} />
           </div>
-          <p className="hero-rating-block ref-rise w-full md:w-auto mt-5 md:mt-0 pt-5 md:pt-0 border-t border-white/10 md:border-0" style={{ transitionDelay: "1440ms" }}>
-            · Rated 5.0 · Patient Reviews
-          </p>
+        </div>
+      </Link>
+
+      {/* Scroll hint */}
+      <div className="hero-scroll-hint" aria-hidden>
+        <span className="hero-scroll-hint-label">Scroll</span>
+        <div className="hero-scroll-hint-line" />
+      </div>
+
+      {/* Full-width top rule — border on viewport edge, content in container (warm-site pattern) */}
+      <div className="hero-stats-wrap">
+        <div className="site-container py-6 md:py-8">
+          <div className="hero-stats">
+            <div className="hero-stats-grid">
+              {stats.map(({ v, l }, i) => (
+                <div
+                  key={l}
+                  className="hero-stat-item ref-rise"
+                  style={{ transitionDelay: `${1280 + i * 80}ms` }}
+                >
+                  <div className="hero-stat-value">{v}</div>
+                  <div className="hero-stat-label">{l}</div>
+                </div>
+              ))}
+            </div>
+            <p
+              className="hero-rating-block ref-rise w-full md:w-auto mt-5 md:mt-0 pt-5 md:pt-0 border-t border-white/10 md:border-0"
+              style={{ transitionDelay: "1440ms" }}
+            >
+              · Rated 5.0 · Patient Reviews
+            </p>
+          </div>
         </div>
       </div>
 
@@ -211,108 +291,6 @@ function Services() {
   );
 }
 
-/* ─── Stats band — reference dark credential strip ─── */
-function StatsBand() {
-  const stats = [
-    { v: "20+", l: "Years of Excellence" },
-    { v: "5.0 ★", l: "Patient Rated" },
-    { v: "AGPAL", l: "Accredited Practice" },
-    { v: "4", l: "Specialist Services" },
-  ];
-
-  return (
-    <section className="stats-band">
-      <div className="site-container">
-        <ScrollReveal>
-          <div className="stats-band-grid">
-            {stats.map(({ v, l }) => (
-              <div key={l} className="stats-band-item">
-                <div className="stats-band-value">{v}</div>
-                <div className="stats-band-label">{l}</div>
-              </div>
-            ))}
-          </div>
-          <div className="stats-band-foot">
-            <p className="font-sans text-white/40 text-[13px] font-light max-w-md">
-              Excellence in every consultation — trusted family care with specialist skin and aesthetic expertise.
-            </p>
-            <Link to="/practice-info" className="link-arrow !text-white/55 hover:!text-[#7EC8D8] shrink-0">
-              About Our Practice <ArrowRight size={13} />
-            </Link>
-          </div>
-        </ScrollReveal>
-      </div>
-    </section>
-  );
-}
-
-/* ─── STEP 4: WhyUs — reference philosophy section with numbered list ─── */
-function WhyUs() {
-  const points = [
-    { n: "01", title: "AGPAL-Accredited Excellence", desc: "Maintaining Australia's highest GP standards with evidence-based care." },
-    { n: "02", title: "MoleMax HD Technology", desc: "The gold standard in skin cancer detection with total body photography." },
-    { n: "03", title: "Medical-Grade Aesthetics", desc: "All treatments performed by AHPRA-registered medical practitioners." },
-  ];
-
-  return (
-    <section className="section-py section-cream">
-      <div className="site-container">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-center">
-          <ScrollZoomReveal className="relative order-2 lg:order-1">
-            <div className="relative pl-6 pt-6">
-              <div className="absolute top-0 left-0 w-16 h-16 bg-[#0D1F2D] z-0" aria-hidden />
-              <div className="absolute top-0 left-[72px] w-px h-24 bg-[#0A7E94]/25 z-0" aria-hidden />
-              <div className="image-frame aspect-[4/5] max-w-md relative z-10 overflow-hidden">
-                <img
-                  src={IMAGES.clinicInterior}
-                  alt="Clinic"
-                  className="ref-zoom-img ref-zoom-img-drift w-full h-full object-cover"
-                />
-              </div>
-              <div className="absolute -bottom-6 -right-2 md:-right-6 w-[52%] aspect-square border-[5px] border-white shadow-[0_16px_48px_rgba(13,31,45,0.12)] overflow-hidden z-20">
-                <img
-                  src={IMAGES.cardAesthetic}
-                  alt="Treatment"
-                  className="ref-zoom-img ref-zoom-img-delay w-full h-full object-cover"
-                />
-              </div>
-              <div className="absolute top-10 left-0 z-30 bg-[#0D1F2D] text-white px-4 py-3 font-sans text-[10px] uppercase tracking-[0.14em] leading-relaxed border border-[#0A7E94]/20">
-                20+<br />Years of<br />Excellence
-              </div>
-            </div>
-          </ScrollZoomReveal>
-
-          <ScrollReveal delay={2} className="order-1 lg:order-2">
-            <p className="ref-label">WHY CHOOSE US</p>
-            <h2 className="heading-section mb-6">
-              The Standard of Care<br />
-              <em className="heading-accent">You Deserve</em>
-            </h2>
-            <p className="body-text mb-8">
-              We combine the warmth of a trusted family practice with the capabilities of a
-              specialist skin and aesthetics clinic — all under one roof in Batemans Bay.
-            </p>
-            <div className="mb-8">
-              {points.map(({ n, title, desc }) => (
-                <div key={n} className="philosophy-item">
-                  <span className="philosophy-num">{n}</span>
-                  <div>
-                    <p className="philosophy-title">{title}</p>
-                    <p className="body-text-sm">{desc}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <Link to="/practice-info" className="btn-primary bg-[#0A7E94] hover:bg-[#086B7E]">
-              About Our Practice <ArrowRight size={14} />
-            </Link>
-          </ScrollReveal>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 /* ─── STEP 5: About — reference editorial + featured grid ─── */
 function About() {
   const featured = [
@@ -323,7 +301,7 @@ function About() {
   ];
 
   return (
-    <section className="section-py section-white">
+    <section className="section-py section-white !pb-10 md:!pb-14">
       <div className="site-container">
         <ScrollReveal>
           <div className="section-header-split">
@@ -407,7 +385,8 @@ function Testimonials() {
   const pad = (n: number) => String(n).padStart(2, "0");
 
   return (
-    <section className="section-py section-dark">
+    <section id="testimonials" className="section-py section-dark !pt-0">
+      <div className="testimonial-quote-deco" aria-hidden>&ldquo;</div>
       <div className="site-container">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14">
           <ScrollReveal className="lg:col-span-4">
@@ -451,7 +430,7 @@ function Testimonials() {
             <blockquote key={idx} className="testimonial-quote-enter font-serif text-white/90 text-[clamp(1.2rem,2.2vw,1.75rem)] leading-[1.55] mb-10">
               &ldquo;{r.quote}&rdquo;
             </blockquote>
-            <div className="flex items-center justify-between border-t border-white/10 pt-8">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-5 border-t border-white/10 pt-8">
               <div className="flex items-center gap-4">
                 <div className="w-11 h-11 rounded-full bg-[#0A7E94]/30 flex items-center justify-center text-[#7EC8D8] font-serif text-lg">
                   {r.name[0]}
@@ -528,7 +507,7 @@ function Location() {
           </ScrollReveal>
 
           <ScrollReveal delay={2} className="lg:col-span-5">
-            <div className="flex flex-col h-full divide-y divide-[rgba(10,126,148,0.08)] border border-[rgba(10,126,148,0.08)]">
+            <div className="location-info-card">
               {[
                 { icon: <MapPin size={16} className="text-[#0A7E94]" />, label: "Address", content: "116 Beach Road\nBatemans Bay NSW 2536",
                   link: { text: "Get Directions →", href: "https://maps.google.com/?q=116+Beach+Road+Batemans+Bay+NSW" } },
@@ -569,11 +548,12 @@ export default function Home() {
       <div className="home-sections">
         <Services />
         <TrustStrip />
-        <WhyUs />
-        <StatsBand />
+        <HomePhilosophy />
+        <HomeNumbers />
+        <HomeTreatments />
         <About />
         <Testimonials />
-        <BookingBanner />
+        <HomeBooking />
         <Location />
       </div>
     </>

@@ -4,13 +4,25 @@ import Header from "./Header";
 import Footer from "./Footer";
 
 export default function Layout() {
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
+
   useEffect(() => {
+    if (hash) {
+      const id = hash.replace("#", "");
+      const scrollToAnchor = () => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      };
+      requestAnimationFrame(() => requestAnimationFrame(scrollToAnchor));
+      return;
+    }
     window.scrollTo({ top: 0, behavior: "instant" });
-  }, [pathname]);
+  }, [pathname, hash]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-background font-sans antialiased">
+    <div className="min-h-screen flex flex-col bg-background font-sans antialiased overflow-x-clip">
       <Header />
       <main className="flex-1">
         <Outlet />
