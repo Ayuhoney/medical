@@ -4,6 +4,7 @@ import { Phone, MapPin, Menu, X, ChevronDown, ArrowRight, ShoppingBag, Calendar 
 import { NAV_ITEMS, IMAGES, CLINIC } from "@/app/constants";
 import agpalBadge from "@/imports/AGPAL-Accredited-Email-Signature-536w.webp";
 import { Logo } from "./Logo";
+import { useFirstVisitGate } from "@/app/hooks/useFirstVisitGate";
 
 const UTILITY_H = 32;
 const NAV_H = 68;
@@ -91,10 +92,12 @@ export default function Header() {
     return () => { document.body.style.overflow = ""; };
   }, [mobileOpen]);
 
+  const gateOpen = useFirstVisitGate();
+
   /* Reference video: navbar slides down + fades in on hero load */
   useEffect(() => {
     const el = headerRef.current;
-    if (!el || !isHome) {
+    if (!el || !isHome || !gateOpen) {
       headerRef.current?.classList.remove("ref-entered");
       return;
     }
@@ -106,7 +109,7 @@ export default function Header() {
       clearTimeout(t);
       el.classList.remove("ref-entered", "ref-header-enter");
     };
-  }, [isHome, location.pathname]);
+  }, [isHome, location.pathname, gateOpen]);
 
   const openDrop = (label: string) => {
     if (timer.current) clearTimeout(timer.current);

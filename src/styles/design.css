@@ -1725,6 +1725,173 @@
   animation: spinSlow 18s linear infinite;
 }
 
+  /* ─── First visit — unified overlay (intro → modal → reveal) ─── */
+  .first-visit-layer {
+    @apply fixed inset-0 z-[200] flex items-center justify-center px-4 sm:px-6;
+    will-change: opacity;
+  }
+  .first-visit-layer--closing {
+    animation: fvlLayerOut 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    pointer-events: none;
+  }
+  .first-visit-backdrop {
+    @apply absolute inset-0 bg-[#0D1F2D];
+    will-change: opacity;
+  }
+  .first-visit-layer[data-step="modal"] .first-visit-backdrop {
+    background: rgba(13, 31, 45, 0.94);
+  }
+  .first-visit-layer--closing .first-visit-backdrop {
+    opacity: 0;
+    transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .first-visit-intro {
+    @apply relative z-[2] flex flex-col items-center text-center px-6;
+    transition:
+      opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+      visibility 0.55s;
+    will-change: opacity, transform;
+  }
+  .first-visit-intro--out {
+    @apply opacity-0 pointer-events-none;
+    transform: scale(0.97) translateY(-8px);
+    visibility: hidden;
+  }
+  .first-visit-intro-glow {
+    @apply absolute inset-0 -z-[1] pointer-events-none;
+    background:
+      radial-gradient(ellipse 70% 55% at 50% 42%, rgba(10, 126, 148, 0.24) 0%, transparent 62%),
+      radial-gradient(ellipse 45% 40% at 80% 75%, rgba(126, 200, 216, 0.12) 0%, transparent 55%);
+  }
+  .first-visit-logo {
+    @apply mb-5;
+    animation: fvlLogoIn 1s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .first-visit-wordmark {
+    @apply flex flex-col items-center gap-0.5 mb-10;
+    animation: fvlLogoIn 1s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
+  }
+  .first-visit-name {
+    @apply font-sans font-bold text-[15px] sm:text-[16px] tracking-[-0.01em] text-white;
+  }
+  .first-visit-sub {
+    @apply font-sans font-normal text-[13px] sm:text-[14px] tracking-[-0.01em] text-white/85;
+  }
+  .first-visit-bar {
+    @apply relative w-40 h-[2px] overflow-hidden bg-white/10 rounded-full;
+  }
+  .first-visit-bar-fill {
+    @apply absolute inset-y-0 left-0 w-full rounded-full origin-left;
+    background: linear-gradient(90deg, #7EC8D8, #0A7E94);
+    animation: fvlBarFill 2s cubic-bezier(0.4, 0, 0.2, 1) 0.2s both;
+  }
+
+  .first-visit-modal {
+    @apply absolute inset-0 z-[3] flex items-center justify-center px-4 sm:px-6;
+    opacity: 0;
+    transform: translateY(12px);
+    transition:
+      opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.08s,
+      transform 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.08s;
+    pointer-events: none;
+    will-change: opacity, transform;
+  }
+  .first-visit-modal--in {
+    @apply opacity-100 pointer-events-auto;
+    transform: translateY(0);
+  }
+  .first-visit-card {
+    @apply relative w-full max-w-[640px] px-8 py-10 sm:px-12 sm:py-12 text-center rounded-2xl;
+    background: linear-gradient(145deg, #0A7E94 0%, #0B8FA3 42%, #2799A5 100%);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    box-shadow:
+      0 32px 64px rgba(13, 31, 45, 0.35),
+      0 8px 24px rgba(10, 126, 148, 0.25),
+      inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  }
+  .first-visit-modal--in .first-visit-card {
+    animation: fvlCardIn 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .first-visit-layer--closing .first-visit-card {
+    animation: none;
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+    transition: opacity 0.45s ease, transform 0.45s ease;
+  }
+  .first-visit-card::before {
+    content: '';
+    @apply absolute inset-0 rounded-2xl pointer-events-none;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(255, 255, 255, 0.14) 0%, transparent 65%);
+  }
+  .first-visit-close {
+    @apply absolute top-4 right-4 sm:top-5 sm:right-5 z-[2]
+      flex items-center justify-center w-9 h-9 rounded-full
+      border border-white/35 text-white/90
+      hover:bg-white/12 hover:border-white/55 hover:text-white
+      transition-colors duration-300;
+  }
+  .first-visit-eyebrow {
+    @apply relative z-[1] mb-4 font-sans text-[10px] sm:text-[11px] font-medium uppercase tracking-[0.24em] text-white/70;
+  }
+  .first-visit-title {
+    @apply relative z-[1] mb-5 font-serif text-white text-[clamp(1.35rem,3.2vw,1.75rem)] leading-[1.25] font-normal;
+  }
+  .first-visit-body {
+    @apply relative z-[1] font-sans text-[14px] sm:text-[15px] leading-relaxed text-white/88 max-w-[480px] mx-auto;
+  }
+  .first-visit-link {
+    @apply text-white font-medium underline underline-offset-[3px] decoration-white/45
+      hover:decoration-white transition-colors duration-300;
+  }
+
+  /* Hold hero + header still until first-visit overlay completes */
+  body.first-visit-active .ref-header-enter {
+    opacity: 0 !important;
+    transform: translateY(-20px) !important;
+    transition: none !important;
+  }
+  body.first-visit-active .hero-section .ref-mask-inner {
+    transform: translateY(110%) !important;
+    transition: none !important;
+  }
+  body.first-visit-active .hero-section .ref-rise {
+    opacity: 0 !important;
+    transform: translateY(28px) !important;
+    transition: none !important;
+  }
+  body.first-visit-active .hero-section .ref-label-enter::before {
+    transform: scaleX(0) !important;
+    transition: none !important;
+  }
+  body.first-visit-active .hero-section > .hero-bg-layer .hero-bg-pan {
+    transform: scale(1.06) !important;
+    transition: none !important;
+  }
+  body.first-visit-active .hero-section .hero-scroll-badge {
+    opacity: 0 !important;
+    transform: scale(0.88) !important;
+    transition: none !important;
+  }
+
+@keyframes fvlLogoIn {
+  from { opacity: 0; transform: translateY(18px) scale(0.95); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes fvlBarFill {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+@keyframes fvlCardIn {
+  from { opacity: 0; transform: translateY(18px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes fvlLayerOut {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .reveal, .reveal-stagger > * { @apply opacity-100 translate-y-0; transition: none; }
   .animate-fade-up, .animate-fade-up-delay, .animate-fade-up-delay-2, .animate-fade-up-delay-3 { animation: none; }
@@ -1739,4 +1906,7 @@
     transition: none !important;
   }
   .ref-label-enter::before { transform: scaleX(1) !important; transition: none !important; }
+  .first-visit-layer, .first-visit-logo, .first-visit-wordmark, .first-visit-bar-fill,
+  .first-visit-card { animation: none !important; }
+  .first-visit-intro, .first-visit-modal { transition: none !important; opacity: 1 !important; transform: none !important; }
 }

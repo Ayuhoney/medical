@@ -2,6 +2,7 @@ import { Outlet, useLocation } from "react-router";
 import { useEffect } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
+import FirstVisitExperience from "./FirstVisitExperience";
 
 export default function Layout() {
   const { pathname, hash } = useLocation();
@@ -23,6 +24,7 @@ export default function Layout() {
 
   return (
     <div className="min-h-screen flex flex-col bg-background font-sans antialiased overflow-x-clip">
+      <FirstVisitExperience />
       <Header />
       <main className="flex-1">
         <Outlet />
