@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router";
 import { ArrowUpRight, ShoppingBag, Star } from "lucide-react";
-import type { Product } from "../../data/products";
+import type { Product } from "@/app/data/products";
 
 export function ProductCard({ product }: { product: Product }) {
   const [added, setAdded] = useState(false);

@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import logoPng from "../../assest/Logo.png";
+import logoPng from "@/assest/Logo.png";
 
 type LogoProps = {
   light?: boolean;

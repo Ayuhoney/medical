@@ -1,4 +1,4 @@
-import { IMAGES } from "../constants";
+import { IMAGES } from "@/app/constants";
 
 export type BlogPost = {
   slug: string;

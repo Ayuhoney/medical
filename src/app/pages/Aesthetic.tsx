@@ -1,9 +1,9 @@
 import { Link } from "react-router";
 import { Sparkles, ArrowRight } from "lucide-react";
-import { IMAGES } from "../constants";
-import { PageHero, BookingBanner } from "../components/ui";
-import { ServiceDetailList } from "../components/ServiceDetailSection";
-import { aestheticServices } from "../data/services/aesthetic";
+import { IMAGES } from "@/app/constants";
+import { PageHero, BookingBanner } from "@/app/components/ui";
+import { ServiceDetailList } from "@/app/components/ServiceDetailSection";
+import { aestheticServices } from "@/app/data/services/aesthetic";
 
 export default function Aesthetic() {
   return (

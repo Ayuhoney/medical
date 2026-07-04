@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
 import { ArrowRight } from "lucide-react";
-import { IMAGES } from "../../constants";
+import { IMAGES } from "@/app/constants";
 
 const featured = {
   title: "Full Body Skin Check",

@@ -1,7 +1,7 @@
 import { Link, useParams, Navigate } from "react-router";
 import { ArrowLeft, Clock } from "lucide-react";
-import { getBlogPost } from "../data/blogPosts";
-import { PageHero } from "../components/ui";
+import { getBlogPost } from "@/app/data/blogPosts";
+import { PageHero } from "@/app/components/ui";
 
 const categoryColors: Record<string, string> = {
   "Skin Cancer": "bg-red-50 text-red-600",

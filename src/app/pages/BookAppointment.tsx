@@ -12,8 +12,8 @@ import {
   Zap,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { PageHero, BookingBanner } from "../components/ui";
-import { IMAGES, CLINIC } from "../constants";
+import { PageHero, BookingBanner } from "@/app/components/ui";
+import { IMAGES, CLINIC } from "@/app/constants";
 
 type ServiceType = {
   id: string;

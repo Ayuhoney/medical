@@ -4,8 +4,8 @@ import {
   ArrowLeft, ArrowRight, Check, ChevronRight, Shield, ShoppingBag,
   Star, Truck, Zap,
 } from "lucide-react";
-import { getProductBySlug, getRelatedProducts } from "../data/products";
-import { ProductCard } from "../components/store/ProductCard";
+import { getProductBySlug, getRelatedProducts } from "@/app/data/products";
+import { ProductCard } from "@/app/components/store/ProductCard";
 
 export default function ProductDetail() {
   const { slug } = useParams<{ slug: string }>();

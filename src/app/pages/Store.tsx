@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { ArrowRight, Search, Sparkles } from "lucide-react";
-import { IMAGES } from "../constants";
-import { PageHero } from "../components/ui";
+import { IMAGES } from "@/app/constants";
+import { PageHero } from "@/app/components/ui";
 import { Link } from "react-router";
-import { products, STORE_CATEGORIES } from "../data/products";
-import { ProductCard } from "../components/store/ProductCard";
+import { products, STORE_CATEGORIES } from "@/app/data/products";
+import { ProductCard } from "@/app/components/store/ProductCard";
 
 export default function Store() {
   const [activeCategory, setActiveCategory] = useState("All Products");

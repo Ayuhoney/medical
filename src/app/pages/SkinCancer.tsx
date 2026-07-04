@@ -1,9 +1,9 @@
 import { Link } from "react-router";
 import { ArrowRight } from "lucide-react";
-import { IMAGES } from "../constants";
-import { PageHero, BookingBanner } from "../components/ui";
-import { ServiceDetailList } from "../components/ServiceDetailSection";
-import { skinCancerServices } from "../data/services/skinCancer";
+import { IMAGES } from "@/app/constants";
+import { PageHero, BookingBanner } from "@/app/components/ui";
+import { ServiceDetailList } from "@/app/components/ServiceDetailSection";
+import { skinCancerServices } from "@/app/data/services/skinCancer";
 
 const signs = [
   { letter: "A", name: "Asymmetry", desc: "One half doesn't match the other" },

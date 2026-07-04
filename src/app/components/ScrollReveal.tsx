@@ -1,4 +1,4 @@
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useRef, type CSSProperties, type ReactNode } from "react";
 
 export function ScrollReveal({
   children,
@@ -35,9 +35,11 @@ export function ScrollReveal({
 export function StaggerReveal({
   children,
   className = "",
+  style,
 }: {
   children: ReactNode;
   className?: string;
+  style?: CSSProperties;
 }) {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -53,7 +55,7 @@ export function StaggerReveal({
   }, []);
 
   return (
-    <div ref={ref} className={`reveal-stagger ${className}`}>
+    <div ref={ref} className={`reveal-stagger ${className}`} style={style}>
       {children}
     </div>
   );

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
 import { ArrowRight, Mail, Phone, MapPin } from "lucide-react";
-import { CLINIC, IMAGES } from "../../constants";
+import { CLINIC, IMAGES } from "@/app/constants";
 
 const services = [
   "General Practice",

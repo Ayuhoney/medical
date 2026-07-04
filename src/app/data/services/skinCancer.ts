@@ -1,5 +1,5 @@
-import { IMAGES } from "../../constants";
-import type { ServiceDetailItem } from "../../components/ServiceDetailSection";
+import { IMAGES } from "@/app/constants";
+import type { ServiceDetailItem } from "@/app/components/ServiceDetailSection";
 
 export const skinCancerServices: ServiceDetailItem[] = [
   {

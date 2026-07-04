@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
 import { ArrowRight } from "lucide-react";
-import { IMAGES } from "../../constants";
-import { use3dTilt } from "../../hooks/use3dTilt";
+import { IMAGES } from "@/app/constants";
+import { use3dTilt } from "@/app/hooks/use3dTilt";
 
 const values = [
   { n: "01", title: "AGPAL-Accredited Excellence", desc: "Maintaining Australia's highest GP standards with evidence-based care." },

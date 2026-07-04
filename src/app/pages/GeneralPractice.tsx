@@ -1,9 +1,9 @@
 import { Link } from "react-router";
 import { ArrowRight } from "lucide-react";
-import { IMAGES } from "../constants";
-import { PageHero, BookingBanner } from "../components/ui";
-import { ServiceDetailList } from "../components/ServiceDetailSection";
-import { generalPracticeServices } from "../data/services/generalPractice";
+import { IMAGES } from "@/app/constants";
+import { PageHero, BookingBanner } from "@/app/components/ui";
+import { ServiceDetailList } from "@/app/components/ServiceDetailSection";
+import { generalPracticeServices } from "@/app/data/services/generalPractice";
 
 export default function GeneralPractice() {
   return (

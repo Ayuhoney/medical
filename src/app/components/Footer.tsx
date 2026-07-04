@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 import { Phone, MapPin, Clock, Facebook, Instagram, Mail, ArrowRight } from "lucide-react";
-import { CLINIC } from "../constants";
+import { CLINIC } from "@/app/constants";
 import { Logo } from "./Logo";
 
 const quickLinks = [

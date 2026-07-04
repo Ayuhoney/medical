@@ -1,8 +1,8 @@
 import { Link } from "react-router";
 import { Award, Shield, CheckCircle, Users, Clock, Heart, FileText, Stethoscope, Lock } from "lucide-react";
-import { IMAGES, CLINIC } from "../constants";
-import { PageHero, BookingBanner } from "../components/ui";
-import { PolicySection } from "../components/ServiceDetailSection";
+import { IMAGES, CLINIC } from "@/app/constants";
+import { PageHero, BookingBanner } from "@/app/components/ui";
+import { PolicySection } from "@/app/components/ServiceDetailSection";
 
 const doctors = [
   {

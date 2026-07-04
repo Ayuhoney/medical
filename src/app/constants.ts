@@ -1,4 +1,6 @@
-import newHeroImg from "../assest/c7892ed3-3f57-4be1-979e-87d646dc6423.jpeg";
+import newHeroImg from "@/assest/c7892ed3-3f57-4be1-979e-87d646dc6423.jpeg";
+import agpalBadge from "@/imports/AGPAL-Accredited-Email-Signature-536w.webp";
+import doctorThilan from "@/imports/dr-thilan-walgamage-662w.png";
 
 // ─── Image URLs (Unsplash) ────────────────────────────────────────────────────
 const U = "https://images.unsplash.com/photo-";
@@ -31,6 +33,8 @@ export const IMAGES = {
   facialTreat: `${U}1731514771613-991a02407132${q}&w=700&h=500`,
   // Doctor
   doctorFemale: `${U}1638202993928-7267aad84c31${q}&w=600&h=750`,
+  doctorThilan,
+  agpalBadge,
   // Store
   productSerums: `${U}1767256046031-743d33937c4e${q}&w=500&h=500`,
   productBasket: `${U}1780770738499-5ade63b1f6c3${q}&w=500&h=500`,

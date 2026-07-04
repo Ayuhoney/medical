@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Phone, MapPin, Clock, Mail, CheckCircle, Send } from "lucide-react";
-import { IMAGES, CLINIC } from "../constants";
-import { PageHero } from "../components/ui";
+import { IMAGES, CLINIC } from "@/app/constants";
+import { PageHero } from "@/app/components/ui";
 
 export default function Contact() {
   const [form, setForm] = useState({ name: "", email: "", phone: "", subject: "", message: "" });

@@ -1,15 +1,23 @@
-import { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { Link } from "react-router";
 import {
   Calendar, ArrowRight, Award, Shield, CheckCircle, Microscope,
-  Star, Phone, Clock, MapPin, ChevronLeft, ChevronRight, ArrowUpRight,
+  Star, Phone, Clock, MapPin, ArrowUpRight,
 } from "lucide-react";
-import { IMAGES, CLINIC } from "../constants";
-import { ServiceAccordion } from "../components/ServiceAccordion";
-import { MaskReveal, useRefEntrance } from "../components/RefEntrance";
-import { ScrollReveal, StaggerReveal } from "../components/ScrollReveal";
-import { ServiceMarquee } from "../components/ServiceMarquee";
-import { HomePhilosophy, HomeNumbers, HomeTreatments, HomeBooking } from "../components/home";
+import { IMAGES, CLINIC } from "@/app/constants";
+import awardRegional from "@/imports/award-regional-winner.png";
+import awardFinalist from "@/imports/award-finalist.png";
+import awardISC from "@/imports/award-isc-winner.jpg";
+import logoANU from "@/imports/logo-anu.png";
+import logoRACGP from "@/imports/logo-racgp.png";
+import awardWinner2022 from "@/imports/award-winner-2022.png";
+import logoAgpal from "@/imports/logo-agpal-award.png";
+import logoSCI from "@/imports/logo-sci-award.webp";
+import { ServiceAccordion } from "@/app/components/ServiceAccordion";
+import { MaskReveal, useRefEntrance } from "@/app/components/RefEntrance";
+import { ScrollReveal, StaggerReveal } from "@/app/components/ScrollReveal";
+import { ServiceMarquee } from "@/app/components/ServiceMarquee";
+import { HomePhilosophy, HomeNumbers, HomeTreatments, HomeBooking } from "@/app/components/home";
 
 /* ─── STEP 1: Hero — Beauty Redefined UI language, Beach Road header image + content ─── */
 const TEAL_ORB  = "rgba(10,126,148,0.22)";
@@ -291,6 +299,53 @@ function Services() {
   );
 }
 
+/* ─── Awards & Credentials strip ─── */
+const awardsLogos = [
+  { src: awardRegional,  alt: "2022 Regional Winner — Local Business Awards" },
+  { src: awardFinalist,  alt: "Local Business Awards Finalist" },
+  { src: awardISC,       alt: "2022 ISC Winner — Local Business Awards" },
+  { src: logoANU,        alt: "Australian National University" },
+  { src: logoRACGP,      alt: "RACGP — Royal Australian College of General Practitioners" },
+  { src: awardWinner2022, alt: "Winner 2022" },
+  { src: logoAgpal,      alt: "AGPAL — Australian General Practice Accreditation Limited" },
+  { src: logoSCI,        alt: "Skin Cancer Institute" },
+];
+
+function Awards() {
+  return (
+    <section className="section-white border-y border-[rgba(10,126,148,0.07)] py-12 md:py-16">
+      <div className="site-container">
+        <ScrollReveal>
+          <div className="section-header-split !mb-8 md:!mb-10">
+            <div>
+              <p className="ref-label">AWARDS &amp; ACCREDITATIONS</p>
+              <h2 className="heading-section pl-11">
+                Recognised Excellence in <em className="heading-accent">Healthcare</em>
+              </h2>
+            </div>
+          </div>
+        </ScrollReveal>
+        <StaggerReveal className="flex w-full max-w-full flex-nowrap items-center justify-center gap-x-3 sm:gap-x-5 md:gap-x-7 lg:gap-x-9">
+          {awardsLogos.map(({ src, alt }) => (
+            <div
+              key={alt}
+              className="flex flex-1 min-w-0 items-center justify-center hover:scale-105 transition-transform duration-300"
+            >
+              <img
+                src={src}
+                alt={alt}
+                className="object-contain w-auto max-w-full"
+                style={{ height: "clamp(4.5rem, 11vw, 10rem)" }}
+                loading="lazy"
+              />
+            </div>
+          ))}
+        </StaggerReveal>
+      </div>
+    </section>
+  );
+}
+
 /* ─── STEP 5: About — reference editorial + featured grid ─── */
 function About() {
   const featured = [
@@ -349,7 +404,17 @@ function About() {
 
           <ScrollReveal delay={2}>
             <div className="featured-grid">
-              <Link to="/practice-info" className="featured-card featured-card-lg group">
+              <Link
+                to="/practice-info"
+                className="featured-card featured-card-lg group"
+                onMouseMove={(e) => {
+                  const r = e.currentTarget.getBoundingClientRect();
+                  const x = (e.clientX - r.left) / r.width  - 0.5;
+                  const y = (e.clientY - r.top)  / r.height - 0.5;
+                  e.currentTarget.style.transform = `perspective(700px) rotateY(${x * 10}deg) rotateX(${-y * 7}deg) translateZ(6px)`;
+                }}
+                onMouseLeave={(e) => { e.currentTarget.style.transform = ""; }}
+              >
                 <img src={IMAGES.heroWomanWarm} alt="Personalised care at Beach Road Surgery" />
                 <div className="featured-card-overlay" />
                 <span className="featured-card-meta">Our Clinic</span>
@@ -357,7 +422,18 @@ function About() {
               </Link>
               <div className="featured-card-wrap">
                 {featured.map(({ tag, title, image, path }) => (
-                  <Link key={title} to={path} className="featured-card featured-card-sm group">
+                  <Link
+                    key={title}
+                    to={path}
+                    className="featured-card featured-card-sm group"
+                    onMouseMove={(e) => {
+                      const r = e.currentTarget.getBoundingClientRect();
+                      const x = (e.clientX - r.left) / r.width  - 0.5;
+                      const y = (e.clientY - r.top)  / r.height - 0.5;
+                      e.currentTarget.style.transform = `perspective(600px) rotateY(${x * 12}deg) rotateX(${-y * 8}deg) translateZ(5px)`;
+                    }}
+                    onMouseLeave={(e) => { e.currentTarget.style.transform = ""; }}
+                  >
                     <img src={image} alt={title} />
                     <div className="featured-card-overlay" />
                     <span className="featured-card-meta">{tag}</span>
@@ -373,87 +449,67 @@ function About() {
   );
 }
 
-/* ─── STEP 6: Testimonials — reference carousel + stats bar ─── */
+/* ─── STEP 6: Patient Care — dark theme, doctor portrait + clinic message ─── */
 function Testimonials() {
-  const reviews = [
-    { name: "Sarah M.", type: "General Practice", rating: 5, quote: "Dr Dharmarama is exceptional — he truly listens and takes time to explain everything clearly. The clinic is modern and the team are incredibly welcoming. I wouldn't go anywhere else." },
-    { name: "James T.", type: "Skin Cancer Check", rating: 5, quote: "I had a comprehensive skin check with full body mapping using MoleMax HD. The technology is impressive and the doctor was thorough and reassuring. Peace of mind is priceless." },
-    { name: "Michelle K.", type: "Aesthetic Medicine", rating: 5, quote: "The results from my treatments exceeded my expectations. The team made me feel at ease throughout the process and the outcomes looked completely natural. Highly recommend." },
-  ];
-  const [idx, setIdx] = useState(0);
-  const r = reviews[idx];
-  const pad = (n: number) => String(n).padStart(2, "0");
-
   return (
-    <section id="testimonials" className="section-py section-dark !pt-0">
-      <div className="testimonial-quote-deco" aria-hidden>&ldquo;</div>
+    <section id="testimonials" className="section-py section-dark">
       <div className="site-container">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14">
-          <ScrollReveal className="lg:col-span-4">
-            <p className="ref-label-light !text-[#7EC8D8] before:!bg-[#7EC8D8]/40">PATIENT STORIES</p>
-            <h2 className="heading-section-light mb-10">
-              What Our<br />
-              <em className="heading-accent-light">Patients Say</em>
-            </h2>
-            <div className="flex items-center gap-3 mb-4">
-              <button
-                onClick={() => setIdx((i) => (i - 1 + reviews.length) % reviews.length)}
-                className="testimonial-nav-btn"
-                aria-label="Previous review"
-              >
-                <ChevronLeft size={16} />
-              </button>
-              <button
-                onClick={() => setIdx((i) => (i + 1) % reviews.length)}
-                className="testimonial-nav-btn"
-                aria-label="Next review"
-              >
-                <ChevronRight size={16} />
-              </button>
-              <span className="font-sans text-white/35 text-[11px] tracking-[0.12em] ml-2">
-                {pad(idx + 1)} / {pad(reviews.length)}
-              </span>
-            </div>
-            <div className="flex gap-2">
-              {reviews.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => setIdx(i)}
-                  className={`testimonial-dash ${i === idx ? "active" : "inactive"}`}
-                  aria-label={`Go to review ${i + 1}`}
-                />
-              ))}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20 items-center">
+
+          {/* Left — Doctor portrait */}
+          <ScrollReveal className="flex justify-center md:justify-start">
+            <div className="w-full max-w-[300px] sm:max-w-[360px] md:max-w-[420px]">
+              <img
+                src={IMAGES.doctorThilan}
+                alt="Dr Thilan Walgamage"
+                loading="lazy"
+                decoding="async"
+                className="block w-full rounded-xl object-cover"
+                style={{
+                  objectPosition: "center 10%",
+                  border: "1px solid rgba(126,200,216,0.22)",
+                  boxShadow: "0 24px 64px rgba(0,0,0,0.5)",
+                }}
+              />
             </div>
           </ScrollReveal>
 
-          <ScrollReveal delay={2} className="lg:col-span-8">
-            <blockquote key={idx} className="testimonial-quote-enter font-serif text-white/90 text-[clamp(1.2rem,2.2vw,1.75rem)] leading-[1.55] mb-10">
-              &ldquo;{r.quote}&rdquo;
-            </blockquote>
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-5 border-t border-white/10 pt-8">
-              <div className="flex items-center gap-4">
-                <div className="w-11 h-11 rounded-full bg-[#0A7E94]/30 flex items-center justify-center text-[#7EC8D8] font-serif text-lg">
-                  {r.name[0]}
-                </div>
-                <div>
-                  <p className="font-sans text-white text-sm font-medium">{r.name}</p>
-                  <p className="font-sans text-white/40 text-[11px] uppercase tracking-[0.1em]">{r.type}</p>
-                </div>
-              </div>
-              <div className="text-right">
-                <div className="flex gap-0.5 justify-end mb-1">
-                  {Array.from({ length: r.rating }).map((_, j) => (
-                    <Star key={j} size={12} className="text-[#7EC8D8] fill-[#7EC8D8]" />
-                  ))}
-                </div>
-                <p className="font-sans text-white/30 text-[9px] uppercase tracking-[0.14em]">Verified</p>
-              </div>
+          {/* Right — Content */}
+          <ScrollReveal delay={2} className="flex flex-col gap-6">
+            <p className="ref-label-light !text-[#7EC8D8] before:!bg-[#7EC8D8]/40 !mb-0">OUR CLINIC</p>
+            <h2
+              className="font-serif font-light text-white leading-[1.1]"
+              style={{ fontSize: "clamp(2rem, 3.4vw, 2.75rem)", letterSpacing: "-0.02em" }}
+            >
+              Our <em className="heading-accent-light">Patient Care</em>
+            </h2>
+            <div className="space-y-4">
+              <p className="font-sans text-white/65 text-[15px] leading-[1.85]">
+                We are a unique clinic who are passionate about providing personalised and comprehensive
+                General Practice and Skin Care treatment to our local community. Our aim is to bring
+                world-class knowledge and skills combined with the latest technology to the Eurobodalla
+                Community.
+              </p>
+              <p className="font-sans text-white/65 text-[15px] leading-[1.85]">
+                Our team is diverse and professional. We care and support each other, and it is our
+                aspiration to bring a high level of service and professionalism to the care we bring to
+                our patients.
+              </p>
+              <p className="font-sans text-white/65 text-[15px] leading-[1.85]">
+                Beach Road Surgery &amp; Skin Clinic believes in compassionate care and excellent service
+                that transcends conventional healthcare.
+              </p>
             </div>
+            <p className="font-serif text-[#7EC8D8] text-xl italic pt-5 border-t border-white/10">
+              — Dr Thilan Walgamage
+            </p>
           </ScrollReveal>
+
         </div>
 
+        {/* Stats bar */}
         <ScrollReveal delay={3}>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-14 pt-10 border-t border-white/10">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16 pt-10 border-t border-white/10">
             {[
               { v: "5.0 ★", l: "Average Rating" },
               { v: "20+", l: "Years of Care" },
@@ -551,6 +607,7 @@ export default function Home() {
         <HomePhilosophy />
         <HomeNumbers />
         <HomeTreatments />
+        <Awards />
         <About />
         <Testimonials />
         <HomeBooking />

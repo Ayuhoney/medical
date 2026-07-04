@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router";
 import { Phone, MapPin, Menu, X, ChevronDown, ArrowRight, ShoppingBag, Calendar } from "lucide-react";
-import { NAV_ITEMS, IMAGES, CLINIC } from "../constants";
+import { NAV_ITEMS, IMAGES, CLINIC } from "@/app/constants";
+import agpalBadge from "@/imports/AGPAL-Accredited-Email-Signature-536w.webp";
 import { Logo } from "./Logo";
 
 const UTILITY_H = 32;
@@ -145,22 +146,44 @@ export default function Header() {
         >
           <div className="header-utility-inner text-[9px] md:text-[10px] font-sans tracking-wide">
             <div className="header-utility-side header-utility-side-left">
-              <span className="hidden lg:flex items-center gap-1.5 opacity-75 truncate max-w-[340px]">
+              <span className="hidden lg:flex items-center gap-1.5 truncate max-w-[340px] font-semibold">
                 <MapPin size={10} strokeWidth={1.75} className="shrink-0" />
                 <span className="truncate">{CLINIC.address}</span>
               </span>
             </div>
             <a
               href={`tel:${CLINIC.phone.replace(/\s/g, "")}`}
-              className="header-utility-phone flex items-center gap-1.5 hover:text-white transition-colors"
+              className="header-utility-phone flex items-center gap-1.5 hover:text-white transition-colors font-semibold"
             >
               <Phone size={10} strokeWidth={1.75} aria-hidden />
               <span>{CLINIC.phone}</span>
             </a>
-            <div className="header-utility-side header-utility-side-right">
+            <div className="header-utility-side header-utility-side-right" style={{ gap: "1rem" }}>
+              <Link
+                to="/practice-info#accreditations"
+                className="hidden sm:flex items-center shrink-0 hover:opacity-90 transition-opacity duration-300"
+                aria-label="Proudly AGPAL Accredited"
+              >
+                <img
+                  src={agpalBadge}
+                  alt="Proudly AGPAL Accredited"
+                  loading="eager"
+                  decoding="async"
+                  style={{
+                    height: "1.9rem",
+                    width: "auto",
+                    maxWidth: "14rem",
+                    display: "block",
+                    borderRadius: "0.3rem",
+                    border: "1px solid rgba(255,255,255,0.5)",
+                    padding: "1px 6px",
+                    background: "rgba(255,255,255,0.93)",
+                  }}
+                />
+              </Link>
               <Link
                 to="/blog"
-                className="hidden sm:block uppercase tracking-[0.18em] opacity-75 hover:opacity-100 transition-opacity"
+                className="hidden xl:block uppercase tracking-[0.18em] font-semibold hover:opacity-100 transition-opacity"
               >
                 Blog &amp; News
               </Link>
