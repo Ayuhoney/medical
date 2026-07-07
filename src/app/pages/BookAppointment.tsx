@@ -14,6 +14,7 @@ import {
 import type { LucideIcon } from "lucide-react";
 import { PageHero, BookingBanner } from "@/app/components/ui";
 import { IMAGES, CLINIC } from "@/app/constants";
+import { api } from "@/app/api";
 
 type ServiceType = {
   id: string;
@@ -143,6 +144,8 @@ export default function BookAppointment() {
     notes: "",
   });
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const next = () => setStep((s) => Math.min(s + 1, 5));
   const back = () => setStep((s) => Math.max(s - 1, 1));
@@ -155,7 +158,28 @@ export default function BookAppointment() {
     return true;
   };
 
-  const handleSubmit = () => setSubmitted(true);
+  const handleSubmit = async () => {
+    setLoading(true);
+    setError("");
+    try {
+      await api.appointments.submit({
+        service: selected.service,
+        doctor: selected.doctor,
+        date: selected.date,
+        time: selected.time,
+        name: selected.name,
+        email: selected.email || undefined,
+        phone: selected.phone,
+        dob: selected.dob || undefined,
+        notes: selected.notes || undefined,
+      });
+      setSubmitted(true);
+    } catch (err: any) {
+      setError(err?.message || "Failed to submit booking request.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (submitted) {
     return (
@@ -420,6 +444,7 @@ export default function BookAppointment() {
                 <div>
                   <h3 className="font-serif text-[#0D1F2D] text-xl md:text-2xl mb-2">Confirm Your Booking</h3>
                   <p className="body-text-sm mb-6 text-[#5A7A8A]">Please review your details before submitting.</p>
+                  {error && <p className="text-red-600 text-sm mb-4">{error}</p>}
                   <div className="rounded-2xl bg-[#F4F8FA] border border-[rgba(10,126,148,0.08)] p-5 md:p-6 space-y-3 mb-5">
                     {[
                       { label: "Service", value: serviceTypes.find((s) => s.id === selected.service)?.label },
@@ -469,9 +494,10 @@ export default function BookAppointment() {
                   <button
                     type="button"
                     onClick={handleSubmit}
+                    disabled={loading}
                     className="book-continue-btn book-continue-btn--active"
                   >
-                    <Calendar size={15} /> Submit Request
+                    <Calendar size={15} /> {loading ? "Submitting…" : "Submit Request"}
                   </button>
                 )}
               </div>

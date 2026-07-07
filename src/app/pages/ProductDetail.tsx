@@ -4,18 +4,45 @@ import {
   ArrowLeft, ArrowRight, Check, ChevronRight, Shield, ShoppingBag,
   Star, Truck,
 } from "lucide-react";
-import { getProductBySlug, getRelatedProducts } from "@/app/data/products";
+import { useEffect } from "react";
+import { api } from "@/app/api";
+import type { Product } from "@/app/api/types";
 import { ProductCard } from "@/app/components/store/ProductCard";
 import { useShop } from "@/app/shop/ShopContext";
 
 export default function ProductDetail() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
-  const product = slug ? getProductBySlug(slug) : undefined;
+  const [product, setProduct] = useState<Product | null>(null);
+  const [all, setAll] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
   const { addItem } = useShop();
 
   const [qty, setQty] = useState(1);
   const [activeTab, setActiveTab] = useState<"details" | "ingredients" | "usage">("details");
+
+  useEffect(() => {
+    if (!slug) return;
+    setLoading(true);
+    Promise.all([api.products.bySlug(slug), api.products.list()])
+      .then(([p, list]) => {
+        setProduct(p);
+        setAll(list);
+      })
+      .catch(() => setProduct(null))
+      .finally(() => setLoading(false));
+  }, [slug]);
+
+  if (loading) {
+    return (
+      <section className="section-py section-white min-h-[50vh]">
+        <div className="site-container text-center">
+          <h1 className="heading-section mb-4">Loading…</h1>
+          <p className="body-text mb-8">Fetching product details.</p>
+        </div>
+      </section>
+    );
+  }
 
   if (!product) {
     return (
@@ -31,7 +58,9 @@ export default function ProductDetail() {
     );
   }
 
-  const related = getRelatedProducts(product);
+  const related = all
+    .filter((p) => p.slug !== product.slug && (p.category === product.category || p.brand === product.brand))
+    .slice(0, 4);
   const total = product.price * qty;
 
   const handleAddToCart = () => {

@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 import { ArrowUpRight, ShoppingBag, Star } from "lucide-react";
-import type { Product } from "@/app/data/products";
+import type { Product } from "@/app/api/types";
 import { useShop } from "@/app/shop/ShopContext";
 
 export function ProductCard({ product }: { product: Product }) {

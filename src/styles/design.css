@@ -740,7 +740,7 @@
     @apply flex flex-col sm:flex-row gap-3;
   }
   .product-btn-buy {
-    @apply flex-1 flex items-center justify-center gap-2 px-6 py-4 rounded-xl
+    @apply inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl w-full sm:w-auto
       bg-[#0A7E94] text-white text-[11px] font-bold uppercase tracking-[0.14em] font-sans
       transition-all duration-300 hover:bg-[#086B7E]
       shadow-[0_4px_20px_rgba(10,126,148,0.3)] hover:shadow-[0_6px_24px_rgba(10,126,148,0.4)];

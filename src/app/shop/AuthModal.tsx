@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Eye, EyeOff, Lock, Mail, ShieldCheck, User, X } from "lucide-react";
 import { LogoMarkIcon } from "@/app/components/Logo";
+import { api } from "@/app/api";
 import { lockBodyScroll, unlockBodyScroll, useShop } from "./ShopContext";
 
 type Mode = "login" | "signup";
@@ -17,7 +18,7 @@ function GoogleIcon() {
 }
 
 export function AuthModal() {
-  const { authOpen, closeAuth, login, checkoutPending } = useShop();
+  const { authOpen, closeAuth, loginWithToken, checkoutPending } = useShop();
   const [mode, setMode] = useState<Mode>("signup");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -25,6 +26,7 @@ export function AuthModal() {
   const [password, setPassword] = useState("");
   const [showPw, setShowPw] = useState(false);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!authOpen) return;
@@ -41,7 +43,7 @@ export function AuthModal() {
     if (authOpen) setError("");
   }, [authOpen, mode]);
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email.trim() || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
       setError("Please enter a valid email address.");
@@ -55,12 +57,27 @@ export function AuthModal() {
       setError("Please enter your first name.");
       return;
     }
-    const name = mode === "signup" ? `${firstName.trim()} ${lastName.trim()}`.trim() : email.split("@")[0];
-    login({ name, email: email.trim() });
+    setLoading(true);
+    setError("");
+    try {
+      const eMail = email.trim().toLowerCase();
+      if (mode === "signup") {
+        const name = `${firstName.trim()} ${lastName.trim()}`.trim();
+        const res = await api.auth.register({ name, email: eMail, password });
+        await loginWithToken(res.accessToken);
+      } else {
+        const res = await api.auth.login({ email: eMail, password });
+        await loginWithToken(res.accessToken);
+      }
+    } catch (err: any) {
+      setError(err?.message || "Authentication failed.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const googleAuth = () => {
-    login({ name: "Google User", email: "user@gmail.com" });
+    setError("Google sign-in isn't enabled yet.");
   };
 
   return (
@@ -192,9 +209,10 @@ export function AuthModal() {
 
             <button
               type="submit"
+              disabled={loading}
               className="w-full h-12 rounded-full bg-[#0A7E94] hover:bg-[#086B7E] text-white text-[13px] font-semibold font-sans transition-all duration-300 hover:scale-[1.01] shadow-lg shadow-[#0A7E94]/25 mt-1"
             >
-              {mode === "signup" ? "Create Account" : "Sign In"}
+              {loading ? "Please wait…" : mode === "signup" ? "Create Account" : "Sign In"}
             </button>
           </form>
 

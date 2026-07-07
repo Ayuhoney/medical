@@ -2,14 +2,32 @@ import { useState } from "react";
 import { Phone, MapPin, Clock, Mail, CheckCircle, Send, Printer, MessageCircle } from "lucide-react";
 import { IMAGES, CLINIC } from "@/app/constants";
 import { PageHero } from "@/app/components/ui";
+import { api } from "@/app/api";
 
 export default function Contact() {
   const [form, setForm] = useState({ name: "", email: "", phone: "", subject: "", message: "" });
   const [sent, setSent] = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handle = (e: React.FormEvent) => {
+  const handle = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSent(true);
+    setLoading(true);
+    setError("");
+    try {
+      await api.contact.submit({
+        name: form.name,
+        email: form.email,
+        phone: form.phone || undefined,
+        subject: form.subject || undefined,
+        message: form.message,
+      });
+      setSent(true);
+    } catch (err: any) {
+      setError(err?.message || "Failed to send message.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -82,6 +100,7 @@ export default function Contact() {
               ) : (
                 <form onSubmit={handle} className="card-premium p-8 md:p-10">
                   <h3 className="font-serif text-[#0D1F2D] text-xl mb-6">Send Us a Message</h3>
+                  {error && <p className="text-red-600 text-sm mb-4">{error}</p>}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     {[
                       { key: "name", label: "Full Name *", placeholder: "Jane Smith", type: "text", required: true },
@@ -113,8 +132,8 @@ export default function Contact() {
                       />
                     </div>
                   </div>
-                  <button type="submit" className="btn-primary mt-6">
-                    <Send size={15} /> Send Message
+                  <button type="submit" className="btn-primary mt-6" disabled={loading}>
+                    <Send size={15} /> {loading ? "Sending…" : "Send Message"}
                   </button>
                 </form>
               )}

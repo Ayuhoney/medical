@@ -1,22 +1,39 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ArrowRight, Search, Sparkles } from "lucide-react";
 import { IMAGES } from "@/app/constants";
 import { PageHero } from "@/app/components/ui";
 import { Link } from "react-router";
-import { products, STORE_CATEGORIES } from "@/app/data/products";
+import { api } from "@/app/api";
+import type { Product } from "@/app/api/types";
+import { STORE_CATEGORIES } from "@/app/data/products";
 import { ProductCard } from "@/app/components/store/ProductCard";
 
 export default function Store() {
   const [activeCategory, setActiveCategory] = useState("All Products");
   const [searchQuery, setSearchQuery] = useState("");
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const filtered = products.filter((p) => {
-    const matchCat = activeCategory === "All Products" || p.category === activeCategory;
-    const matchSearch =
-      p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      p.brand.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchCat && matchSearch;
-  });
+  useEffect(() => {
+    setLoading(true);
+    setError("");
+    api.products
+      .list()
+      .then(setProducts)
+      .catch((e: any) => setError(e?.message || "Failed to load products."))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const filtered = useMemo(() => {
+    return products.filter((p) => {
+      const matchCat = activeCategory === "All Products" || p.category === activeCategory;
+      const matchSearch =
+        p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        p.brand.toLowerCase().includes(searchQuery.toLowerCase());
+      return matchCat && matchSearch;
+    });
+  }, [products, activeCategory, searchQuery]);
 
   return (
     <>
@@ -66,7 +83,7 @@ export default function Store() {
               />
             </div>
             <p className="store-count">
-              {filtered.length} product{filtered.length !== 1 ? "s" : ""}
+              {loading ? "Loading…" : `${filtered.length} product${filtered.length !== 1 ? "s" : ""}`}
             </p>
           </div>
 
@@ -83,7 +100,16 @@ export default function Store() {
             ))}
           </div>
 
-          {filtered.length > 0 ? (
+          {error ? (
+            <div className="py-20 text-center">
+              <p className="font-serif text-red-600 text-lg">Couldn't load products</p>
+              <p className="body-text-sm mt-2">{error}</p>
+            </div>
+          ) : loading ? (
+            <div className="py-20 text-center">
+              <p className="font-serif text-[#5A7A8A] text-lg">Loading products…</p>
+            </div>
+          ) : filtered.length > 0 ? (
             <div className="store-grid">
               {filtered.map((p) => <ProductCard key={p.id} product={p} />)}
             </div>
