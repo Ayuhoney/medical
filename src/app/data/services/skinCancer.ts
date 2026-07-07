@@ -1,14 +1,16 @@
 import { IMAGES } from "@/app/constants";
 import type { ServiceDetailItem } from "@/app/components/ServiceDetailSection";
 
+// Content sourced from beachroadsurgery.com.au skin cancer pages
+
 export const skinCancerServices: ServiceDetailItem[] = [
   {
     id: "full-body-skin-check",
     tag: "DETECTION",
     title: "Full Body Skin Check",
     description:
-      "A thorough head-to-toe skin examination by our trained skin cancer doctors — the gold standard for early detection in Australia's high-risk climate.",
-    bullets: ["Complete lesion mapping", "Dermoscopic examination", "Digital record keeping", "Same-day concern management"],
+      "Many skin cancers go unnoticed by the patient — a full-body skin check is a comprehensive head-to-toe assessment taking 15–30 minutes. Avoid nail polish, make-up or fake tan on the day, as these can disguise spots and make them harder to find.",
+    bullets: ["Complete head-to-toe examination", "Dermatoscope examination — painless", "Cryotherapy of sunspots on the day", "Simple shave biopsies where needed"],
     image: IMAGES.skinFullBody,
     cta: { label: "Book Skin Check", path: "/book" },
   },
@@ -17,18 +19,18 @@ export const skinCancerServices: ServiceDetailItem[] = [
     tag: "MONITORING",
     title: "Mole Monitoring",
     description:
-      "Scheduled follow-up appointments to track changes in moles and lesions over time — catching problems early when treatment is most effective.",
-    bullets: ["Serial photography comparison", "Change detection alerts", "Personalised recall schedule", "Ongoing surveillance plans"],
+      "Melanoma changes its appearance — early changes can only be detected by comparing images taken 3 to 6 months apart. Research shows 99% of lesions that do not change over three months are benign, while 96% of melanomas show subtle changes within 3 months.",
+    bullets: ["Serial imaging 3–6 months apart", "Digital change detection", "Reduces unnecessary biopsies", "Personalised recall schedule"],
     image: IMAGES.skinMoleMonitor,
     cta: { label: "Book Skin Check", path: "/book" },
   },
   {
     id: "molemax-hd",
     tag: "TECHNOLOGY",
-    title: "MoleMax HD Photography",
+    title: "MoleMax HD & Total Body Photography",
     description:
-      "Total body photography using the MoleMax HD system — high-resolution imaging for precise mole mapping and long-term change tracking.",
-    bullets: ["Full body baseline imaging", "HD dermoscopic capture", "AI-assisted comparison", "Comprehensive documentation"],
+      "The MoleMax HD PRO high-definition mole mapping system magnifies dermoscopic images up to 100 times and stores them for comparison at successive check-ups. Total Body Photography creates a complete photographic record — ideal if you have 50+ moles, a personal or family history of melanoma, or are developing new moles.",
+    bullets: ["Dermoscopic magnification up to 100×", "Full body baseline imaging — $350", "Side-by-side comparison at follow-ups", "Early detection when most treatable"],
     image: IMAGES.skinMolemax,
     cta: { label: "Book Skin Check", path: "/book" },
   },
@@ -37,8 +39,8 @@ export const skinCancerServices: ServiceDetailItem[] = [
     tag: "DIAGNOSIS",
     title: "Dermoscopy",
     description:
-      "Advanced magnified skin surface microscopy allowing our doctors to examine structures beneath the skin surface for accurate lesion diagnosis.",
-    bullets: ["Non-invasive examination", "Improved diagnostic accuracy", "Reduces unnecessary biopsies", "Performed in-clinic"],
+      "A dermatoscope is a special skin microscope that allows the doctor to look deep into your skin, beyond its surface layers. The procedure is completely painless and greatly improves diagnostic accuracy for suspicious lesions.",
+    bullets: ["Non-invasive & painless", "Views internal mole structure", "Reduces unnecessary biopsies", "Certified dermoscopy-trained doctors"],
     image: IMAGES.skinDermoscopy,
     cta: { label: "Book Skin Check", path: "/book" },
   },
@@ -47,8 +49,8 @@ export const skinCancerServices: ServiceDetailItem[] = [
     tag: "TREATMENT",
     title: "Skin Cancer Treatments",
     description:
-      "Comprehensive treatment pathways for basal cell carcinoma, squamous cell carcinoma, and melanoma — from topical therapies to surgical excision.",
-    bullets: ["Surgical excision", "Cryotherapy", "Topical field therapy", "Multidisciplinary coordination"],
+      "Surgery is the most common treatment for skin cancer, usually performed under local anaesthetic in our purpose-built rooms. Dr Walgamage is highly skilled in all cutaneous surgeries — including complex flap repairs, skin grafts and reconstructive surgeries of the nose, ears, lips and eyelids.",
+    bullets: ["Simple & complex skin surgeries", "Flap repairs & skin grafts", "Curettage, cryotherapy & topical therapy", "Individualised treatment decisions"],
     image: IMAGES.skinTreatment,
     cta: { label: "Book Consultation", path: "/book" },
   },
@@ -57,8 +59,8 @@ export const skinCancerServices: ServiceDetailItem[] = [
     tag: "PROCEDURES",
     title: "Minor Surgical Procedures",
     description:
-      "In-clinic minor surgery for biopsy, excision of suspicious lesions, and skin cancer treatment in a sterile, comfortable environment.",
-    bullets: ["Local anaesthesia", "Sterile procedure room", "Pathology coordination", "Wound care instructions"],
+      "A range of procedures performed in our treatment room with nurse assistance — from suturing and mole removal to Implanon insertion, joint injections, and lumps and cyst removal.",
+    bullets: ["Mole removal & skin biopsies", "Implanon insertion & removal", "Joint injections & cryotherapy", "Ingrown toenails, lumps & cysts"],
     image: IMAGES.skinSurgery,
     cta: { label: "Book Consultation", path: "/book" },
   },
@@ -67,8 +69,8 @@ export const skinCancerServices: ServiceDetailItem[] = [
     tag: "NON-SURGICAL",
     title: "Photodynamic Therapy (PDT)",
     description:
-      "Light-activated treatment for superficial skin cancers, sun-damaged skin, and actinic keratoses — effective with minimal scarring.",
-    bullets: ["Treats sun damage & AKs", "Non-surgical option", "Targeted light therapy", "Minimal downtime"],
+      "PDT combines a medication (ALA/Levulan) with special blue light to target superficial skin cancers and actinic (solar) keratoses — especially over large areas like the full face, scalp and chest. Approximately 80% of actinic keratoses clear with one episode of PDT.",
+    bullets: ["~80% clearance for solar keratoses", "Ideal for face, scalp & chest", "Face & scalp treatment — $375", "Less downtime than other field treatments"],
     image: IMAGES.skinPDT,
     cta: { label: "Book Consultation", path: "/book" },
   },
@@ -77,8 +79,8 @@ export const skinCancerServices: ServiceDetailItem[] = [
     tag: "AFTERCARE",
     title: "Post-Treatment Care",
     description:
-      "Dedicated follow-up care after skin cancer treatment — wound management, scar monitoring, and ongoing surveillance to protect your long-term skin health.",
-    bullets: ["Wound review appointments", "Scar management advice", "Sun protection education", "Ongoing skin surveillance"],
+      "Dedicated follow-up after skin cancer treatment — wound management, scar monitoring, and ongoing surveillance. Skin cancers on the scalp and nose need particular care, with recurrences typically occurring within the first two years after surgery.",
+    bullets: ["Wound review appointments", "Scar management advice", "Slip, Slop, Slap, Seek, Slide education", "Ongoing skin surveillance"],
     image: IMAGES.skinAftercare,
     cta: { label: "Book Follow-Up", path: "/book" },
   },

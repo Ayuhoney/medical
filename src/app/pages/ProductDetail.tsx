@@ -2,20 +2,20 @@ import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import {
   ArrowLeft, ArrowRight, Check, ChevronRight, Shield, ShoppingBag,
-  Star, Truck, Zap,
+  Star, Truck,
 } from "lucide-react";
 import { getProductBySlug, getRelatedProducts } from "@/app/data/products";
 import { ProductCard } from "@/app/components/store/ProductCard";
+import { useShop } from "@/app/shop/ShopContext";
 
 export default function ProductDetail() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const product = slug ? getProductBySlug(slug) : undefined;
+  const { addItem } = useShop();
 
   const [qty, setQty] = useState(1);
   const [activeTab, setActiveTab] = useState<"details" | "ingredients" | "usage">("details");
-  const [purchased, setPurchased] = useState(false);
-  const [cartAdded, setCartAdded] = useState(false);
 
   if (!product) {
     return (
@@ -34,14 +34,9 @@ export default function ProductDetail() {
   const related = getRelatedProducts(product);
   const total = product.price * qty;
 
-  const handleBuyNow = () => {
-    setPurchased(true);
-    setTimeout(() => setPurchased(false), 4000);
-  };
-
   const handleAddToCart = () => {
-    setCartAdded(true);
-    setTimeout(() => setCartAdded(false), 2500);
+    addItem(product, qty);
+    setQty(1);
   };
 
   return (
@@ -81,18 +76,20 @@ export default function ProductDetail() {
               <p className="ref-label mb-4">{product.brand}</p>
               <h1 className="product-detail-title">{product.name}</h1>
 
-              <div className="product-detail-rating">
-                <div className="flex gap-0.5">
-                  {[1, 2, 3, 4, 5].map((s) => (
-                    <Star
-                      key={s}
-                      size={14}
-                      className={s <= Math.round(product.rating) ? "text-[#E8A838] fill-[#E8A838]" : "text-[#E8ECF0] fill-[#E8ECF0]"}
-                    />
-                  ))}
+              {product.rating != null && (
+                <div className="product-detail-rating">
+                  <div className="flex gap-0.5">
+                    {[1, 2, 3, 4, 5].map((s) => (
+                      <Star
+                        key={s}
+                        size={14}
+                        className={s <= Math.round(product.rating!) ? "text-[#E8A838] fill-[#E8A838]" : "text-[#E8ECF0] fill-[#E8ECF0]"}
+                      />
+                    ))}
+                  </div>
+                  <span>{product.rating} · {product.reviews ?? 0} verified reviews</span>
                 </div>
-                <span>{product.rating} · {product.reviews} verified reviews</span>
-              </div>
+              )}
 
               <p className="product-detail-desc">{product.longDesc}</p>
 
@@ -107,6 +104,9 @@ export default function ProductDetail() {
 
               <div className="product-purchase-box">
                 <div className="product-price-row">
+                  {product.originalPrice != null && product.originalPrice > product.price && (
+                    <span className="text-[#9AB0BA] text-base line-through font-sans">${product.originalPrice}</span>
+                  )}
                   <span className="product-price">${product.price}</span>
                   <span className="product-size-label">{product.size}</span>
                 </div>
@@ -121,33 +121,15 @@ export default function ProductDetail() {
                   <span className="product-total">Total: <strong>${total}</strong></span>
                 </div>
 
-                <div className="product-actions">
-                  <button
-                    type="button"
-                    onClick={handleBuyNow}
-                    className={`product-btn-buy ${purchased ? "is-success" : ""}`}
-                  >
-                    {purchased ? (
-                      <><Check size={16} /> Order Confirmed!</>
-                    ) : (
-                      <><Zap size={16} /> Buy Now — ${total}</>
-                    )}
-                  </button>
+                <div className="product-actions justify-center">
                   <button
                     type="button"
                     onClick={handleAddToCart}
-                    className={`product-btn-cart ${cartAdded ? "is-added" : ""}`}
+                    className="product-btn-buy !flex-none mx-auto px-10 min-w-[240px] hover:scale-[1.02]"
                   >
-                    <ShoppingBag size={16} />
-                    {cartAdded ? "Added to Cart" : "Add to Cart"}
+                    <ShoppingBag size={16} /> Add to Cart — ${total}
                   </button>
                 </div>
-
-                {purchased && (
-                  <p className="product-success-note">
-                    Thank you! Our clinic team will contact you shortly to complete your secure order.
-                  </p>
-                )}
               </div>
             </div>
           </div>

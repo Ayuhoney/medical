@@ -24,10 +24,10 @@ export default function Laser() {
               <br /><em>for Beautiful Results</em>
             </h2>
             <p className="body-text mb-5">
-              Our clinic uses state-of-the-art laser technology operated by trained medical professionals. Laser treatments offer precise, targeted results with minimal downtime for a wide range of skin concerns.
+              We use the Alma Harmony XL PRO Special Edition — a Class IV Medical Grade LASER platform with over 72 FDA-cleared indications. Unlike beauty-grade IPL devices, medical lasers emit a targeted, specific wavelength with more power per pulse, delivering better outcomes in fewer sessions. Some treatments are covered by a Medicare rebate.
             </p>
             <p className="body-text mb-8 md:mb-10">
-              A consultation is required before all laser treatments to assess your skin type, concerns and goals, and to create a personalised treatment plan for optimal results.
+              A consultation is required before all laser treatments — suitability depends on your clinical condition, skin type and other factors. You are treated by a qualified medical team of doctors, nurses and aesthetic therapists.
             </p>
             <Link to="/book" className="btn-primary">
               Book Laser Consultation <ArrowRight size={16} />

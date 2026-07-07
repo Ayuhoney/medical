@@ -30,7 +30,7 @@ export default function GeneralPractice() {
               As an AGPAL-accredited practice, we maintain the highest standards in general practice medicine, using evidence-based approaches to deliver outstanding care for individuals and families in Batemans Bay.
             </p>
             <div className="flex flex-wrap gap-3 mb-8 md:mb-10">
-              {["Bulk billing available", "New patients welcome", "Same-day appointments", "HotDoc online booking"].map((t) => (
+              {["Health assessments bulk billed", "New patients welcome", "TeleHealth available", "HotDoc online booking"].map((t) => (
                 <span key={t} className="bg-[#EDF8FB] text-[#0A7E94] text-xs font-semibold px-4 py-2 rounded-full border border-[rgba(10,126,148,0.2)] font-sans">{t}</span>
               ))}
             </div>

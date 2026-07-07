@@ -1,59 +1,70 @@
 import { IMAGES } from "@/app/constants";
 import type { ServiceDetailItem } from "@/app/components/ServiceDetailSection";
 
+// Content sourced from beachroadsurgery.com.au general practice pages
+
 export const generalPracticeServices: ServiceDetailItem[] = [
   {
-    id: "preventive-healthcare",
-    tag: "PREVENTION",
-    title: "Preventive Healthcare",
+    id: "childrens-health",
+    tag: "CHILDREN",
+    title: "Children's Health & Immunisations",
     description:
-      "Stay ahead of illness with proactive screenings, lifestyle counselling, and evidence-based preventive care tailored to your age and risk profile.",
-    bullets: ["Health screenings & cancer checks", "Lifestyle & nutrition advice", "Travel health planning", "Vaccination reviews"],
-    image: IMAGES.gpPreventive,
-  },
-  {
-    id: "family-medicine",
-    tag: "FAMILY CARE",
-    title: "Family Medicine",
-    description:
-      "Continuity of care for every generation — from childhood immunisations to elderly health management, all under one trusted family practice.",
-    bullets: ["Paediatric & adolescent care", "Women's & men's health", "Care for chronic conditions", "Same GP, ongoing relationship"],
+      "Good health is an important element in a child's quality of life. Our doctors treat children with acute medical problems and offer health checks and childhood vaccinations across the full immunisation schedule.",
+    bullets: ["Childhood immunisation schedule", "Feeding & sleeping problems", "Childhood behavioural issues", "Childhood obesity management"],
     image: IMAGES.gpFamily,
   },
   {
-    id: "chronic-disease",
-    tag: "ONGOING CARE",
-    title: "Chronic Disease Management",
+    id: "womens-health",
+    tag: "WOMEN'S HEALTH",
+    title: "Women's Health",
     description:
-      "Structured GP Management Plans and Team Care Arrangements for diabetes, hypertension, asthma, heart disease, and other long-term conditions.",
-    bullets: ["Personalised care plans", "Regular monitoring & reviews", "Allied health coordination", "Medication optimisation"],
+      "Health requirements vary from woman to woman depending on your stage of life — puberty, pregnancy, menopause or mature age. 'Well Women's Health Checks' specific to these stages can be arranged with early interventions put in place.",
+    bullets: ["Cervical screening (Pap Smear)", "Breast health & contraception", "Pregnancy care & pre-pregnancy counselling", "Menopause & osteoporosis"],
+    image: IMAGES.gpPreventive,
+  },
+  {
+    id: "mens-health",
+    tag: "MEN'S HEALTH",
+    title: "Men's Health",
+    description:
+      "Accidents, cancer and heart disease account for the majority of male deaths. Our doctors recognise prevention is vital to improve men's health outcomes, and encourage men to return for regular checkups.",
+    bullets: ["Cardiovascular health", "Prostate health (BPH)", "Erectile dysfunction", "STD testing & osteoporosis"],
     image: IMAGES.gpChronic,
   },
   {
     id: "mental-health",
     tag: "WELLBEING",
-    title: "Mental Health Care",
+    title: "Mental Health",
     description:
-      "Compassionate GP support for anxiety, depression, stress, and other mental health concerns — including Mental Health Care Plans and referrals.",
-    bullets: ["Mental Health Care Plans", "Counselling & referral pathways", "Medication management", "Confidential, supportive environment"],
+      "Our doctors are trained in mental health care for people of all ages. We provide GP Mental Health Care Plans for eligible patients — Medicare benefits are available for up to ten services per calendar year under the Better Access initiative.",
+    bullets: ["GP Mental Health Care Plans", "Mental health assessments", "Psychologist referral pathways", "Confidential, supportive environment"],
     image: IMAGES.gpMentalHealth,
   },
   {
-    id: "health-assessments",
+    id: "health-checks",
     tag: "ASSESSMENTS",
-    title: "Health Assessments",
+    title: "Health Checks & Care Plans",
     description:
-      "Comprehensive 45–75 minute health assessments for patients aged 45–49, 75+, and Aboriginal & Torres Strait Islander patients — often bulk billed.",
-    bullets: ["45–49 year health check", "Over 75 health assessment", "Aboriginal health assessment", "Preventive screening bundle"],
+      "Regular health checks are an important preventative health component. Free Medicare-funded health assessments are available if you're aged 45–49 or 75 and above — approximately one hour including 30 minutes with a practice nurse and 30 minutes with your GP.",
+    bullets: ["Free 45–49 health check", "Over 75 annual assessment", "Diabetes & cholesterol screening", "Chronic disease care plans"],
     image: IMAGES.gpAssessment,
   },
   {
-    id: "immunisations",
-    tag: "VACCINATION",
-    title: "Immunisations",
+    id: "occupational-health",
+    tag: "OCCUPATIONAL",
+    title: "Occupational Health & Medicals",
     description:
-      "Complete vaccination services for children, adults, and travellers — including influenza, COVID-19 boosters, and childhood schedule vaccines.",
-    bullets: ["Childhood immunisation schedule", "Flu & COVID-19 vaccines", "Travel vaccinations", "Workplace & school vaccines"],
+      "Pre-employment medicals, driver licence medicals (private and commercial), and active management of work-related injuries with full Workers Compensation support and a team approach to return-to-work rehabilitation.",
+    bullets: ["Pre-employment medicals", "Driver licence medicals", "Hearing, lung function & vision testing", "Workers compensation & injury care"],
+    image: IMAGES.gpOccupational,
+  },
+  {
+    id: "vaccinations",
+    tag: "VACCINATION",
+    title: "Flu & COVID Vaccinations",
+    description:
+      "Annual flu vaccination protects you and your family from the influenza virus. Government-funded flu vaccines are free for eligible patients; private flu vaccines are $30. We also provide COVID-19 vaccination information and referrals.",
+    bullets: ["Private flu vaccine — $30", "Government-funded for eligible patients", "Children, pregnant women & 65+ eligible", "Travel vaccinations"],
     image: IMAGES.gpImmunisation,
   },
 ];

@@ -56,18 +56,25 @@ const serviceTypes: ServiceType[] = [
 
 const doctors = [
   {
-    id: "heshan",
-    name: "Dr Heshan Dharmarama",
-    role: "General Practitioner",
+    id: "thilan",
+    name: "Dr Thilan Walgamage",
+    role: "Specialist GP — Skin Cancer & Aesthetic Medicine",
     available: "Next available: Today",
-    image: IMAGES.doctorFemale,
+    image: IMAGES.teamDrThilan,
   },
   {
     id: "kishani",
     name: "Dr Kishani Weerasena",
-    role: "GP & Aesthetic Physician",
+    role: "GP — Women's & Children's Health",
     available: "Next available: Tomorrow",
-    image: IMAGES.heroAesthetic,
+    image: IMAGES.teamDrKishani,
+  },
+  {
+    id: "heshan",
+    name: "Dr Heshan Dharmaratna",
+    role: "GP — Mental Health & Chronic Disease",
+    available: "Next available: Today",
+    image: IMAGES.teamDrHeshan,
   },
   {
     id: "any",
@@ -480,8 +487,49 @@ export default function BookAppointment() {
               <a href={`tel:${CLINIC.phone.replace(/\s/g, "")}`} className="text-[#0A7E94] font-semibold hover:underline">
                 {CLINIC.phone}
               </a>
-              <span className="text-[#5C7A8A]"> — Mon–Fri 9am–4:30pm</span>
+              <span className="text-[#5C7A8A]"> — Mon–Fri 9am–4:30pm · Sat 9am–12:30pm</span>
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Your First Visit — from beachroadsurgery.com.au/first-visit */}
+      <section id="first-visit" className="section-py section-white scroll-mt-28">
+        <div className="site-container">
+          <div className="text-center mb-10 md:mb-14">
+            <p className="eyebrow">YOUR FIRST VISIT</p>
+            <h2 className="heading-section">What to Bring &amp; What to Expect</h2>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
+            {[
+              {
+                title: "Medical Information",
+                items: ["Medical and family history", "Copies of pathology reports", "List of current medications", "Allergies & other relevant information"],
+              },
+              {
+                title: "Personal Information",
+                items: ["Medicare, DVA or pension card", "Driver's licence or valid ID", "Employer letter if work-related"],
+              },
+              {
+                title: "Initial Consultation",
+                items: ["Typically a long consult", "Detailed symptom history taken", "Thorough physical examination", "Time to ask questions before you leave"],
+              },
+              {
+                title: "Diagnosis & Next Steps",
+                items: ["Diagnostic tests ordered if needed", "Treatment options explained", "Costs & follow-up discussed by our staff"],
+              },
+            ].map(({ title, items }) => (
+              <div key={title} className="card-surface p-6">
+                <h3 className="text-[#0D1F2D] font-semibold text-sm mb-3 font-sans">{title}</h3>
+                <ul className="space-y-2">
+                  {items.map((it) => (
+                    <li key={it} className="flex items-start gap-2 body-text-sm">
+                      <CheckCircle size={13} className="text-[#0A7E94] mt-0.5 shrink-0" /> {it}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
         </div>
       </section>

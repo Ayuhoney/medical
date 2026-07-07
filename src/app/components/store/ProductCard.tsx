@@ -1,16 +1,15 @@
-import { useState } from "react";
 import { Link } from "react-router";
 import { ArrowUpRight, ShoppingBag, Star } from "lucide-react";
 import type { Product } from "@/app/data/products";
+import { useShop } from "@/app/shop/ShopContext";
 
 export function ProductCard({ product }: { product: Product }) {
-  const [added, setAdded] = useState(false);
+  const { addItem } = useShop();
 
   const handleQuickAdd = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    setAdded(true);
-    setTimeout(() => setAdded(false), 2000);
+    addItem(product, 1);
   };
 
   return (
@@ -34,32 +33,37 @@ export function ProductCard({ product }: { product: Product }) {
         <h3 className="store-card-title">{product.name}</h3>
         <p className="store-card-desc">{product.desc}</p>
 
-        <div className="store-card-rating">
-          <div className="flex gap-0.5">
-            {[1, 2, 3, 4, 5].map((s) => (
-              <Star
-                key={s}
-                size={11}
-                className={s <= Math.round(product.rating) ? "text-[#E8A838] fill-[#E8A838]" : "text-[#E8ECF0] fill-[#E8ECF0]"}
-              />
-            ))}
+        {product.rating != null && (
+          <div className="store-card-rating">
+            <div className="flex gap-0.5">
+              {[1, 2, 3, 4, 5].map((s) => (
+                <Star
+                  key={s}
+                  size={11}
+                  className={s <= Math.round(product.rating!) ? "text-[#E8A838] fill-[#E8A838]" : "text-[#E8ECF0] fill-[#E8ECF0]"}
+                />
+              ))}
+            </div>
+            <span className="store-card-reviews">{product.rating} · {product.reviews ?? 0} reviews</span>
           </div>
-          <span className="store-card-reviews">{product.rating} · {product.reviews} reviews</span>
-        </div>
+        )}
 
         <div className="store-card-footer">
           <div>
+            {product.originalPrice != null && product.originalPrice > product.price && (
+              <span className="text-[#9AB0BA] text-xs line-through mr-1.5 font-sans">${product.originalPrice}</span>
+            )}
             <span className="store-card-price">${product.price}</span>
             <span className="store-card-size">{product.size}</span>
           </div>
           <button
             type="button"
             onClick={handleQuickAdd}
-            className={`store-card-add ${added ? "is-added" : ""}`}
-            aria-label={added ? "Added to cart" : `Add ${product.name} to cart`}
+            className="store-card-add"
+            aria-label={`Add ${product.name} to cart`}
           >
             <ShoppingBag size={14} />
-            <span>{added ? "Added" : "Quick Add"}</span>
+            <span>Add to Cart</span>
           </button>
         </div>
       </div>

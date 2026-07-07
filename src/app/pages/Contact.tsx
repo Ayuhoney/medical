@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Phone, MapPin, Clock, Mail, CheckCircle, Send } from "lucide-react";
+import { Phone, MapPin, Clock, Mail, CheckCircle, Send, Printer, MessageCircle } from "lucide-react";
 import { IMAGES, CLINIC } from "@/app/constants";
 import { PageHero } from "@/app/components/ui";
 
@@ -30,6 +30,8 @@ export default function Contact() {
 
               {[
                 { icon: <Phone size={18} className="text-[#0A7E94]" />, label: "Phone", value: CLINIC.phone, href: `tel:${CLINIC.phone.replace(/\s/g, "")}` },
+                { icon: <MessageCircle size={18} className="text-[#0A7E94]" />, label: "WhatsApp", value: CLINIC.whatsapp, href: `https://wa.me/${CLINIC.whatsapp.replace(/\s/g, "")}` },
+                { icon: <Printer size={18} className="text-[#0A7E94]" />, label: "Fax", value: CLINIC.fax },
                 { icon: <Mail size={18} className="text-[#0A7E94]" />, label: "Email", value: CLINIC.email, href: `mailto:${CLINIC.email}` },
                 { icon: <MapPin size={18} className="text-[#0A7E94]" />, label: "Address", value: CLINIC.address },
               ].map(({ icon, label, value, href }) => (
@@ -54,7 +56,7 @@ export default function Contact() {
                   <div>
                     <p className="text-[#0D1F2D] font-semibold text-sm mb-2 font-sans">Opening Hours</p>
                     <div className="space-y-1">
-                      {[{ d: "Monday – Friday", t: "9:00 AM – 4:30 PM" }, { d: "Saturday", t: "Closed" }, { d: "Sunday", t: "Closed" }].map(({ d, t }) => (
+                      {[{ d: "Monday – Friday", t: "9:00 AM – 4:30 PM" }, { d: "Saturday", t: "9:00 AM – 12:30 PM" }, { d: "Sunday", t: "Closed" }].map(({ d, t }) => (
                         <div key={d} className="flex justify-between gap-6">
                           <span className="body-text-sm">{d}</span>
                           <span className={`text-xs font-medium font-sans ${t === "Closed" ? "text-[#9AB0BA]" : "text-[#0A7E94]"}`}>{t}</span>
@@ -121,7 +123,61 @@ export default function Contact() {
         </div>
       </section>
 
-      <section className="pb-20 md:pb-28 section-white">
+      <section id="faq" className="section-py section-muted scroll-mt-28">
+        <div className="site-container-narrow">
+          <div className="text-center mb-10 md:mb-14">
+            <p className="eyebrow">FAQ</p>
+            <h2 className="heading-section">Frequently Asked Questions</h2>
+          </div>
+          <div className="space-y-3">
+            {[
+              {
+                q: "Do I need a referral from my GP for skin checks?",
+                a: "No, you do not need a referral. However, if your GP has referred you to us, they will give you a letter to bring to your appointment.",
+              },
+              {
+                q: "How long does a skin check take?",
+                a: "A skin check can take between 15 and 30 minutes, depending on your skin type and the number of skin spots or moles you have. Make sure you tell the doctor about any spots or moles which are sore, changing, abnormal or new.",
+              },
+              {
+                q: "How is the skin check performed?",
+                a: "The doctor will ask you to undress down to your underwear — you can ask for a modesty sheet if you wish. The doctor uses a dermatoscope, a special skin microscope that allows them to look deep into your skin, to visually inspect your whole body. The procedure is completely painless.",
+              },
+              {
+                q: "What happens if the doctor finds a suspicious skin spot?",
+                a: "The doctor will tell you straight away if any moles or spots require a biopsy — a small sample of skin removed for testing at a pathology laboratory. Results can take several days, and results and treatment options are discussed at length at your follow-up appointment.",
+              },
+              {
+                q: "What happens if a skin cancer is found?",
+                a: "In most cases, when found early, skin cancer can be easily and successfully treated with surgery. Most skin cancers are cured once they are removed. Other non-surgical treatments may be used depending on the type of skin cancer found.",
+              },
+              {
+                q: "Do you Bulk Bill?",
+                a: "We are a private billing practice, and we appreciate full payment on the day of consultation. We are dedicated to providing the best standard of patient care without compromise — our highly qualified doctors will address your health needs promptly and efficiently.",
+              },
+              {
+                q: "Are the doctors GPs or Dermatologists?",
+                a: "Dr Walgamage is a Specialist General Practitioner with advanced qualifications in skin cancer medicine and surgery. He has completed university-certified skin cancer training and has many years' experience in the detection and surgical removal of skin cancers.",
+              },
+              {
+                q: "Why do I need a biopsy before my procedure?",
+                a: "It is important that you have a biopsy, as the results of this procedure will influence the best course of action for your treatment.",
+              },
+            ].map(({ q, a }) => (
+              <details key={q} className="card-surface p-5 md:p-6 group">
+                <summary className="cursor-pointer list-none flex items-center justify-between gap-4 text-[#0D1F2D] font-semibold text-sm font-sans select-none">
+                  {q}
+                  <span className="text-[#0A7E94] shrink-0 group-open:hidden">+</span>
+                  <span className="text-[#0A7E94] shrink-0 hidden group-open:inline">−</span>
+                </summary>
+                <p className="body-text-sm mt-3">{a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section-py section-white">
         <div className="site-container">
           <div className="image-frame h-72 lg:h-96">
             <iframe

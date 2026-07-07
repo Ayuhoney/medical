@@ -91,7 +91,7 @@ export default function Footer() {
               Personalised healthcare and advanced skin treatments for the Batemans Bay community since 2002.
             </p>
             <div className="flex gap-2.5">
-              {[{ Icon: Facebook, href: "#" }, { Icon: Instagram, href: "#" }, { Icon: Mail, href: `mailto:${CLINIC.email}` }].map(({ Icon, href }, i) => (
+              {[{ Icon: Facebook, href: CLINIC.facebook }, { Icon: Instagram, href: CLINIC.instagram }, { Icon: Mail, href: `mailto:${CLINIC.email}` }].map(({ Icon, href }, i) => (
                 <a
                   key={i}
                   href={href}
@@ -135,7 +135,8 @@ export default function Footer() {
               {[
                 { Icon: MapPin, text: "116 Beach Road\nBatemans Bay NSW 2536" },
                 { Icon: Phone, text: CLINIC.phone, href: `tel:${CLINIC.phone.replace(/\s/g, "")}` },
-                { Icon: Clock, text: "Mon – Fri\n9:00 AM – 4:30 PM" },
+                { Icon: Mail, text: CLINIC.email, href: `mailto:${CLINIC.email}` },
+                { Icon: Clock, text: "Mon – Fri: 9:00 AM – 4:30 PM\nSat: 9:00 AM – 12:30 PM" },
               ].map(({ Icon, text, href }) => (
                 <div key={text} className="flex items-start gap-3">
                   <Icon size={13} className="text-[#0A7E94] mt-0.5 flex-shrink-0" />

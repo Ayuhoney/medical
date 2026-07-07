@@ -33,7 +33,7 @@ function Hero() {
   const orb3Ref    = useRef<HTMLDivElement>(null);
 
   const stats = [
-    { v: "20+", l: "Years of Care" },
+    { v: "20+", l: "Years Clinical Experience" },
     { v: "AGPAL", l: "Accredited" },
     { v: "5.0 ★", l: "Patient Rated" },
     { v: "4", l: "Specialist Services" },
@@ -512,7 +512,7 @@ function Testimonials() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16 pt-10 border-t border-white/10">
             {[
               { v: "5.0 ★", l: "Average Rating" },
-              { v: "20+", l: "Years of Care" },
+              { v: "20+", l: "Years Clinical Experience" },
               { v: "98%", l: "Patient Satisfaction" },
               { v: "4", l: "Specialist Services" },
             ].map(({ v, l }) => (
@@ -569,7 +569,7 @@ function Location() {
                   link: { text: "Get Directions →", href: "https://maps.google.com/?q=116+Beach+Road+Batemans+Bay+NSW" } },
                 { icon: <Phone size={16} className="text-[#0A7E94]" />, label: "Phone", content: CLINIC.phone,
                   link: { text: "Call Now →", href: `tel:${CLINIC.phone.replace(/\s/g, "")}` } },
-                { icon: <Clock size={16} className="text-[#0A7E94]" />, label: "Opening Hours", content: "Monday – Friday\n9:00 AM – 4:30 PM" },
+                { icon: <Clock size={16} className="text-[#0A7E94]" />, label: "Opening Hours", content: "Monday – Friday: 9:00 AM – 4:30 PM\nSaturday: 9:00 AM – 12:30 PM" },
               ].map(({ icon, label, content, link }) => (
                 <div key={label} className="flex items-start gap-4 p-6 md:p-8 bg-surface hover:bg-[var(--cream-warm)] transition-colors duration-500 flex-1">
                   <span className="mt-0.5">{icon}</span>

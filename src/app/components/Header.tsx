@@ -5,6 +5,7 @@ import { NAV_ITEMS, IMAGES, CLINIC } from "@/app/constants";
 import agpalBadge from "@/imports/AGPAL-Accredited-Email-Signature-536w.webp";
 import { Logo } from "./Logo";
 import { useFirstVisitGate } from "@/app/hooks/useFirstVisitGate";
+import { useShop } from "@/app/shop/ShopContext";
 
 const UTILITY_H = 32;
 const NAV_H = 68;
@@ -93,6 +94,21 @@ export default function Header() {
   }, [mobileOpen]);
 
   const gateOpen = useFirstVisitGate();
+  const { count: cartCount, openCart, user, logout, openAuth } = useShop();
+  const onStore = location.pathname.startsWith("/store");
+  const [accountOpen, setAccountOpen] = useState(false);
+  const accountRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => { setAccountOpen(false); }, [location.pathname]);
+
+  useEffect(() => {
+    if (!accountOpen) return;
+    const onDown = (e: MouseEvent) => {
+      if (accountRef.current && !accountRef.current.contains(e.target as Node)) setAccountOpen(false);
+    };
+    document.addEventListener("mousedown", onDown);
+    return () => document.removeEventListener("mousedown", onDown);
+  }, [accountOpen]);
 
   /* Reference video: navbar slides down + fades in on hero load */
   useEffect(() => {
@@ -258,6 +274,68 @@ export default function Header() {
                   Book Now
                 </Link>
               </div>
+
+              {onStore && (
+                <>
+                  <button
+                    type="button"
+                    onClick={openCart}
+                    aria-label={`Open cart (${cartCount} items)`}
+                    className={`relative w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
+                      overlay && !openMenu ? "text-white hover:bg-white/10" : "text-[#0D1F2D] hover:bg-[#EDF8FB]"
+                    }`}
+                  >
+                    <ShoppingBag size={18} strokeWidth={1.75} />
+                    {cartCount > 0 && (
+                      <span className="absolute -top-0.5 -right-0.5 min-w-[17px] h-[17px] px-1 rounded-full bg-[#0A7E94] text-white text-[9.5px] font-bold font-sans flex items-center justify-center border-2 border-white">
+                        {cartCount > 9 ? "9+" : cartCount}
+                      </span>
+                    )}
+                  </button>
+
+                  {user ? (
+                    <div ref={accountRef} className="relative">
+                      <button
+                        type="button"
+                        onClick={() => setAccountOpen((o) => !o)}
+                        aria-label="Account menu"
+                        className="w-9 h-9 rounded-full bg-[#0A7E94] text-white text-[13px] font-bold font-sans flex items-center justify-center hover:bg-[#086B7E] transition-colors ring-2 ring-white/60"
+                      >
+                        {user.name.trim().charAt(0).toUpperCase()}
+                      </button>
+                      <div
+                        className={`absolute right-0 top-[calc(100%+10px)] w-56 bg-white rounded-2xl shadow-xl border border-[rgba(10,126,148,0.1)] p-2 origin-top-right transition-all duration-200 ease-out ${
+                          accountOpen ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"
+                        }`}
+                      >
+                        <div className="px-3 py-2.5 border-b border-[rgba(10,126,148,0.08)]">
+                          <p className="text-[#0D1F2D] text-[13px] font-semibold font-sans truncate">{user.name}</p>
+                          <p className="text-[#9AB0BA] text-[11px] font-sans truncate">{user.email}</p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => { logout(); setAccountOpen(false); }}
+                          className="w-full text-left px-3 py-2.5 rounded-xl text-[12.5px] font-sans text-[#5C7A8A] hover:bg-[#EDF8FB] hover:text-[#0A7E94] transition-colors"
+                        >
+                          Sign Out
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={openAuth}
+                      className={`h-9 px-4 rounded-full text-[11px] font-semibold uppercase tracking-[0.1em] font-sans transition-colors border ${
+                        overlay && !openMenu
+                          ? "text-white border-white/30 hover:bg-white/10"
+                          : "text-[#0A7E94] border-[rgba(10,126,148,0.3)] hover:bg-[#EDF8FB]"
+                      }`}
+                    >
+                      Sign In
+                    </button>
+                  )}
+                </>
+              )}
 
               <button
                 type="button"
