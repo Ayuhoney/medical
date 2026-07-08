@@ -5,20 +5,31 @@ import { useShop } from "@/app/shop/ShopContext";
 
 export function ProductCard({ product }: { product: Product }) {
   const { addItem } = useShop();
+  const outOfStock = product.inStock === false;
 
   const handleQuickAdd = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    if (outOfStock) return;
     addItem(product, 1);
   };
 
   return (
     <Link to={`/store/${product.slug}`} className="store-card group block">
       <div className="store-card-media">
-        <img src={product.image} alt={product.name} className="store-card-img" />
+        <img
+          src={product.image}
+          alt={product.name}
+          className="store-card-img"
+          style={outOfStock ? { filter: "grayscale(0.7)", opacity: 0.75 } : undefined}
+        />
         <div className="store-card-media-overlay" aria-hidden />
-        {product.tag && (
-          <span className="store-card-tag">{product.tag}</span>
+        {outOfStock ? (
+          <span className="store-card-tag" style={{ background: "#B42318", color: "#fff" }}>
+            Out of Stock
+          </span>
+        ) : (
+          product.tag && <span className="store-card-tag">{product.tag}</span>
         )}
         <span className="store-card-view">
           View Details <ArrowUpRight size={14} />
@@ -60,10 +71,12 @@ export function ProductCard({ product }: { product: Product }) {
             type="button"
             onClick={handleQuickAdd}
             className="store-card-add"
-            aria-label={`Add ${product.name} to cart`}
+            disabled={outOfStock}
+            style={outOfStock ? { opacity: 0.45, cursor: "not-allowed" } : undefined}
+            aria-label={outOfStock ? `${product.name} is out of stock` : `Add ${product.name} to cart`}
           >
             <ShoppingBag size={14} />
-            <span>Add to Cart</span>
+            <span>{outOfStock ? "Out of Stock" : "Add to Cart"}</span>
           </button>
         </div>
       </div>

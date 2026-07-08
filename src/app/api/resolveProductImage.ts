@@ -1,3 +1,5 @@
+import { API_BASE_URL } from "./config";
+
 const storeImages = import.meta.glob("@/imports/store/*.webp", {
   eager: true,
   import: "default",
@@ -14,6 +16,9 @@ export function resolveProductImage(image: string): string {
     const file = image.split("/").pop() || "";
     return byFile.get(file) || image;
   }
+  // Images uploaded from the admin panel are served by the backend.
+  if (image?.startsWith("/uploads/")) {
+    return `${API_BASE_URL}${image}`;
+  }
   return image;
 }
-

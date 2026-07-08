@@ -62,8 +62,11 @@ export default function ProductDetail() {
     .filter((p) => p.slug !== product.slug && (p.category === product.category || p.brand === product.brand))
     .slice(0, 4);
   const total = product.price * qty;
+  const outOfStock = product.inStock === false;
+  const maxQty = product.inventory ?? 99;
 
   const handleAddToCart = () => {
+    if (outOfStock) return;
     addItem(product, qty);
     setQty(1);
   };
@@ -83,8 +86,19 @@ export default function ProductDetail() {
           <div className="product-detail-grid">
             <div className="product-detail-gallery">
               <div className="product-detail-image-wrap">
-                <img src={product.image} alt={product.name} className="product-detail-image" />
-                {product.tag && <span className="store-card-tag !top-6 !left-6">{product.tag}</span>}
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="product-detail-image"
+                  style={outOfStock ? { filter: "grayscale(0.7)", opacity: 0.75 } : undefined}
+                />
+                {outOfStock ? (
+                  <span className="store-card-tag !top-6 !left-6" style={{ background: "#B42318", color: "#fff" }}>
+                    Out of Stock
+                  </span>
+                ) : (
+                  product.tag && <span className="store-card-tag !top-6 !left-6">{product.tag}</span>
+                )}
               </div>
               <div className="product-detail-trust">
                 <span><Shield size={14} /> Doctor recommended</span>
@@ -140,23 +154,41 @@ export default function ProductDetail() {
                   <span className="product-size-label">{product.size}</span>
                 </div>
 
-                <div className="product-qty-row">
-                  <span className="text-[11px] uppercase tracking-[0.14em] text-[#5C7A8A] font-sans">Quantity</span>
-                  <div className="product-qty-control">
-                    <button type="button" onClick={() => setQty((q) => Math.max(1, q - 1))} aria-label="Decrease quantity">−</button>
-                    <span>{qty}</span>
-                    <button type="button" onClick={() => setQty((q) => q + 1)} aria-label="Increase quantity">+</button>
+                {outOfStock ? (
+                  <div className="py-3 text-center">
+                    <p className="font-sans font-semibold text-[#B42318] mb-1">Currently out of stock</p>
+                    <p className="body-text-sm">
+                      Contact the clinic to be notified when this product is available again.
+                    </p>
                   </div>
-                  <span className="product-total">Total: <strong>${total}</strong></span>
-                </div>
+                ) : (
+                  <>
+                    {product.inventory != null && product.inventory <= 5 && (
+                      <p className="text-center font-sans text-[12.5px] font-semibold text-[#B45309] mb-1">
+                        Only {product.inventory} left in stock
+                      </p>
+                    )}
+                    <div className="product-qty-row">
+                      <span className="text-[11px] uppercase tracking-[0.14em] text-[#5C7A8A] font-sans">Quantity</span>
+                      <div className="product-qty-control">
+                        <button type="button" onClick={() => setQty((q) => Math.max(1, q - 1))} aria-label="Decrease quantity">−</button>
+                        <span>{qty}</span>
+                        <button type="button" onClick={() => setQty((q) => Math.min(maxQty, q + 1))} aria-label="Increase quantity">+</button>
+                      </div>
+                      <span className="product-total">Total: <strong>${total}</strong></span>
+                    </div>
+                  </>
+                )}
 
                 <div className="product-actions justify-center">
                   <button
                     type="button"
                     onClick={handleAddToCart}
+                    disabled={outOfStock}
                     className="product-btn-buy !flex-none mx-auto px-10 min-w-[240px] hover:scale-[1.02]"
+                    style={outOfStock ? { opacity: 0.45, cursor: "not-allowed" } : undefined}
                   >
-                    <ShoppingBag size={16} /> Add to Cart — ${total}
+                    <ShoppingBag size={16} /> {outOfStock ? "Out of Stock" : `Add to Cart — $${total}`}
                   </button>
                 </div>
               </div>

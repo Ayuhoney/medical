@@ -6,9 +6,15 @@ import FirstVisitExperience from "./FirstVisitExperience";
 import { ShopProvider } from "@/app/shop/ShopContext";
 import { CartDrawer } from "@/app/shop/CartDrawer";
 import { AuthModal } from "@/app/shop/AuthModal";
+import { api } from "@/app/api";
 
 export default function Layout() {
   const { pathname, hash } = useLocation();
+
+  // Anonymous visit beacon for the admin Traffic dashboard
+  useEffect(() => {
+    api.track(pathname);
+  }, [pathname]);
 
   useEffect(() => {
     if (hash) {

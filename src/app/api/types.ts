@@ -16,6 +16,9 @@ export type Product = {
   ingredients: string;
   size: string;
   howToUse: string;
+  status?: "active" | "inactive";
+  inStock?: boolean;
+  inventory?: number | null;
 };
 
 export type ShopUser = {

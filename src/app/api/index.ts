@@ -33,6 +33,24 @@ export const api = {
     submit: (body: { name: string; email: string; phone?: string; subject?: string; message: string }) =>
       apiFetch<{ ok: true; id: string }>(`/api/contact`, { method: "POST", body: JSON.stringify(body) }),
   },
+  track: (path: string) => {
+    const KEY = "brssc-visitor-id";
+    let visitorId = "";
+    try {
+      visitorId = localStorage.getItem(KEY) || "";
+      if (!visitorId) {
+        visitorId = `v_${Math.random().toString(36).slice(2)}${Date.now().toString(36)}`;
+        localStorage.setItem(KEY, visitorId);
+      }
+    } catch {
+      visitorId = "anon";
+    }
+    return apiFetch(`/api/track`, {
+      method: "POST",
+      body: JSON.stringify({ path, referrer: document.referrer || "", visitorId }),
+      keepalive: true,
+    }).catch(() => undefined); // analytics must never break the site
+  },
   appointments: {
     submit: (body: {
       service: string;
