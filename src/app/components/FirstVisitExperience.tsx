@@ -4,6 +4,8 @@ import { X } from "lucide-react";
 import { CLINIC } from "@/app/constants";
 import { LogoMarkIcon } from "./Logo";
 import { FIRST_VISIT_KEY, openFirstVisitGate } from "@/app/hooks/useFirstVisitGate";
+import { api } from "@/app/api";
+import type { ClinicSettings } from "@/app/api/types";
 
 type Step = "intro" | "modal";
 
@@ -12,6 +14,7 @@ export default function FirstVisitExperience() {
   const [active, setActive] = useState(false);
   const [step, setStep] = useState<Step>("intro");
   const [closing, setClosing] = useState(false);
+  const [settings, setSettings] = useState<ClinicSettings | null>(null);
 
   useEffect(() => {
     if (sessionStorage.getItem(FIRST_VISIT_KEY)) {
@@ -28,6 +31,11 @@ export default function FirstVisitExperience() {
     setClosing(false);
     document.body.classList.add("first-visit-active");
     document.body.style.overflow = "hidden";
+
+    // Start loading settings
+    api.clinic.get().then((data) => {
+      setSettings(data);
+    }).catch(console.error);
 
     const toModal = window.setTimeout(() => setStep("modal"), 2400);
     return () => {
@@ -53,12 +61,18 @@ export default function FirstVisitExperience() {
   useEffect(() => {
     if (!active || step !== "modal" || closing) return;
 
+    // Auto-dismiss if we loaded settings and popup is disabled
+    if (settings && !settings.popupEnabled) {
+      dismiss();
+      return;
+    }
+
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") dismiss();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [active, step, closing, dismiss]);
+  }, [active, step, closing, dismiss, settings]);
 
   if (!active) return null;
 
@@ -102,21 +116,27 @@ export default function FirstVisitExperience() {
             <X size={16} strokeWidth={1.75} />
           </button>
 
-          <p className="first-visit-eyebrow">New Patients Welcome</p>
+          <p className="first-visit-eyebrow">
+            {settings?.popupEyebrow || "New Patients Welcome"}
+          </p>
 
           <h2 id="welcome-title" className="first-visit-title">
-            We are now accepting new patients for a limited time
+            {settings?.popupTitle || "We are now accepting new patients for a limited time"}
           </h2>
 
-          <p className="first-visit-body">
-            To secure your place, call our reception on{" "}
-            <a href={`tel:${CLINIC.phone.replace(/\s/g, "")}`} className="first-visit-link">
-              {CLINIC.phone}
-            </a>{" "}
-            or email us at{" "}
-            <a href={`mailto:${CLINIC.email}`} className="first-visit-link">
-              {CLINIC.email}
-            </a>
+          <p className="first-visit-body" style={{ whiteSpace: "pre-wrap" }}>
+            {settings?.popupBody || (
+              <>
+                To secure your place, call our reception on{" "}
+                <a href={`tel:${CLINIC.phone.replace(/\s/g, "")}`} className="first-visit-link">
+                  {CLINIC.phone}
+                </a>{" "}
+                or email us at{" "}
+                <a href={`mailto:${CLINIC.email}`} className="first-visit-link">
+                  {CLINIC.email}
+                </a>
+              </>
+            )}
           </p>
         </div>
       </div>

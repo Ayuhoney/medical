@@ -1,5 +1,5 @@
 import { apiFetch } from "./http";
-import type { OrderItem, OrderResponse, Product, ShopUser, TokenResponse } from "./types";
+import type { ClinicSettings, OrderItem, OrderResponse, Product, ShopUser, TokenResponse } from "./types";
 import { resolveProductImage } from "./resolveProductImage";
 
 function normalizeProduct(p: Product): Product {
@@ -63,6 +63,9 @@ export const api = {
       dob?: string;
       notes?: string;
     }) => apiFetch<{ ok: true; id: string }>(`/api/appointments`, { method: "POST", body: JSON.stringify(body) }),
+  },
+  clinic: {
+    get: () => apiFetch<ClinicSettings>(`/api/clinic`),
   },
 };
 

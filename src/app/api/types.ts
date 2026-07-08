@@ -48,3 +48,22 @@ export type OrderResponse = {
   createdAt: string;
 };
 
+export type ClinicSettings = {
+  name: string;
+  address: string;
+  phone: string;
+  fax: string;
+  whatsapp: string;
+  email: string;
+  hoursWeekday: string;
+  hoursSaturday: string;
+  bookingUrl: string;
+  facebook: string;
+  instagram: string;
+  announcement: string;
+  popupEnabled: boolean;
+  popupEyebrow: string;
+  popupTitle: string;
+  popupBody: string;
+};
+
