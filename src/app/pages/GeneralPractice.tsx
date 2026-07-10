@@ -1,11 +1,22 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { ArrowRight } from "lucide-react";
 import { IMAGES } from "@/app/constants";
 import { PageHero, BookingBanner } from "@/app/components/ui";
-import { ServiceDetailList } from "@/app/components/ServiceDetailSection";
-import { generalPracticeServices } from "@/app/data/services/generalPractice";
+import { ServiceDetailList, type ServiceDetailItem } from "@/app/components/ServiceDetailSection";
+import { api } from "@/app/api";
+import { mapServicesToDetailItems } from "@/app/api/resolveServiceImage";
 
 export default function GeneralPractice() {
+  const [items, setItems] = useState<ServiceDetailItem[]>([]);
+
+  useEffect(() => {
+    api.services
+      .list("general-practice")
+      .then((rows) => setItems(mapServicesToDetailItems(rows)))
+      .catch(() => setItems([]));
+  }, []);
+
   return (
     <>
       <PageHero
@@ -44,7 +55,7 @@ export default function GeneralPractice() {
         </div>
       </section>
 
-      <ServiceDetailList items={generalPracticeServices} bookLabel="Book a GP Visit" />
+      <ServiceDetailList items={items} bookLabel="Book a GP Visit" />
 
       <BookingBanner />
     </>

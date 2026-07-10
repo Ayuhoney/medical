@@ -1,11 +1,18 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { ArrowRight } from "lucide-react";
 import { IMAGES } from "@/app/constants";
 import { PageHero, BookingBanner } from "@/app/components/ui";
-import { ServiceDetailList } from "@/app/components/ServiceDetailSection";
-import { laserServices } from "@/app/data/services/laser";
+import { ServiceDetailList, type ServiceDetailItem } from "@/app/components/ServiceDetailSection";
+import { api } from "@/app/api";
+import { mapServicesToDetailItems } from "@/app/api/resolveServiceImage";
 
 export default function Laser() {
+  const [items, setItems] = useState<ServiceDetailItem[]>([]);
+  useEffect(() => {
+    api.services.list("laser").then((rows) => setItems(mapServicesToDetailItems(rows))).catch(() => setItems([]));
+  }, []);
+
   return (
     <>
       <PageHero
@@ -39,7 +46,7 @@ export default function Laser() {
         </div>
       </section>
 
-      <ServiceDetailList items={laserServices} bookLabel="Book Laser Session" />
+      <ServiceDetailList items={items} bookLabel="Book Laser Session" />
 
       <BookingBanner />
     </>

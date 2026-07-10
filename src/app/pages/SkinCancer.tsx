@@ -1,9 +1,11 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { ArrowRight } from "lucide-react";
 import { IMAGES } from "@/app/constants";
 import { PageHero, BookingBanner } from "@/app/components/ui";
-import { ServiceDetailList } from "@/app/components/ServiceDetailSection";
-import { skinCancerServices } from "@/app/data/services/skinCancer";
+import { ServiceDetailList, type ServiceDetailItem } from "@/app/components/ServiceDetailSection";
+import { api } from "@/app/api";
+import { mapServicesToDetailItems } from "@/app/api/resolveServiceImage";
 
 const signs = [
   { letter: "A", name: "Asymmetry", desc: "One half doesn't match the other" },
@@ -14,6 +16,11 @@ const signs = [
 ];
 
 export default function SkinCancer() {
+  const [items, setItems] = useState<ServiceDetailItem[]>([]);
+  useEffect(() => {
+    api.services.list("skin-cancer").then((rows) => setItems(mapServicesToDetailItems(rows))).catch(() => setItems([]));
+  }, []);
+
   return (
     <>
       <PageHero
@@ -67,7 +74,7 @@ export default function SkinCancer() {
         </div>
       </section>
 
-      <ServiceDetailList items={skinCancerServices} bookLabel="Book Skin Check" />
+      <ServiceDetailList items={items} bookLabel="Book Skin Check" />
 
       <BookingBanner />
     </>

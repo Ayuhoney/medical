@@ -252,22 +252,6 @@ export const VIDEOS = {
   clinic2311:     videoClinic2311,
 };
 
-// ─── Clinic Info ──────────────────────────────────────────────────────────────
-export const CLINIC = {
-  name:       "Beach Road Surgery & Skin Clinic",
-  address:    "116 Beach Road, Batemans Bay NSW 2536",
-  phone:      "02 4408 0777",
-  fax:        "02 4404 7769",
-  whatsapp:   "+61 466 638 666",
-  email:      "admin@beachroadsurgery.com.au",
-  hours:      "Monday – Friday: 9:00 AM – 4:30 PM · Saturday: 9:00 AM – 12:30 PM",
-  hoursWeekday: "9:00 AM – 4:30 PM",
-  hoursSaturday: "9:00 AM – 12:30 PM",
-  bookingUrl: "https://www.hotdoc.com.au/medical-centres/batemans-bay-NSW-2536/beach-road-surgery/doctors",
-  facebook:   "https://www.facebook.com/Beach-Road-Surgery-Skin-Clinic-105557038525704",
-  instagram:  "https://www.instagram.com/beachroad.skinclinic/",
-};
-
 // ─── Navigation ───────────────────────────────────────────────────────────────
 export const NAV_ITEMS = [
   { label: "Home", path: "/" },

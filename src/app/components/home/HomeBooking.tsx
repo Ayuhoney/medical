@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
 import { ArrowRight, Mail, Phone, MapPin } from "lucide-react";
-import { CLINIC, IMAGES } from "@/app/constants";
+import { IMAGES } from "@/app/constants";
+import { useClinic } from "@/app/clinic/ClinicContext";
 
 const services = [
   "General Practice",
@@ -15,6 +16,7 @@ const services = [
 type Form = { name: string; email: string; phone: string; service: string; message: string };
 
 export function HomeBooking() {
+  const { clinic: CLINIC } = useClinic();
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
   const [form, setForm] = useState<Form>({ name: "", email: "", phone: "", service: "", message: "" });

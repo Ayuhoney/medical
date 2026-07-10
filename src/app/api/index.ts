@@ -1,5 +1,15 @@
 import { apiFetch } from "./http";
-import type { ClinicSettings, OrderItem, OrderResponse, Product, ShopUser, TokenResponse, BlogPost, TeamMember } from "./types";
+import type {
+  ClinicSettings,
+  OrderItemPayload,
+  OrderResponse,
+  Product,
+  ShopUser,
+  TokenResponse,
+  BlogPost,
+  TeamMember,
+  ServiceItem,
+} from "./types";
 import { resolveProductImage } from "./resolveProductImage";
 
 function normalizeProduct(p: Product): Product {
@@ -26,8 +36,12 @@ export const api = {
     me: (token: string) => apiFetch<ShopUser>(`/api/auth/me`, { method: "GET", token }),
   },
   orders: {
-    create: (token: string, items: OrderItem[]) =>
-      apiFetch<OrderResponse>(`/api/orders`, { method: "POST", token, body: JSON.stringify({ items }) }),
+    create: (token: string, items: OrderItemPayload[]) =>
+      apiFetch<OrderResponse>(`/api/orders`, {
+        method: "POST",
+        token,
+        body: JSON.stringify({ items: items.map((i) => ({ slug: i.slug, qty: i.qty })) }),
+      }),
   },
   contact: {
     submit: (body: { name: string; email: string; phone?: string; subject?: string; message: string }) =>
@@ -49,7 +63,7 @@ export const api = {
       method: "POST",
       body: JSON.stringify({ path, referrer: document.referrer || "", visitorId }),
       keepalive: true,
-    }).catch(() => undefined); // analytics must never break the site
+    }).catch(() => undefined);
   },
   appointments: {
     submit: (body: {
@@ -74,5 +88,10 @@ export const api = {
   team: {
     list: () => apiFetch<TeamMember[]>(`/api/team`),
   },
+  services: {
+    list: (category?: string) => {
+      const qs = category ? `?category=${encodeURIComponent(category)}` : "";
+      return apiFetch<ServiceItem[]>(`/api/services${qs}`);
+    },
+  },
 };
-

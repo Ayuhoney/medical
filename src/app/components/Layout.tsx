@@ -4,6 +4,7 @@ import Header from "./Header";
 import Footer from "./Footer";
 import FirstVisitExperience from "./FirstVisitExperience";
 import { ShopProvider } from "@/app/shop/ShopContext";
+import { ClinicProvider } from "@/app/clinic/ClinicContext";
 import { CartDrawer } from "@/app/shop/CartDrawer";
 import { AuthModal } from "@/app/shop/AuthModal";
 import { api } from "@/app/api";
@@ -32,17 +33,19 @@ export default function Layout() {
   }, [pathname, hash]);
 
   return (
-    <ShopProvider>
-      <div className="min-h-screen flex flex-col bg-background font-sans antialiased overflow-x-clip">
-        <FirstVisitExperience />
-        <Header />
-        <main className="flex-1">
-          <Outlet />
-        </main>
-        <Footer />
-        <CartDrawer />
-        <AuthModal />
-      </div>
-    </ShopProvider>
+    <ClinicProvider>
+      <ShopProvider>
+        <div className="min-h-screen flex flex-col bg-background font-sans antialiased overflow-x-clip">
+          <FirstVisitExperience />
+          <Header />
+          <main className="flex-1">
+            <Outlet />
+          </main>
+          <Footer />
+          <CartDrawer />
+          <AuthModal />
+        </div>
+      </ShopProvider>
+    </ClinicProvider>
   );
 }

@@ -4,7 +4,8 @@ import {
   Calendar, ArrowRight, Award, Shield, CheckCircle, Microscope,
   Star, Phone, Clock, MapPin, ArrowUpRight,
 } from "lucide-react";
-import { IMAGES, VIDEOS, CLINIC } from "@/app/constants";
+import { IMAGES, VIDEOS } from "@/app/constants";
+import { useClinic } from "@/app/clinic/ClinicContext";
 import awardRegional from "@/imports/award-regional-winner.png";
 import awardFinalist from "@/imports/award-finalist.png";
 import awardISC from "@/imports/award-isc-winner.jpg";
@@ -580,6 +581,7 @@ function Testimonials() {
 
 /* ─── STEP 7: Location — reference clean split layout ─── */
 function Location() {
+  const { clinic: CLINIC, hours } = useClinic();
   return (
     <section className="section-py section-white">
       <div className="site-container">
@@ -610,11 +612,11 @@ function Location() {
           <ScrollReveal delay={2} className="lg:col-span-5">
             <div className="location-info-card">
               {[
-                { icon: <MapPin size={16} className="text-[#0A7E94]" />, label: "Address", content: "116 Beach Road\nBatemans Bay NSW 2536",
-                  link: { text: "Get Directions →", href: "https://maps.google.com/?q=116+Beach+Road+Batemans+Bay+NSW" } },
+                { icon: <MapPin size={16} className="text-[#0A7E94]" />, label: "Address", content: CLINIC.address || "116 Beach Road\nBatemans Bay NSW 2536",
+                  link: { text: "Get Directions →", href: `https://maps.google.com/?q=${encodeURIComponent(CLINIC.address || "116 Beach Road Batemans Bay NSW")}` } },
                 { icon: <Phone size={16} className="text-[#0A7E94]" />, label: "Phone", content: CLINIC.phone,
-                  link: { text: "Call Now →", href: `tel:${CLINIC.phone.replace(/\s/g, "")}` } },
-                { icon: <Clock size={16} className="text-[#0A7E94]" />, label: "Opening Hours", content: "Monday – Friday: 9:00 AM – 4:30 PM\nSaturday: 9:00 AM – 12:30 PM" },
+                  link: { text: "Call Now →", href: `tel:${(CLINIC.phone || "").replace(/\s/g, "")}` } },
+                { icon: <Clock size={16} className="text-[#0A7E94]" />, label: "Opening Hours", content: hours || "Monday – Friday: 9:00 AM – 4:30 PM\nSaturday: 9:00 AM – 12:30 PM" },
               ].map(({ icon, label, content, link }) => (
                 <div key={label} className="flex items-start gap-4 p-6 md:p-8 bg-surface hover:bg-[var(--cream-warm)] transition-colors duration-500 flex-1">
                   <span className="mt-0.5">{icon}</span>
@@ -752,7 +754,6 @@ function VideoShowcase() {
 }
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState(0); // Add default state if needed in future, keeping it clean
   return (
     <>
       <Hero />

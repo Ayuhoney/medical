@@ -1,12 +1,13 @@
 import { useEffect, useState, useMemo } from "react";
 import { Link } from "react-router";
 import { Award, Shield, CheckCircle, Users, Clock, Heart, FileText, Stethoscope, Lock, Loader2 } from "lucide-react";
-import { IMAGES, CLINIC } from "@/app/constants";
+import { IMAGES } from "@/app/constants";
+import { useClinic } from "@/app/clinic/ClinicContext";
 import { PageHero, BookingBanner } from "@/app/components/ui";
 import { PolicySection } from "@/app/components/ServiceDetailSection";
 import { api } from "@/app/api";
 import type { TeamMember } from "@/app/api/types";
-import { doctors as fallbackDoctors, teamMembers as fallbackTeamMembers, VISION, MISSION, VALUES } from "@/app/data/team";
+import { doctors as fallbackDoctors, teamMembers as fallbackTeamMembers } from "@/app/data/team";
 
 const accreditations = [
   { icon: <Shield size={24} className="text-[#0A7E94]" />, name: "AGPAL Accredited Practice", desc: "Our clinic meets the highest standards for general practice in Australia." },
@@ -16,6 +17,10 @@ const accreditations = [
 ];
 
 export default function PracticeInfo() {
+  const { clinic: CLINIC } = useClinic();
+  const VISION = CLINIC.vision || "";
+  const MISSION = CLINIC.mission || "";
+  const VALUES = CLINIC.values || [];
   const [team, setTeam] = useState<TeamMember[]>([]);
   const [loading, setLoading] = useState(true);
 

@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router";
 import { Phone, MapPin, Menu, X, ChevronDown, ArrowRight, ShoppingBag, Calendar } from "lucide-react";
-import { NAV_ITEMS, IMAGES, CLINIC } from "@/app/constants";
+import { NAV_ITEMS, IMAGES } from "@/app/constants";
+import { useClinic } from "@/app/clinic/ClinicContext";
 import agpalBadge from "@/imports/AGPAL-Accredited-Email-Signature-536w.webp";
 import { Logo } from "./Logo";
 import { useFirstVisitGate } from "@/app/hooks/useFirstVisitGate";
@@ -69,6 +70,7 @@ function MegaPanel({
 }
 
 export default function Header() {
+  const { clinic: CLINIC } = useClinic();
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);

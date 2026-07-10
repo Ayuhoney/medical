@@ -24,10 +24,13 @@ export default function ProductDetail() {
   useEffect(() => {
     if (!slug) return;
     setLoading(true);
-    Promise.all([api.products.bySlug(slug), api.products.list()])
-      .then(([p, list]) => {
+    api.products
+      .bySlug(slug)
+      .then(async (p) => {
         setProduct(p);
-        setAll(list);
+        // Related products: same category only (avoid full-catalog double fetch cost)
+        const related = await api.products.list({ category: p.category });
+        setAll(related.filter((x) => x.slug !== p.slug).slice(0, 8));
       })
       .catch(() => setProduct(null))
       .finally(() => setLoading(false));

@@ -65,6 +65,11 @@ export type ClinicSettings = {
   popupEyebrow: string;
   popupTitle: string;
   popupBody: string;
+  vision?: string;
+  mission?: string;
+  values?: { name: string; desc: string }[];
+  storeCategories?: string[];
+  timeSlots?: string[];
 };
 
 export type BlogPost = {
@@ -92,5 +97,27 @@ export type TeamMember = {
   specialties?: string[];
   education?: string[];
   credentials?: string[];
+};
+
+export type ServiceItem = {
+  id: string;
+  category: string;
+  serviceId: string;
+  tag: string;
+  title: string;
+  description: string;
+  bullets: string[];
+  imageKey: string;
+  sortOrder: number;
+  ctaLabel?: string | null;
+  ctaPath?: string | null;
+  bookingDesc?: string | null;
+  icon?: string | null;
+  status?: string;
+};
+
+export type OrderItemPayload = {
+  slug: string;
+  qty: number;
 };
 

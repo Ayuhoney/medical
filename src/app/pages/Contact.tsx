@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { Phone, MapPin, Clock, Mail, CheckCircle, Send, Printer, MessageCircle } from "lucide-react";
-import { IMAGES, CLINIC } from "@/app/constants";
+import { IMAGES } from "@/app/constants";
+import { useClinic } from "@/app/clinic/ClinicContext";
 import { PageHero } from "@/app/components/ui";
 import { api } from "@/app/api";
 
 export default function Contact() {
+  const { clinic: CLINIC, hours } = useClinic();
   const [form, setForm] = useState({ name: "", email: "", phone: "", subject: "", message: "" });
   const [sent, setSent] = useState(false);
   const [error, setError] = useState("");

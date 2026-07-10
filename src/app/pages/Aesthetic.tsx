@@ -1,11 +1,18 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { Sparkles, ArrowRight } from "lucide-react";
 import { IMAGES } from "@/app/constants";
 import { PageHero, BookingBanner } from "@/app/components/ui";
-import { ServiceDetailList } from "@/app/components/ServiceDetailSection";
-import { aestheticServices } from "@/app/data/services/aesthetic";
+import { ServiceDetailList, type ServiceDetailItem } from "@/app/components/ServiceDetailSection";
+import { api } from "@/app/api";
+import { mapServicesToDetailItems } from "@/app/api/resolveServiceImage";
 
 export default function Aesthetic() {
+  const [items, setItems] = useState<ServiceDetailItem[]>([]);
+  useEffect(() => {
+    api.services.list("aesthetic").then((rows) => setItems(mapServicesToDetailItems(rows))).catch(() => setItems([]));
+  }, []);
+
   return (
     <>
       <PageHero
@@ -54,7 +61,7 @@ export default function Aesthetic() {
         </div>
       </section>
 
-      <ServiceDetailList items={aestheticServices} bookLabel="Book Consultation" />
+      <ServiceDetailList items={items} bookLabel="Book Consultation" />
 
       <section className="section-py-sm section-white">
         <div className="site-container-narrow text-center">

@@ -5,10 +5,14 @@ import { PageHero } from "@/app/components/ui";
 import { Link } from "react-router";
 import { api } from "@/app/api";
 import type { Product } from "@/app/api/types";
-import { STORE_CATEGORIES } from "@/app/data/products";
+import { useClinic } from "@/app/clinic/ClinicContext";
 import { ProductCard } from "@/app/components/store/ProductCard";
 
 export default function Store() {
+  const { clinic } = useClinic();
+  const STORE_CATEGORIES = clinic.storeCategories?.length
+    ? clinic.storeCategories
+    : ["All Products"];
   const [activeCategory, setActiveCategory] = useState("All Products");
   const [searchQuery, setSearchQuery] = useState("");
   const [products, setProducts] = useState<Product[]>([]);

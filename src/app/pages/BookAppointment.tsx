@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Calendar,
   CheckCircle,
@@ -13,8 +13,11 @@ import {
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { PageHero, BookingBanner } from "@/app/components/ui";
-import { IMAGES, CLINIC } from "@/app/constants";
+import { IMAGES } from "@/app/constants";
+import { useClinic } from "@/app/clinic/ClinicContext";
 import { api } from "@/app/api";
+import { resolveImageKey } from "@/app/api/resolveServiceImage";
+import type { ServiceItem, TeamMember } from "@/app/api/types";
 
 type ServiceType = {
   id: string;
@@ -24,72 +27,12 @@ type ServiceType = {
   icon: LucideIcon;
 };
 
-const serviceTypes: ServiceType[] = [
-  {
-    id: "gp",
-    label: "General Practice",
-    desc: "GP consultation, health checks, prescriptions",
-    image: IMAGES.heroGP,
-    icon: Stethoscope,
-  },
-  {
-    id: "skin",
-    label: "Skin Cancer Check",
-    desc: "Full body skin check and mole monitoring",
-    image: IMAGES.heroSkinCancer,
-    icon: Microscope,
-  },
-  {
-    id: "aesthetic",
-    label: "Aesthetic Medicine",
-    desc: "Cosmetic injectables and skin treatments",
-    image: IMAGES.heroAesthetic,
-    icon: Sparkles,
-  },
-  {
-    id: "laser",
-    label: "Laser Treatment",
-    desc: "Laser resurfacing, pigmentation, hair removal",
-    image: IMAGES.heroLaser,
-    icon: Zap,
-  },
-];
-
-const doctors = [
-  {
-    id: "thilan",
-    name: "Dr Thilan Walgamage",
-    role: "Specialist GP — Skin Cancer & Aesthetic Medicine",
-    available: "Next available: Today",
-    image: IMAGES.teamDrThilan,
-  },
-  {
-    id: "kishani",
-    name: "Dr Kishani Weerasena",
-    role: "GP — Women's & Children's Health",
-    available: "Next available: Tomorrow",
-    image: IMAGES.teamDrKishani,
-  },
-  {
-    id: "heshan",
-    name: "Dr Heshan Dharmaratna",
-    role: "GP — Mental Health & Chronic Disease",
-    available: "Next available: Today",
-    image: IMAGES.teamDrHeshan,
-  },
-  {
-    id: "any",
-    name: "First Available Doctor",
-    role: "Any available GP",
-    available: "Soonest appointment",
-    image: IMAGES.clinicInterior,
-  },
-];
-
-const timeSlots = [
-  "9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM",
-  "1:00 PM", "1:30 PM", "2:00 PM", "2:30 PM", "3:00 PM", "3:30 PM", "4:00 PM",
-];
+const ICON_MAP: Record<string, LucideIcon> = {
+  Stethoscope,
+  Microscope,
+  Sparkles,
+  Zap,
+};
 
 const STEPS = ["Service", "Doctor", "Date & Time", "Your Details", "Confirm"];
 
@@ -131,6 +74,7 @@ function StepIndicator({ current }: { current: number }) {
 }
 
 export default function BookAppointment() {
+  const { clinic: CLINIC } = useClinic();
   const [step, setStep] = useState(1);
   const [selected, setSelected] = useState({
     service: "",
@@ -146,6 +90,56 @@ export default function BookAppointment() {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [serviceTypes, setServiceTypes] = useState<ServiceType[]>([]);
+  const [doctors, setDoctors] = useState<
+    { id: string; name: string; role: string; available: string; image: string }[]
+  >([]);
+  const timeSlots = CLINIC.timeSlots?.length
+    ? CLINIC.timeSlots
+    : [
+        "9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM",
+        "1:00 PM", "1:30 PM", "2:00 PM", "2:30 PM", "3:00 PM", "3:30 PM", "4:00 PM",
+      ];
+
+  useEffect(() => {
+    api.services
+      .list("booking")
+      .then((rows: ServiceItem[]) => {
+        setServiceTypes(
+          rows.map((s) => ({
+            id: s.serviceId,
+            label: s.title,
+            desc: s.bookingDesc || s.description,
+            image: resolveImageKey(s.imageKey),
+            icon: ICON_MAP[s.icon || ""] || Stethoscope,
+          })),
+        );
+      })
+      .catch(() => setServiceTypes([]));
+
+    api.team
+      .list()
+      .then((members: TeamMember[]) => {
+        const docs = members
+          .filter((m) => m.kind === "doctor")
+          .map((m) => ({
+            id: m.id,
+            name: m.name,
+            role: m.role,
+            available: "Book for next available",
+            image: m.image || resolveImageKey("clinicInterior"),
+          }));
+        docs.push({
+          id: "any",
+          name: "First Available Doctor",
+          role: "Any available GP",
+          available: "Soonest appointment",
+          image: resolveImageKey("clinicInterior"),
+        });
+        setDoctors(docs);
+      })
+      .catch(() => setDoctors([]));
+  }, []);
 
   const next = () => setStep((s) => Math.min(s + 1, 5));
   const back = () => setStep((s) => Math.max(s - 1, 1));
@@ -271,7 +265,7 @@ export default function BookAppointment() {
               </p>
             </div>
             <a
-              href="https://www.hotdoc.com.au"
+              href={CLINIC.bookingUrl || "https://www.hotdoc.com.au"}
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-2 flex-shrink-0 h-11 px-6 rounded-full bg-[#0A7E94] hover:bg-[#086B7E] text-white font-sans text-[11px] font-semibold uppercase tracking-[0.12em] transition-all duration-300 hover:scale-[1.02]"

@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 import { Phone, MapPin, Clock, Facebook, Instagram, Mail, ArrowRight } from "lucide-react";
-import { CLINIC } from "@/app/constants";
+import { useClinic } from "@/app/clinic/ClinicContext";
 import { Logo } from "./Logo";
 
 const quickLinks = [
@@ -26,6 +26,7 @@ const services = [
 ];
 
 export default function Footer() {
+  const { clinic: CLINIC, hours } = useClinic();
   return (
     <footer className="bg-[#080F14] text-white">
       {/* Pre-footer CTA */}

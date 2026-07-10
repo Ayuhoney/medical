@@ -1,20 +1,19 @@
 import { useCallback, useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import { X } from "lucide-react";
-import { CLINIC } from "@/app/constants";
+import { useClinic } from "@/app/clinic/ClinicContext";
 import { LogoMarkIcon } from "./Logo";
 import { FIRST_VISIT_KEY, openFirstVisitGate } from "@/app/hooks/useFirstVisitGate";
-import { api } from "@/app/api";
-import type { ClinicSettings } from "@/app/api/types";
 
 type Step = "intro" | "modal";
 
 export default function FirstVisitExperience() {
   const { pathname } = useLocation();
+  const { clinic: CLINIC } = useClinic();
   const [active, setActive] = useState(false);
   const [step, setStep] = useState<Step>("intro");
   const [closing, setClosing] = useState(false);
-  const [settings, setSettings] = useState<ClinicSettings | null>(null);
+  const settings = CLINIC;
 
   useEffect(() => {
     if (sessionStorage.getItem(FIRST_VISIT_KEY)) {
@@ -31,11 +30,6 @@ export default function FirstVisitExperience() {
     setClosing(false);
     document.body.classList.add("first-visit-active");
     document.body.style.overflow = "hidden";
-
-    // Start loading settings
-    api.clinic.get().then((data) => {
-      setSettings(data);
-    }).catch(console.error);
 
     const toModal = window.setTimeout(() => setStep("modal"), 2400);
     return () => {
@@ -128,12 +122,12 @@ export default function FirstVisitExperience() {
             {settings?.popupBody || (
               <>
                 To secure your place, call our reception on{" "}
-                <a href={`tel:${CLINIC.phone.replace(/\s/g, "")}`} className="first-visit-link">
-                  {CLINIC.phone}
+                <a href={`tel:${(settings.phone || "").replace(/\s/g, "")}`} className="first-visit-link">
+                  {settings.phone}
                 </a>{" "}
                 or email us at{" "}
-                <a href={`mailto:${CLINIC.email}`} className="first-visit-link">
-                  {CLINIC.email}
+                <a href={`mailto:${settings.email}`} className="first-visit-link">
+                  {settings.email}
                 </a>
               </>
             )}
