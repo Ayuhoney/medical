@@ -67,3 +67,30 @@ export type ClinicSettings = {
   popupBody: string;
 };
 
+export type BlogPost = {
+  slug: string;
+  title: string;
+  category: string;
+  excerpt: string;
+  image: string;
+  author: string;
+  date: string;
+  readTime: string;
+  featured: boolean;
+  body: string[];
+};
+
+export type TeamMember = {
+  id: string;
+  kind: "doctor" | "staff";
+  name: string;
+  role: string;
+  qualifications?: string;
+  registration?: string;
+  bio: string;
+  image: string;
+  specialties?: string[];
+  education?: string[];
+  credentials?: string[];
+};
+

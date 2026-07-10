@@ -1,21 +1,49 @@
-import { Link, useParams, Navigate } from "react-router";
-import { ArrowLeft, Clock } from "lucide-react";
-import { getBlogPost } from "@/app/data/blogPosts";
+import { useEffect, useState } from "react";
+import { Link, useParams, useNavigate } from "react-router";
+import { ArrowLeft, Clock, Loader2 } from "lucide-react";
 import { PageHero } from "@/app/components/ui";
+import { api } from "@/app/api";
+import type { BlogPost as BlogPostType } from "@/app/api/types";
 
 const categoryColors: Record<string, string> = {
   "Skin Cancer": "bg-red-50 text-red-600",
   "Aesthetic Medicine": "bg-purple-50 text-purple-600",
   "General Practice": "bg-blue-50 text-blue-600",
-  Laser: "bg-[#EDF8FB] text-[#0A7E94]",
-  Skincare: "bg-green-50 text-green-600",
+  "Laser": "bg-[#EDF8FB] text-[#0A7E94]",
+  "Skincare": "bg-green-50 text-green-600",
 };
 
 export default function BlogPost() {
   const { slug } = useParams();
-  const post = slug ? getBlogPost(slug) : undefined;
+  const navigate = useNavigate();
+  const [post, setPost] = useState<BlogPostType | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  if (!post) return <Navigate to="/blog" replace />;
+  useEffect(() => {
+    if (!slug) {
+      navigate("/blog", { replace: true });
+      return;
+    }
+
+    api.blog.bySlug(slug)
+      .then(setPost)
+      .catch((err) => {
+        console.error(err);
+        navigate("/blog", { replace: true });
+      })
+      .finally(() => setLoading(false));
+  }, [slug, navigate]);
+
+  if (loading) {
+    return (
+      <div className="min-h-[60vh] flex flex-col items-center justify-center text-[#5A7A8A]">
+        <Loader2 className="animate-spin mb-4 text-[#0A7E94]" size={36} />
+        <p className="font-sans text-sm font-semibold">Loading article...</p>
+      </div>
+    );
+  }
+
+  if (!post) return null;
 
   return (
     <>

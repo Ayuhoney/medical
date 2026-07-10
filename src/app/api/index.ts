@@ -1,5 +1,5 @@
 import { apiFetch } from "./http";
-import type { ClinicSettings, OrderItem, OrderResponse, Product, ShopUser, TokenResponse } from "./types";
+import type { ClinicSettings, OrderItem, OrderResponse, Product, ShopUser, TokenResponse, BlogPost, TeamMember } from "./types";
 import { resolveProductImage } from "./resolveProductImage";
 
 function normalizeProduct(p: Product): Product {
@@ -66,6 +66,13 @@ export const api = {
   },
   clinic: {
     get: () => apiFetch<ClinicSettings>(`/api/clinic`),
+  },
+  blog: {
+    list: () => apiFetch<BlogPost[]>(`/api/blog`),
+    bySlug: (slug: string) => apiFetch<BlogPost>(`/api/blog/${encodeURIComponent(slug)}`),
+  },
+  team: {
+    list: () => apiFetch<TeamMember[]>(`/api/team`),
   },
 };
 

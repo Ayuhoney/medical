@@ -1,9 +1,12 @@
+import { useEffect, useState, useMemo } from "react";
 import { Link } from "react-router";
-import { Award, Shield, CheckCircle, Users, Clock, Heart, FileText, Stethoscope, Lock } from "lucide-react";
+import { Award, Shield, CheckCircle, Users, Clock, Heart, FileText, Stethoscope, Lock, Loader2 } from "lucide-react";
 import { IMAGES, CLINIC } from "@/app/constants";
 import { PageHero, BookingBanner } from "@/app/components/ui";
 import { PolicySection } from "@/app/components/ServiceDetailSection";
-import { doctors, teamMembers, VISION, MISSION, VALUES } from "@/app/data/team";
+import { api } from "@/app/api";
+import type { TeamMember } from "@/app/api/types";
+import { doctors as fallbackDoctors, teamMembers as fallbackTeamMembers, VISION, MISSION, VALUES } from "@/app/data/team";
 
 const accreditations = [
   { icon: <Shield size={24} className="text-[#0A7E94]" />, name: "AGPAL Accredited Practice", desc: "Our clinic meets the highest standards for general practice in Australia." },
@@ -13,6 +16,53 @@ const accreditations = [
 ];
 
 export default function PracticeInfo() {
+  const [team, setTeam] = useState<TeamMember[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    api.team.list()
+      .then((data) => {
+        if (data && data.length > 0) {
+          setTeam(data);
+        }
+      })
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, []);
+
+  const doctorsList = useMemo(() => {
+    const list = team.filter((m) => m.kind === "doctor");
+    if (list.length > 0) return list;
+    // Map fallback doctors to TeamMember type
+    return fallbackDoctors.map((doc, index) => ({
+      id: `fallback_doc_${index}`,
+      kind: "doctor" as const,
+      name: doc.name,
+      role: doc.role,
+      qualifications: doc.qualifications,
+      registration: doc.registration,
+      bio: doc.bio,
+      image: doc.image,
+      specialties: doc.specialties,
+      education: doc.education,
+    }));
+  }, [team]);
+
+  const supportStaffList = useMemo(() => {
+    const list = team.filter((m) => m.kind === "staff");
+    if (list.length > 0) return list;
+    // Map fallback staff to TeamMember type
+    return fallbackTeamMembers.map((staff, index) => ({
+      id: `fallback_staff_${index}`,
+      kind: "staff" as const,
+      name: staff.name,
+      role: staff.role,
+      bio: staff.bio,
+      image: staff.image,
+      credentials: staff.credentials,
+    }));
+  }, [team]);
+
   return (
     <>
       <PageHero image={IMAGES.clinicInterior} tag="PRACTICE INFO" title="About Our Practice" subtitle="Learn about our clinic, our values, and our experienced medical team." />
@@ -61,7 +111,7 @@ export default function PracticeInfo() {
             <h2 className="heading-section">Meet Our Doctors</h2>
           </div>
           <div className="grid grid-cols-1 gap-8 md:gap-10 max-w-[1100px] mx-auto">
-            {doctors.map((doc) => (
+            {doctorsList.map((doc) => (
               <div key={doc.name} className="card-premium hover:-translate-y-1">
                 <div className="grid grid-cols-1 md:grid-cols-5">
                   <div className="doctor-card-media md:col-span-2">
@@ -77,22 +127,24 @@ export default function PracticeInfo() {
                     )}
                     <p className="text-[#2A4A5A] text-xs leading-relaxed mb-4 font-sans">{doc.bio}</p>
                     <div className="flex flex-wrap gap-2 mb-4">
-                      {doc.specialties.map((s) => (
+                      {doc.specialties?.map((s) => (
                         <span key={s} className="bg-[#EDF8FB] text-[#0A7E94] text-[10px] font-semibold px-3 py-1 rounded-full font-sans">{s}</span>
                       ))}
                     </div>
-                    <details className="group">
-                      <summary className="cursor-pointer text-[#0A7E94] text-xs font-semibold font-sans list-none select-none">
-                        Education &amp; Training <span className="group-open:hidden">+</span><span className="hidden group-open:inline">−</span>
-                      </summary>
-                      <ul className="mt-3 space-y-1.5">
-                        {doc.education.map((e) => (
-                          <li key={e} className="flex items-start gap-2 text-[#2A4A5A] text-xs font-sans">
-                            <CheckCircle size={12} className="text-[#0A7E94] mt-0.5 shrink-0" /> {e}
-                          </li>
-                        ))}
-                      </ul>
-                    </details>
+                    {doc.education && doc.education.length > 0 && (
+                      <details className="group">
+                        <summary className="cursor-pointer text-[#0A7E94] text-xs font-semibold font-sans list-none select-none">
+                          Education &amp; Training <span className="group-open:hidden">+</span><span className="hidden group-open:inline">−</span>
+                        </summary>
+                        <ul className="mt-3 space-y-1.5">
+                          {doc.education.map((e) => (
+                            <li key={e} className="flex items-start gap-2 text-[#2A4A5A] text-xs font-sans">
+                              <CheckCircle size={12} className="text-[#0A7E94] mt-0.5 shrink-0" /> {e}
+                            </li>
+                          ))}
+                        </ul>
+                      </details>
+                    )}
                   </div>
                 </div>
               </div>
@@ -111,7 +163,7 @@ export default function PracticeInfo() {
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 max-w-[1200px] mx-auto">
-            {teamMembers.map((member) => (
+            {supportStaffList.map((member) => (
               <div key={member.name} className="team-card card-premium hover:-translate-y-1">
                 <div className="team-card-media">
                   <img src={member.image} alt={member.name} loading="lazy" />
