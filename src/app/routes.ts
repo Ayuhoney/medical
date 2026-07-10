@@ -12,6 +12,7 @@ import BookAppointment from "./pages/BookAppointment";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import Contact from "./pages/Contact";
+import Gallery from "./pages/Gallery";
 
 export const router = createBrowserRouter([
   {
@@ -28,6 +29,7 @@ export const router = createBrowserRouter([
       { path: "book",            Component: BookAppointment },
       { path: "blog",            Component: Blog },
       { path: "blog/:slug",      Component: BlogPost },
+      { path: "gallery",         Component: Gallery },
       { path: "contact",         Component: Contact },
     ],
   },

@@ -1,10 +1,10 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
 import {
   Calendar, ArrowRight, Award, Shield, CheckCircle, Microscope,
   Star, Phone, Clock, MapPin, ArrowUpRight,
 } from "lucide-react";
-import { IMAGES, CLINIC } from "@/app/constants";
+import { IMAGES, VIDEOS, CLINIC } from "@/app/constants";
 import awardRegional from "@/imports/award-regional-winner.png";
 import awardFinalist from "@/imports/award-finalist.png";
 import awardISC from "@/imports/award-isc-winner.jpg";
@@ -299,48 +299,93 @@ function Services() {
   );
 }
 
-/* ─── Awards & Credentials strip ─── */
-const awardsLogos = [
-  { src: awardRegional,  alt: "2022 Regional Winner — Local Business Awards" },
-  { src: awardFinalist,  alt: "Local Business Awards Finalist" },
-  { src: awardISC,       alt: "2022 ISC Winner — Local Business Awards" },
-  { src: logoANU,        alt: "Australian National University" },
-  { src: logoRACGP,      alt: "RACGP — Royal Australian College of General Practitioners" },
-  { src: awardWinner2022, alt: "Winner 2022" },
-  { src: logoAgpal,      alt: "AGPAL — Australian General Practice Accreditation Limited" },
-  { src: logoSCI,        alt: "Skin Cancer Institute" },
-];
-
+/* ─── STEP 4: Awards — Celebrated Excellence with real Awards Night assets ─── */
 function Awards() {
   return (
-    <section className="section-white border-y border-[rgba(10,126,148,0.07)] py-12 md:py-16">
+    <section className="section-py section-cream overflow-hidden border-y border-[rgba(10,126,148,0.06)]">
       <div className="site-container">
         <ScrollReveal>
-          <div className="section-header-split !mb-8 md:!mb-10">
+          <div className="section-header-split !mb-12">
             <div>
-              <p className="ref-label">AWARDS &amp; ACCREDITATIONS</p>
-              <h2 className="heading-section pl-11">
-                Recognised Excellence in <em className="heading-accent">Healthcare</em>
+              <p className="ref-label">CELEBRATING EXCELLENCE</p>
+              <h2 className="heading-section">
+                Our Award-Winning <br />
+                <em className="heading-accent">Clinical Team</em>
               </h2>
             </div>
+            <p className="section-header-note hidden lg:block">
+              Proud winners of the regional Local Business Awards, reflecting our unwavering commitment to the community.
+            </p>
           </div>
         </ScrollReveal>
-        <StaggerReveal className="flex w-full max-w-full flex-nowrap items-center justify-center gap-x-3 sm:gap-x-5 md:gap-x-7 lg:gap-x-9">
-          {awardsLogos.map(({ src, alt }) => (
-            <div
-              key={alt}
-              className="flex flex-1 min-w-0 items-center justify-center hover:scale-105 transition-transform duration-300"
-            >
-              <img
-                src={src}
-                alt={alt}
-                className="object-contain w-auto max-w-full"
-                style={{ height: "clamp(4.5rem, 11vw, 10rem)" }}
-                loading="lazy"
-              />
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          {/* Real Awards Night Team Photo Showcase */}
+          <ScrollReveal className="lg:col-span-7 relative group rounded-2xl overflow-hidden shadow-lg aspect-[16/10] bg-[#0D1F2D]">
+            <img
+              src={IMAGES.awardNightGroup}
+              alt="Beach Road Surgery team receiving the Local Business Award at the Awards Night"
+              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0D1F2D]/90 via-[#0D1F2D]/20 to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
+              <span className="text-[9px] tracking-[0.25em] uppercase font-bold text-[#7EC8D8] mb-1.5 block">
+                LOCAL BUSINESS AWARDS NIGHT
+              </span>
+              <h3 className="font-serif text-white text-xl md:text-2xl mb-2">
+                Winner: Regional Business Excellence
+              </h3>
+              <p className="text-white/60 text-xs md:text-sm font-sans leading-relaxed max-w-lg mb-4">
+                Our doctors, nurses, and administrative staff celebrating our regional victory at the official gala presentation.
+              </p>
+              <Link
+                to="/gallery"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#7EC8D8] hover:underline"
+              >
+                View Awards Night Gallery <ArrowUpRight size={14} />
+              </Link>
             </div>
-          ))}
-        </StaggerReveal>
+          </ScrollReveal>
+
+          {/* Staggered Specific Accolades */}
+          <ScrollReveal delay={2} className="lg:col-span-5 flex flex-col gap-6">
+            <div className="flex gap-4 p-5 bg-white rounded-xl border border-[rgba(10,126,148,0.06)] shadow-sm hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 rounded-lg bg-[#EDF8FB] flex items-center justify-center shrink-0">
+                <img src={awardRegional} alt="Regional Winner Badge" className="h-9 object-contain" />
+              </div>
+              <div>
+                <h4 className="font-serif text-[#0D1F2D] text-base mb-1">Local Business Awards Winner</h4>
+                <p className="text-body-text text-xs leading-relaxed font-sans">
+                  Honoured as the regional winner for outstanding medical and aesthetic practice excellence in the community.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex gap-4 p-5 bg-white rounded-xl border border-[rgba(10,126,148,0.06)] shadow-sm hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 rounded-lg bg-[#EDF8FB] flex items-center justify-center shrink-0">
+                <img src={awardISC} alt="Specialist Winner Badge" className="h-9 object-contain" />
+              </div>
+              <div>
+                <h4 className="font-serif text-[#0D1F2D] text-base mb-1">Specialist Skin Clinic Winner</h4>
+                <p className="text-body-text text-xs leading-relaxed font-sans">
+                  Recognised for our high-precision mole screening, early detection procedures, and cancer treatment programs.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex gap-4 p-5 bg-white rounded-xl border border-[rgba(10,126,148,0.06)] shadow-sm hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 rounded-lg bg-[#EDF8FB] flex items-center justify-center shrink-0">
+                <img src={logoAgpal} alt="AGPAL Accredited Practice" className="h-8 object-contain" />
+              </div>
+              <div>
+                <h4 className="font-serif text-[#0D1F2D] text-base mb-1">Fully AGPAL Accredited Standards</h4>
+                <p className="text-body-text text-xs leading-relaxed font-sans">
+                  Meeting the rigorous quality, safety, and health care hygiene standards set by national governing boards.
+                </p>
+              </div>
+            </div>
+          </ScrollReveal>
+        </div>
       </div>
     </section>
   );
@@ -597,7 +642,117 @@ function Location() {
   );
 }
 
+/* ─── STEP 8: Video Showcase — Autoplay clinical / laser marketing videos ─── */
+function VideoShowcase() {
+  const [muted1, setMuted1] = useState(true);
+  const [muted2, setMuted2] = useState(true);
+  const videoRef1 = useRef<HTMLVideoElement>(null);
+  const videoRef2 = useRef<HTMLVideoElement>(null);
+
+  return (
+    <section className="section-py section-cream overflow-hidden">
+      <div className="site-container">
+        <ScrollReveal>
+          <div className="section-header-split !mb-10">
+            <div>
+              <p className="ref-label">CLINICAL VIDEO SHOWCASE</p>
+              <h2 className="heading-section">
+                See Our Treatments <br />
+                <em className="heading-accent">in Action</em>
+              </h2>
+            </div>
+            <p className="section-header-note hidden lg:block">
+              Experience the precision and comfort of our advanced aesthetic procedures.
+            </p>
+          </div>
+        </ScrollReveal>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10">
+          {/* Video 1 - Hollywood Lunchtime Facelift */}
+          <ScrollReveal delay={1}>
+            <div className="relative rounded-2xl overflow-hidden shadow-lg border border-[rgba(10,126,148,0.08)] bg-[#0D1F2D] group aspect-[16/9]">
+              <video
+                ref={videoRef1}
+                src={VIDEOS.facelift}
+                autoPlay
+                muted={muted1}
+                loop
+                playsInline
+                className="w-full h-full object-cover opacity-90 transition-transform duration-700 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0D1F2D]/90 via-transparent to-transparent pointer-events-none" />
+              
+              {/* Overlay Content */}
+              <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 flex flex-col justify-end">
+                <span className="text-[10px] tracking-[0.25em] uppercase text-[#7EC8D8] mb-1">ClearLift Laser</span>
+                <h3 className="font-serif text-white text-xl md:text-2xl mb-2">Hollywood Lunchtime Facelift</h3>
+                <p className="text-white/60 text-xs md:text-sm max-w-md font-sans leading-relaxed mb-4">
+                  Non-invasive skin tightening and collagen remodeling. Zero downtime, natural results.
+                </p>
+                <div className="flex items-center gap-4">
+                  <button
+                    onClick={() => {
+                      setMuted1(!muted1);
+                      if (videoRef1.current) videoRef1.current.muted = !videoRef1.current.muted;
+                    }}
+                    className="text-xs font-semibold font-sans text-[#7EC8D8] bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-full backdrop-blur-sm transition-colors"
+                  >
+                    {muted1 ? "🔊 Unmute Audio" : "🔇 Mute Audio"}
+                  </button>
+                  <Link to="/laser" className="text-xs font-semibold font-sans text-white hover:underline flex items-center gap-1">
+                    Learn More <ArrowUpRight size={14} />
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </ScrollReveal>
+
+          {/* Video 2 - Personalized Aesthetic Care */}
+          <ScrollReveal delay={2}>
+            <div className="relative rounded-2xl overflow-hidden shadow-lg border border-[rgba(10,126,148,0.08)] bg-[#0D1F2D] group aspect-[16/9]">
+              <video
+                ref={videoRef2}
+                src={VIDEOS.personalized}
+                autoPlay
+                muted={muted2}
+                loop
+                playsInline
+                className="w-full h-full object-cover opacity-90 transition-transform duration-700 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0D1F2D]/90 via-transparent to-transparent pointer-events-none" />
+              
+              {/* Overlay Content */}
+              <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 flex flex-col justify-end">
+                <span className="text-[10px] tracking-[0.25em] uppercase text-[#7EC8D8] mb-1">Aesthetic Medicine</span>
+                <h3 className="font-serif text-white text-xl md:text-2xl mb-2">Personalised Skin Solutions</h3>
+                <p className="text-white/60 text-xs md:text-sm max-w-md font-sans leading-relaxed mb-4">
+                  Every face is unique. Our registered clinicians tailor every parameter to fit your natural anatomy.
+                </p>
+                <div className="flex items-center gap-4">
+                  <button
+                    onClick={() => {
+                      setMuted2(!muted2);
+                      if (videoRef2.current) videoRef2.current.muted = !videoRef2.current.muted;
+                    }}
+                    className="text-xs font-semibold font-sans text-[#7EC8D8] bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-full backdrop-blur-sm transition-colors"
+                  >
+                    {muted2 ? "🔊 Unmute Audio" : "🔇 Mute Audio"}
+                  </button>
+                  <Link to="/aesthetic" className="text-xs font-semibold font-sans text-white hover:underline flex items-center gap-1">
+                    Learn More <ArrowUpRight size={14} />
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </ScrollReveal>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function Home() {
+  const [activeTab, setActiveTab] = useState(0); // Add default state if needed in future, keeping it clean
   return (
     <>
       <Hero />
@@ -607,6 +762,7 @@ export default function Home() {
         <HomePhilosophy />
         <HomeNumbers />
         <HomeTreatments />
+        <VideoShowcase />
         <Awards />
         <About />
         <Testimonials />
